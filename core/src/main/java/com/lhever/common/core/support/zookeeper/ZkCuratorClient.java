@@ -213,7 +213,7 @@ public class ZkCuratorClient {
 
 
     public static void main(String[] args) throws Exception {
-        ZkCuratorClient client = new ZkCuratorClient("10.33.65.9:2181", "im", new RetryNTimes(3, 2000));
+        ZkCuratorClient client = new ZkCuratorClient("127.0.0.1:2181", "im", new RetryNTimes(3, 2000));
         //创建节点
         client.deleteNode("/root", true);
 
