@@ -6,8 +6,8 @@
 # Log file
 *.log
 *.iml
-/target
-/log
+target
+log
 
 
 # BlueJ files
