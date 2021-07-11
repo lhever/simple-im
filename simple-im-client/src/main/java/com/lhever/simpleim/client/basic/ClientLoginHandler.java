@@ -48,7 +48,7 @@ public class ClientLoginHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        logger.info("ClientLoginHandler channel active and send login req!!!!");
+        logger.info("ClientLoginHandler channel active and send login req for user:{}", userName);
         // Send the first message if this handler is a client-side handler.
         ChannelFuture future = ctx.writeAndFlush(buildAuthReq());
         future.addListener(FIRE_EXCEPTION_ON_FAILURE); // Let object serialisation exceptions propagate.
@@ -81,7 +81,6 @@ public class ClientLoginHandler extends ChannelInboundHandlerAdapter {
             logger.info("client login success");
             LoginUtil.markAsLogin(ctx.channel());
             LoginUtil.setUserId(ctx.channel(), resp.getUserId());
-            ctx.fireChannelRead(msg);
         } else {
             logger.info("client login failed:{} ", JsonUtils.obj2Json(msg));
             ctx.close();

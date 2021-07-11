@@ -35,7 +35,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Msg> {
         } else if (msg.getType() == MsgType.HEART_BEAT) {
             logger.info("收到心跳响应：{}", JSON.toJSONString(msg));
         } else {
-            logger.info("未找到响应指令，请确认指令是否正确:", JsonUtils.obj2Json(msg));
+            logger.info("未找到响应指令，请确认指令是否正确:{}", JsonUtils.obj2Json(msg));
         }
     }
 
