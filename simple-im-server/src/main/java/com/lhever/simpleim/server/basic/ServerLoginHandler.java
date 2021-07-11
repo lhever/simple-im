@@ -45,12 +45,12 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
         }
 
         loginReq loginReq = (loginReq) msg;
-        logger.info("server received  auth req:  " + JsonUtils.obj2Json(loginReq));
+        logger.info("server received  login req:{}", JsonUtils.obj2Json(loginReq));
         loginResp resp = judgeLogin(loginReq);
 
 
         if (resp.getSuccess()) {
-            logger.info("[{}],登录成功！,id为{}", resp.getUserName(), resp.getUserId());
+            logger.info("[{}]登录成功！,id为{}", resp.getUserName(), resp.getUserId());
             LoginUtil.markAsLogin(ctx.channel());
             SessionUtil.bindSession(new Session(resp.getUserId(), loginReq.getUserName()), ctx.channel());
             ctx.writeAndFlush(resp);
@@ -58,8 +58,6 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
 
             //如果登录了，只要连接没断，就无需再校验
             ctx.channel().pipeline().remove(this);
-            super.channelRead(ctx, msg);
-
         } else {
             ctx.writeAndFlush(resp);
             logger.info("server send login failed");
