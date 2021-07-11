@@ -922,4 +922,17 @@ public class CustomJedisClient {
         return deserializer.convert(bytes);
     }
 
+
+    public static void main(String[] args) {
+
+        CustomJedisClient client = new CustomJedisClient("127.0.0.1", 6379, "redis123", 5000, 5, 20, 2000, true);
+
+        client.set("lihong", "aaaaa", 6);
+        String value = client.get("lihong");
+        System.out.println(value);
+
+
+
+    }
+
 }
