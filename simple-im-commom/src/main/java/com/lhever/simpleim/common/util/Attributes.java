@@ -9,4 +9,5 @@ public interface Attributes {
      */
     AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
     AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
+    AttributeKey<String> USER_ID = AttributeKey.newInstance("USER_ID");
 }

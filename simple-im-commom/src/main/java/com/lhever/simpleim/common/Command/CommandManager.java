@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by Sunnick on 2019/1/18/018.
- *
  * 命令管理器
  */
 public class CommandManager {

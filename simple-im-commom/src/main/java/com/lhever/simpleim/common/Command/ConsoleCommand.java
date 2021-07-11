@@ -3,7 +3,6 @@ package com.lhever.simpleim.common.Command;
 import io.netty.channel.Channel;
 
 /**
- * Created by Sunnick on 2019/1/18/018.
  * 命令行指令接口
  * 单聊 sendToUser::userId::msg
  * 群聊 sendToGroup::groupId::msg

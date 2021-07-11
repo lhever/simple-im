@@ -15,19 +15,20 @@
  */
 package com.lhever.simpleim.client;
 
-import com.lhever.simpleim.client.basic.ClientLoginHandler;
 import com.lhever.simpleim.client.basic.ClientHeartBeatHandler;
 import com.lhever.simpleim.client.basic.ClientIdleHandler;
-import com.lhever.simpleim.common.consts.NettyConstants;
+import com.lhever.simpleim.client.basic.ClientLoginHandler;
+import com.lhever.simpleim.client.business.ClientHandler;
 import com.lhever.simpleim.common.codec.LengthBasedByteBufDecoder;
 import com.lhever.simpleim.common.codec.NettyCodecHandler;
+import com.lhever.simpleim.common.consts.ImConsts;
 import com.lhever.simpleim.common.util.Scan;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.internal.StringUtil;
+import io.netty.util.internal.SystemPropertyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,14 +37,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Lilinfeng
- * @version 1.0
- * @date 2014年3月15日
- */
-public class Client {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Client.class);
+public class Client {
+    private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
@@ -109,6 +105,8 @@ public class Client {
 
                             ch.pipeline().addLast(new ClientLoginHandler(userName, passWord));
 
+                            ch.pipeline().addLast(new ClientHandler());
+
 
                         }
                     });
@@ -117,11 +115,11 @@ public class Client {
                     new InetSocketAddress(clientIp, clientPort)).addListener(new ChannelFutureListener() {
                 public void operationComplete(ChannelFuture channelFuture) throws Exception {
                     if (channelFuture.isSuccess()) {
-                        System.out.println("connect to server success!");
+                        logger.info("connect to server success!");
                         //启动控制台输入
                         startScanConsole(channelFuture.channel());
                     } else {
-                        System.out.println("failed to connect the server! ");
+                        logger.info("failed to connect the server! ");
                     }
                 }
             }).sync();
@@ -135,14 +133,14 @@ public class Client {
                 public void run() {
                     try {
                         TimeUnit.SECONDS.sleep(8);
-                        try {
-                            System.out.println("客户端发起重连操作");
-                            connect();// 发起重连操作
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        logger.error("sleep error", e);
+                    }
+                    try {
+                        logger.info("client reconnecting....");
+                        connect();// 发起重连操作
+                    } catch (Throwable e) {
+                        logger.error("client reconnect error", e);
                     }
                 }
             });
@@ -164,15 +162,15 @@ public class Client {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        String userName = StringUtil.isNullOrEmpty(System.getProperty("userName")) ? "lhever" : System.getProperty("userName");
-        String passWord = StringUtil.isNullOrEmpty(System.getProperty("passWord")) ? "123456" : System.getProperty("passWord");
+        String userName = SystemPropertyUtil.get("userName", "lhever");
+        String passWord = SystemPropertyUtil.get("passWord", "123456");
 
-        String serverIp = StringUtil.isNullOrEmpty(System.getProperty("serverIp")) ? NettyConstants.SERVER_IP : System.getProperty("serverIp");
-        Integer serverPort = StringUtil.isNullOrEmpty(System.getProperty("serverPort")) ? NettyConstants.SERVER_PORT : Integer.parseInt(System.getProperty("serverPort"));
+        String serverIp = SystemPropertyUtil.get("serverIp", ImConsts.SERVER_IP);
+        Integer serverPort = SystemPropertyUtil.getInt("serverPort", ImConsts.SERVER_PORT);
 
 
-        String clientIp = StringUtil.isNullOrEmpty(System.getProperty("clientIp")) ? NettyConstants.CLIENT_IP : System.getProperty("clientIp");
-        Integer clientPort = StringUtil.isNullOrEmpty(System.getProperty("clientPort")) ? NettyConstants.CLIENT_PORT : Integer.parseInt(System.getProperty("clientPort"));
+        String clientIp = SystemPropertyUtil.get("clientIp", ImConsts.CLIENT_IP);
+        Integer clientPort = SystemPropertyUtil.getInt("clientPort", ImConsts.CLIENT_PORT);
 
         new Client(serverIp, serverPort, clientIp, clientPort, userName, passWord).connect();
     }

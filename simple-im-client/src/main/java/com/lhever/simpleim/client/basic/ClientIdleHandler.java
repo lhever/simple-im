@@ -7,9 +7,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by Sunnick on 2019/1/27/027.
- */
+
 public class ClientIdleHandler extends IdleStateHandler {
 
     private static Logger logger = LoggerFactory.getLogger(ClientIdleHandler.class);

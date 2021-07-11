@@ -15,8 +15,8 @@
  */
 package com.lhever.simpleim.server.basic;
 
-import com.lhever.simpleim.common.msg.AuthReq;
-import com.lhever.simpleim.common.msg.AuthResp;
+import com.lhever.simpleim.common.msg.loginReq;
+import com.lhever.simpleim.common.msg.loginResp;
 import com.lhever.simpleim.common.util.JsonUtils;
 import com.lhever.simpleim.common.util.LoginUtil;
 import com.lhever.simpleim.common.util.Session;
@@ -38,53 +38,53 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg == null ||!(msg instanceof AuthReq)) {
-            System.out.println("服务端收到的不是认证请求，透传消息");
+        if (msg == null || !(msg instanceof loginReq)) {
+            logger.info("服务端收到的不是认证请求，透传消息");
             ctx.fireChannelRead(msg);
-        } else  {
-            AuthReq authReq = (AuthReq) msg;
-            System.out.println("server received  auth req:  " + JsonUtils.obj2Json(authReq));
-            AuthResp resp = new AuthResp();
-            System.out.println("服务端发送认证相应");
-            if ("lhever".equals(authReq.getUser()) && "123456".equals(authReq.getPwd())) {
-                resp.setSuccess(true);
-                resp.setClientId("lhever");
-                ctx.writeAndFlush(resp);
-                logger.info("[{}],登录成功！,id为{}", authReq.getUser(),authReq.getPwd());
+            return;
+        }
 
-                LoginUtil.markAsLogin(ctx.channel());
-                SessionUtil.bindSession(new Session(resp.getClientId(), authReq.getUser()),ctx.channel());
+        loginReq loginReq = (loginReq) msg;
+        logger.info("server received  auth req:  " + JsonUtils.obj2Json(loginReq));
+        loginResp resp = judgeLogin(loginReq);
 
-                //如果登录了，只要连接没断，就无需再校验
-                ctx.channel().pipeline().remove(this);
-                super.channelRead(ctx, msg);
 
-            } else {
-                resp.setSuccess(false);
-                ctx.writeAndFlush(resp);
-                System.out.println("认证不通过，关闭客户端");
-                ctx.close();
-            }
-//            ctx.fireChannelUnregistered();
-//            System.out.println("un register lhever");
+        if (resp.getSuccess()) {
+            logger.info("[{}],登录成功！,id为{}", resp.getUserName(), resp.getUserId());
+            LoginUtil.markAsLogin(ctx.channel());
+            SessionUtil.bindSession(new Session(resp.getUserId(), loginReq.getUserName()), ctx.channel());
+            ctx.writeAndFlush(resp);
+            logger.info("server send login success");
+
+            //如果登录了，只要连接没断，就无需再校验
+            ctx.channel().pipeline().remove(this);
+            super.channelRead(ctx, msg);
+
+        } else {
+            ctx.writeAndFlush(resp);
+            logger.info("server send login failed");
+            ctx.close();
         }
     }
 
+
+
+
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        if(LoginUtil.hasLogin(ctx.channel())){
-            logger.info("登录验证已通过，后续无需再验证!");
-        }else{
-            logger.info("登录验证未通过，连接断开...");
+        if (LoginUtil.hasLogin(ctx.channel())) {
+            logger.info("login success, no check login status later");
+        } else {
+            logger.info("login failed.....");
         }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         Session session = SessionUtil.getSessionByChannel(ctx.channel());
-        if (session != null ) {
-            SessionUtil.unBindSession(session,ctx.channel());
-            logger.info("{}下线啦!",session.getUserId());
+        if (session != null) {
+            SessionUtil.unBindSession(session, ctx.channel());
+            logger.info("{}({}) log out", session.getUserName(), session.getUserId());
         }
         ctx.channel().close();
     }
@@ -93,9 +93,9 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         //异常时断开连接
         Session session = SessionUtil.getSessionByChannel(ctx.channel());
-        if (session != null ) {
-            SessionUtil.unBindSession(session,ctx.channel());
-            logger.info("{}下线啦!",session.getUserId());
+        if (session != null) {
+            SessionUtil.unBindSession(session, ctx.channel());
+            logger.info("{}下线啦!", session.getUserId());
         }
         ctx.channel().close();
 
@@ -105,8 +105,29 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.fireChannelReadComplete();
-
     }
+
+
+    public loginResp judgeLogin(loginReq loginReq) {
+        if ("lhever".equals(loginReq.getUserName()) && "123456".equals(loginReq.getPwd())) {
+            loginResp resp = new loginResp();
+            resp.setSuccess(true);
+            resp.setUserId("lhever");
+            resp.setUserName(loginReq.getUserName());
+            return resp;
+        } else {
+            loginResp resp = new loginResp();
+            resp.setSuccess(false);
+            return resp;
+        }
+    }
+
+
+
+
+
+
+
 
 
 }

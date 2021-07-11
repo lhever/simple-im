@@ -15,13 +15,15 @@
  */
 package com.lhever.simpleim.client.basic;
 
-import com.lhever.simpleim.common.msg.AuthReq;
-import com.lhever.simpleim.common.msg.AuthResp;
+import com.lhever.simpleim.common.msg.loginReq;
+import com.lhever.simpleim.common.msg.loginResp;
 import com.lhever.simpleim.common.util.JsonUtils;
 import com.lhever.simpleim.common.util.LoginUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.netty.channel.ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE;
 
@@ -31,6 +33,7 @@ import static io.netty.channel.ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE;
  * first message to the server.
  */
 public class ClientLoginHandler extends ChannelInboundHandlerAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(ClientLoginHandler.class);
 
     private String passWord;
     private String userName;
@@ -45,9 +48,7 @@ public class ClientLoginHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("ClientAuthHandler channel active !!!!");
-
-        System.out.println("client send auth req");
+        logger.info("ClientLoginHandler channel active and send login req!!!!");
         // Send the first message if this handler is a client-side handler.
         ChannelFuture future = ctx.writeAndFlush(buildAuthReq());
         future.addListener(FIRE_EXCEPTION_ON_FAILURE); // Let object serialisation exceptions propagate.
@@ -57,40 +58,36 @@ public class ClientLoginHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("客户端被断开");
+        logger.info("client channel are inactive");
         super.channelInactive(ctx);
     }
 
-    private AuthReq buildAuthReq() {
-        AuthReq req = new AuthReq(userName, passWord);
+    private loginReq buildAuthReq() {
+        loginReq req = new loginReq(userName, passWord);
         return req;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         // Echo back the received object to the server.
-        if (msg != null && msg instanceof AuthResp) {
-            AuthResp resp = (AuthResp) msg;
-
-            if (resp.getSuccess() != null && resp.getSuccess()) {
-
-
-                System.out.println("客户端登陆成功");
-
-                LoginUtil.markAsLogin(ctx.channel());
-
-                ctx.fireChannelRead(msg);
-
-            } else {
-
-                System.out.println("client auth error" + JsonUtils.obj2Json(msg));
-                ctx.close();
-            }
-
-        } else {
-            System.out.println("客户端收到的不是认证响应，透传消息");
+        if (msg == null || !(msg instanceof loginResp)) {
+            logger.info("客户端收到的不是认证响应，透传消息");
             ctx.fireChannelRead(msg);
+            return;
         }
+
+        loginResp resp = (loginResp) msg;
+        if (resp.getSuccess()) {
+            logger.info("client login success");
+            LoginUtil.markAsLogin(ctx.channel());
+            LoginUtil.setUserId(ctx.channel(), resp.getUserId());
+            ctx.fireChannelRead(msg);
+        } else {
+            logger.info("client login failed:{} ", JsonUtils.obj2Json(msg));
+            ctx.close();
+        }
+
+
     }
 
     @Override

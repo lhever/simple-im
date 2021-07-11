@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sunnick on 2019/1/20/020.
  * 发起群聊 createGroup::userId1,userId2,userId3...
  */
 public class CreateGroupCommand implements ConsoleCommand {

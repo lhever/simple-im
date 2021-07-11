@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Sunnick on 2019/1/18/018.
  * 广播 broadcast::msg
  */
 public class BroadcastCommand implements ConsoleCommand {

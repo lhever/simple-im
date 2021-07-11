@@ -7,16 +7,17 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by Sunnick on 2019/1/27/027.
- */
+
 @ChannelHandler.Sharable
 public class ServerHeartBeatHandler extends SimpleChannelInboundHandler<PingPong> {
-
     private static Logger logger = LoggerFactory.getLogger(ServerHeartBeatHandler.class);
 
     private static ServerHeartBeatHandler instance = new ServerHeartBeatHandler();
     private ServerHeartBeatHandler(){}
+
+    public static ServerHeartBeatHandler getInstance() {
+        return instance;
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, PingPong ping) throws Exception {
@@ -25,7 +26,5 @@ public class ServerHeartBeatHandler extends SimpleChannelInboundHandler<PingPong
         ctx.writeAndFlush(PingPong.PONG);
     }
 
-    public static ServerHeartBeatHandler getInstance() {
-        return instance;
-    }
+
 }

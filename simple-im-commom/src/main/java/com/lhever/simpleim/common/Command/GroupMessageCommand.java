@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Sunnick on 2019/1/22/022.
  * 群聊 sendToGroup::groupId::msg
  */
 public class GroupMessageCommand implements ConsoleCommand {

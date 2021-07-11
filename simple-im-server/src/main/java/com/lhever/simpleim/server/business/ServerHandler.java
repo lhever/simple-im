@@ -3,6 +3,7 @@ package com.lhever.simpleim.server.business;
 import com.alibaba.fastjson.JSON;
 import com.lhever.simpleim.common.consts.MsgType;
 import com.lhever.simpleim.common.msg.Msg;
+import com.lhever.simpleim.common.util.JsonUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -34,7 +35,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Msg> {
         if (handler != null) {
             handler.channelRead(channelHandlerContext, packet);
         } else {
-            logger.info("未找到响应指令，请确认指令是否正确！");
+            logger.info("未找到响应指令，请确认指令是否正确:{}", JsonUtils.obj2Json(packet));
         }
     }
 }

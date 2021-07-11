@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Sunnick on 2019/1/18/018.
  * 私聊 sendToUser::userId::msg
  */
 public class P2PCommand implements ConsoleCommand{

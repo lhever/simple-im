@@ -3,8 +3,8 @@ package com.lhever.simpleim.common.codec;
 import com.lhever.simpleim.common.consts.MsgType;
 import com.lhever.simpleim.common.msg.Msg;
 import com.lhever.simpleim.common.msg.PingPong;
-import com.lhever.simpleim.common.msg.AuthReq;
-import com.lhever.simpleim.common.msg.AuthResp;
+import com.lhever.simpleim.common.msg.loginReq;
+import com.lhever.simpleim.common.msg.loginResp;
 import com.lhever.simpleim.common.util.JsonUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -38,8 +38,8 @@ public class NettyCodeC {
     static {
         packetTypeMap = new HashMap<Integer,Class<? extends Msg>>();
         packetTypeMap.put(MsgType.HEART_BEAT, PingPong.class);
-        packetTypeMap.put(MsgType.LOGIN_REQ, AuthReq.class);
-        packetTypeMap.put(MsgType.LOGIN_RESP, AuthResp.class);
+        packetTypeMap.put(MsgType.LOGIN_REQ, loginReq.class);
+        packetTypeMap.put(MsgType.LOGIN_RESP, loginResp.class);
     }
 
     private NettyCodeC(){
