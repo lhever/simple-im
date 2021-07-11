@@ -12,6 +12,11 @@
 
     <artifactId>simple-im-commom</artifactId>
 
+
+    <dependencies>
+
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

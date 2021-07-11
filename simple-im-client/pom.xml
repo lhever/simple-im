@@ -11,6 +11,8 @@
 
     <artifactId>simple-im-client</artifactId>
 
+
+
     <dependencies>
         <dependency>
             <groupId>com.lhever</groupId>

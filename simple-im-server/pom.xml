@@ -39,7 +39,7 @@
                     <archive>
                         <manifest>
                             <!--运行jar包时运行的主类，要求类全名-->
-                            <mainClass>com.sunnick.easyim.Server</mainClass>
+                            <mainClass>com.lhever.simpleim.common.Server</mainClass>
                             <!-- 是否指定项目classpath下的依赖 -->
                             <addClasspath>true</addClasspath>
                             <!-- 指定依赖的时候声明前缀 -->
