@@ -1,9 +1,12 @@
 package com.lhever.simpleimgateway.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>类说明：</p>
@@ -18,10 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api")
 public class GatewayController {
 
+    @Autowired
+    private GatewayService gatewayService;
+
 
     @GetMapping(path = "getServer")
     @ResponseBody
-    public String getServer() {
-        return "127.0.0.1";
+    public List<String> getServer() throws Exception {
+        return gatewayService.getOnlineServers();
     }
 }
