@@ -1,7 +1,9 @@
 package com.lhever.simpleimgateway.api;
 
+import com.lhever.common.core.support.zookeeper.ZkCreateMode;
 import com.lhever.common.core.support.zookeeper.ZkCuratorClient;
 import org.apache.curator.retry.RetryNTimes;
+import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +20,7 @@ public class GatewayService {
     @Value("${zookeeper.address}")
     private String zkAddress;
 
-    @Value("$zookeeper.namespace}")
+    @Value("${zookeeper.namespace}")
     private String zkNamespace;
 
     @Value("${zookeeper.rootPath}")
@@ -43,6 +45,8 @@ public class GatewayService {
             if (child.startsWith(zkRootPath)) {
                 String server = child.substring(zkRootPath.length());
                 servers.add(server);
+            } else {
+                servers.add(child);
             }
         }
         return servers;
