@@ -1,12 +1,13 @@
 package com.lhever.simpleim.server;
 
-import com.lhever.simpleim.common.consts.ImConsts;
 import com.lhever.simpleim.common.codec.LengthBasedByteBufDecoder;
 import com.lhever.simpleim.common.codec.NettyCodecHandler;
-import com.lhever.simpleim.server.basic.ServerLoginHandler;
 import com.lhever.simpleim.server.basic.ServerHeartBeatHandler;
 import com.lhever.simpleim.server.basic.ServerIdleHandler;
+import com.lhever.simpleim.server.basic.ServerLoginHandler;
 import com.lhever.simpleim.server.business.ServerHandler;
+import com.lhever.simpleim.server.config.ServerConfig;
+import com.lhever.simpleim.server.reg.ZkRegister;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -15,7 +16,6 @@ import io.netty.channel.socket.nio.NioChannelOption;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.internal.SystemPropertyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,7 @@ public class Server {
 
     private Integer serverPort;
     private String serverIp;
+    private ZkRegister zkRegister;
 
     public Server(String serverIp, Integer serverPort) {
         this.serverPort = serverPort;
@@ -61,11 +62,10 @@ public class Server {
                 new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                        if (channelFuture.isSuccess()){
-                            System.out.println("server started success using port" + serverPort);
+                        if (channelFuture.isSuccess()) {
+                            logger.info("server started success using port:{}", serverPort);
                         }else {
-                            System.out.println("server started failed using port" + serverPort);
-                            channelFuture.cause().printStackTrace();
+                            logger.info("server started failed using port: {}", serverPort, channelFuture.cause());
                             System.exit(0);
                         }
                     }
@@ -73,12 +73,13 @@ public class Server {
         ).sync();
 
         logger.info("Netty server start success with ip:{} and port:{} ", serverIp, serverPort);
+
+        this.zkRegister = new ZkRegister();
+        zkRegister.register(this.serverIp, this.serverPort);
     }
 
     public static void main(String[] args) throws Exception {
-        String ip = SystemPropertyUtil.get("ip", ImConsts.SERVER_IP);
-        int port = SystemPropertyUtil.getInt("port", ImConsts.SERVER_PORT);
-        new Server(ip, port).bind();
+        new Server(ServerConfig.SERVER_IP, ServerConfig.SERVER_PORT).bind();
     }
 }
 

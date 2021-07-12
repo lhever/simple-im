@@ -1,0 +1,26 @@
+server:
+  ip: 127.0.0.1
+  port: 9999
+
+
+zookeeper:
+  ip: 127.0.0.1
+  port: 2181
+  address: '${zookeeper.ip}:${zookeeper.port}'
+  namespace: im
+  rootPath: /root
+
+
+redis:
+  ip: 127.0.0.1
+  port: 6379
+  pwd: redis123
+
+
+
+
+
+
+
+
+
