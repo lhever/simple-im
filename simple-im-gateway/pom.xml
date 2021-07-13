@@ -15,6 +15,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<skipTests>true</skipTests>
 	</properties>
 	<dependencies>
 
@@ -89,26 +90,159 @@
 
 	<build>
 		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>UTF-8</encoding>
+					<compilerArguments>
+<!--						<extdirs>${project.basedir}/src/main/resources/lib</extdirs>-->
+						<verbose />
+						<!--                        <bootclasspath>${java.home}\jre\lib\rt.jar;${java.home}\jre\lib\jce.jar</bootclasspath>-->
+					</compilerArguments>
+				</configuration>
+			</plugin>
+
+
+			<!--打包jar-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<!--不打包资源文件-->
+					<!--exclude的目录不是src下面的，是以编译结果classes为根目录计算的-->
+					<excludes>
+						<exclude>*.**</exclude>
+						<exclude>run/*</exclude>
+						<exclude>run</exclude>
+						<exclude>*.xml</exclude>
+						<exclude>*.yml</exclude>
+						<!--<exclude>com/hikvision/sc/base/start/config/SwaggerConfiguration.class</exclude>-->
+					</excludes>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<!--MANIFEST.MF 中 Class-Path 加入前缀-->
+							<classpathPrefix>lib/</classpathPrefix>
+							<!--jar包不包含唯一版本标识-->
+							<useUniqueVersions>false</useUniqueVersions>
+							<!--指定入口类-->
+							<mainClass>com.lhever.simpleimgateway.GatewayApplication</mainClass>
+						</manifest>
+						<manifestEntries>
+							<!--MANIFEST.MF 中 Class-Path 加入资源文件目录-->
+							<Class-Path>./resources/ lib/activation-1.1.jar</Class-Path>
+						</manifestEntries>
+					</archive>
+					<outputDirectory>${project.build.directory}</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<!--拷贝依赖 copy-dependencies-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<!--<includeScope>compile</includeScope>-->
+							<!--<excludeScope>provided</excludeScope>-->
+							<!--排除swagger-ui界面相关的jar包-->
+							<excludeGroupIds>
+								<!--io.springfox,-->
+								com.lhever.sc.base.external.mybatis
+							</excludeGroupIds>
+							<outputDirectory>
+								${project.build.directory}/../../target/${project.artifactId}/lib/
+							</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--拷贝资源文件 copy-resources-->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/main/resources</directory>
+									<excludes>
+										<exclude>run/*</exclude>
+										<exclude>run</exclude>
+									</excludes>
+								</resource>
+							</resources>
+							<outputDirectory>${project.build.directory}/../../target/${project.artifactId}/resources</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-script</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/main/resources/run</directory>
+								</resource>
+							</resources>
+							<outputDirectory>${project.build.directory}/../../target/${project.artifactId}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+
+			</plugin>
+
+			<!--spring boot repackage，依赖 maven-jar-plugin 打包的jar包 重新打包成 spring boot 的jar包-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.lhever.simpleimgateway.GatewayApplication</mainClass>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<includeSystemScope>true</includeSystemScope>
+					<!--重写包含依赖，包含不存在的依赖，jar里没有pom里的依赖-->
+					<includes>
+						<include>
+							<groupId>null</groupId>
+							<artifactId>null</artifactId>
+						</include>
+					</includes>
+					<layout>ZIP</layout>
+					<!--使用外部配置文件，jar包里没有资源文件-->
+					<addResources>true</addResources>
+					<outputDirectory>${project.build.directory}/../../target/${project.artifactId}</outputDirectory>
 				</configuration>
 				<executions>
 					<execution>
 						<goals>
 							<goal>repackage</goal>
 						</goals>
+						<configuration>
+							<!--配置jar包特殊标识 配置后，保留原文件，生成新文件 *-run.jar -->
+							<!--配置jar包特殊标识 不配置，原文件命名为 *.jar.original，生成新文件 *.jar -->
+							<!--<classifier>run</classifier>-->
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 
