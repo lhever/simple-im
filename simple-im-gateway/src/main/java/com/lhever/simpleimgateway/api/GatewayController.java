@@ -27,7 +27,7 @@ public class GatewayController {
 
     @GetMapping(path = "getServer")
     @ResponseBody
-    public List<String> getServer() throws Exception {
+    public List<String> getServer() {
         return gatewayService.getOnlineServers();
     }
 }
