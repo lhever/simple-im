@@ -33,40 +33,112 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <!--运行jar包时运行的主类，要求类全名-->
-                            <mainClass>com.sunnick.easyim.Client</mainClass>
-                            <!-- 是否指定项目classpath下的依赖 -->
-                            <addClasspath>true</addClasspath>
-                            <!-- 指定依赖的时候声明前缀 -->
-                            <classpathPrefix>./</classpathPrefix>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
                 <executions>
-                    <execution><!-- 配置执行器 -->
-                        <id>make-assembly</id>
-                        <phase>package</phase><!-- 绑定到package生命周期阶段上 -->
+                    <execution>
+                         <id>copy-dependencies</id>
+                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal><!-- 只运行一次 -->
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <finalName>${project.name}</finalName>
-                            <descriptor>src/main/assembly/assembly.xml</descriptor><!--配置描述文件路径-->
+                            <!--<includeScope>compile</includeScope>-->
+                            <!--<excludeScope>provided</excludeScope>-->
+                            <!--排除swagger-ui界面相关的jar包-->
+                            <!--<excludeGroupIds>
+                                &lt;!&ndash;io.springfox,&ndash;&gt;
+                                com.external.mybatis
+                            </excludeGroupIds>-->
+                            <outputDirectory>
+                                ${project.parent.build.directory}/${project.artifactId}/lib
+                            </outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <excludes>
+                                            <exclude>run/*</exclude>
+                                            <exclude>run</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                            <outputDirectory>
+                                ${project.parent.build.directory}/${project.artifactId}/resources
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-script</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/run</directory>
+                                </resource>
+                            </resources>
+                            <outputDirectory>${project.parent.build.directory}/${project.artifactId}/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.lhever.simpleim.client.Client</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <useUniqueVersions>false</useUniqueVersions>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>./resources/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <outputDirectory>${project.parent.build.directory}/${project.artifactId}</outputDirectory>
+                </configuration>
+            </plugin>
+
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>&lt;!&ndash; 配置执行器 &ndash;&gt;
+                        <id>make-assembly</id>
+                        <phase>package</phase>&lt;!&ndash; 绑定到package生命周期阶段上 &ndash;&gt;
+                        <goals>
+                            <goal>single</goal>&lt;!&ndash; 只运行一次 &ndash;&gt;
+                        </goals>
+                        <configuration>
+                            <finalName>${project.name}</finalName>
+                            <descriptor>src/main/assembly/assembly.xml</descriptor>&lt;!&ndash;配置描述文件路径&ndash;&gt;
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
 
         </plugins>
     </build>
