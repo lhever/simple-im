@@ -44,7 +44,7 @@ public class Server {
         EventExecutorGroup businessGroup = new DefaultEventExecutorGroup(4);//业务
         ServerBootstrap b = new ServerBootstrap();
         b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 100)
+                .option(ChannelOption.SO_BACKLOG, 10000)
                 .option(NioChannelOption.SO_KEEPALIVE, true)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -59,6 +59,10 @@ public class Server {
 
                     }
                 });
+        // 配置子通道也就是SocketChannel的选项
+        // 我们已经有了应用层的心跳检测机制，也不需要开启此参数
+        b.childOption(ChannelOption.SO_KEEPALIVE,false);
+        b.childOption(ChannelOption.TCP_NODELAY,false);
 
         // 绑定端口，同步等待成功
         b.bind(serverIp, serverPort).addListener(
