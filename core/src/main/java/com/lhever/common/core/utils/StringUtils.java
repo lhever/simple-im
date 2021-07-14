@@ -893,12 +893,12 @@ public class StringUtils {
     }
 
 
-    public static String appendAll(String... items) {
+    public static String appendAll(Object... items) {
         if (items == null) {
-            return CommonConsts.EMPTY;
+            return null;
         }
         StringBuilder builder = new StringBuilder();
-        for (String item : items) {
+        for (Object item : items) {
             builder.append(item);
         }
         return builder.toString();
