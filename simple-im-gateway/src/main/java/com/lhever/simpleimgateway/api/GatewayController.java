@@ -27,7 +27,13 @@ public class GatewayController {
 
     @GetMapping(path = "getServer")
     @ResponseBody
-    public List<String> getServer() {
-        return gatewayService.getOnlineServers();
+    public String getServer() {
+        return gatewayService.getOnlineServer();
+    }
+
+    @GetMapping(path = "getAllServer")
+    @ResponseBody
+    public List<String> getAllServer() {
+        return gatewayService.getAllOnlineServer();
     }
 }

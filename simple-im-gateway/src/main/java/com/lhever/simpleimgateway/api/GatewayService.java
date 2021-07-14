@@ -1,18 +1,16 @@
 package com.lhever.simpleimgateway.api;
 
+import com.lhever.common.core.support.lb.RoundRobinStrategy;
 import com.lhever.common.core.support.timer.HashedWheelTimer;
 import com.lhever.common.core.support.timer.Timeout;
 import com.lhever.common.core.support.timer.Timer;
 import com.lhever.common.core.support.timer.TimerTask;
-import com.lhever.common.core.support.zookeeper.ZkCreateMode;
 import com.lhever.common.core.support.zookeeper.ZkCuratorClient;
 import com.lhever.common.core.utils.CollectionUtils;
 import org.apache.curator.retry.RetryNTimes;
-import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.interceptor.CacheOperationInvoker;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -42,27 +40,36 @@ public class GatewayService {
 
     private final AtomicReference<List<String>> reference = new AtomicReference();
 
+    private static final int interval = 15;
+
+    private RoundRobinStrategy<String> roundRobin = new RoundRobinStrategy<>();
+
 
     @PostConstruct
-    public void init() throws Exception {
+    public void init() {
         this.curatorClient = new ZkCuratorClient(zkAddress, zkNamespace, new RetryNTimes(3, 5000));
         reference.set(doGetOnlineServers());
 
         this.timer = new HashedWheelTimer(Executors.defaultThreadFactory(), 5, TimeUnit.SECONDS, 360);
         TimerTask getServerTask = new TimerTask() {
-            public void run(Timeout timeout) throws Exception {
+            public void run(Timeout timeout) {
                 List<String> onlineServers = doGetOnlineServers();
                 if (CollectionUtils.isNotEmpty(onlineServers)) {
                     reference.set(onlineServers);
                 }
-                logger.info("get children will run after {} seconds", 30);
-                timer.newTimeout(this, 30, TimeUnit.SECONDS);//结束时候再次注册
+                logger.info("get children will run after {} seconds", interval);
+                timer.newTimeout(this, interval, TimeUnit.SECONDS);//结束时候再次注册
             }
         };
-        timer.newTimeout(getServerTask, 30, TimeUnit.SECONDS);
+        timer.newTimeout(getServerTask, interval, TimeUnit.SECONDS);
     }
 
-    public List<String> getOnlineServers() {
+    public String getOnlineServer() {
+        // choose on by round robin strategy
+        return roundRobin.choose(() -> reference.get(), null);
+    }
+
+    public List<String> getAllOnlineServer() {
         return reference.get();
     }
 
