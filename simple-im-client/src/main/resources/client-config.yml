@@ -1,0 +1,26 @@
+client:
+  ip: 127.0.0.1
+  port: 19999
+  userName: lhever
+  passWord: 123456
+  enableDiscovery: true
+
+server:
+  ip: 127.0.0.1
+  port: 9999
+
+discovery:
+  ip: 127.0.0.1
+  port: 444
+  context: /gateway
+
+redis:
+  ip: 127.0.0.1
+  port: 6379
+  pwd: redis123
+
+
+
+
+
+

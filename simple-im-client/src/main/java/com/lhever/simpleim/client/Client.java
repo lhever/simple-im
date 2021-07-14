@@ -15,20 +15,24 @@
  */
 package com.lhever.simpleim.client;
 
+import com.lhever.common.core.exception.CommonException;
+import com.lhever.common.core.support.http.HttpClientSingleton;
+import com.lhever.common.core.utils.StringUtils;
 import com.lhever.simpleim.client.basic.ClientHeartBeatHandler;
 import com.lhever.simpleim.client.basic.ClientIdleHandler;
 import com.lhever.simpleim.client.basic.ClientLoginHandler;
 import com.lhever.simpleim.client.business.ClientHandler;
+import com.lhever.simpleim.client.config.ClientConfig;
 import com.lhever.simpleim.common.codec.LengthBasedByteBufDecoder;
 import com.lhever.simpleim.common.codec.NettyCodecHandler;
-import com.lhever.simpleim.common.consts.ImConsts;
 import com.lhever.simpleim.common.util.Scan;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.internal.SystemPropertyUtil;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +42,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
+@Getter
+@Setter
 public class Client {
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
@@ -60,28 +66,9 @@ public class Client {
         this.clientPort = clientPort;
         this.userName = userName;
         this.passWord = passWord;
-
     }
-
-    public Integer getClientPort() {
-        return clientPort;
-    }
-
-    public String getClientIp() {
-        return clientIp;
-    }
-
-    public Integer getServerPort() {
-        return serverPort;
-    }
-
-    public String getServerIp() {
-        return serverIp;
-    }
-
 
     EventLoopGroup group = new NioEventLoopGroup();
-
     public void connect() throws Exception {
         // 配置客户端NIO线程组
         try {
@@ -162,15 +149,26 @@ public class Client {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        String userName = SystemPropertyUtil.get("userName", "lhever");
-        String passWord = SystemPropertyUtil.get("passWord", "123456");
+        String userName = ClientConfig.USER_NAME;
+        String passWord = ClientConfig.PASS_WORD;
 
-        String serverIp = SystemPropertyUtil.get("serverIp", ImConsts.SERVER_IP);
-        Integer serverPort = SystemPropertyUtil.getInt("serverPort", ImConsts.SERVER_PORT);
-
-
-        String clientIp = SystemPropertyUtil.get("clientIp", ImConsts.CLIENT_IP);
-        Integer clientPort = SystemPropertyUtil.getInt("clientPort", ImConsts.CLIENT_PORT);
+        String serverIp = ClientConfig.SERVER_IP;
+        Integer serverPort = ClientConfig.SERVER_PORT;
+        if (ClientConfig.ENABLE_DISCOVERY) {
+            String url = StringUtils.appendAll("http://", ClientConfig.DISCOVERY_IP, ":", ClientConfig.DISCOVERY_PORT, ClientConfig.DISCOVERY_CONTEXT, "/api/getServer");
+            String address = HttpClientSingleton.get().doGet(url, null, null);
+            if (StringUtils.isBlank(address)) {
+                throw new CommonException("cannot get server address");
+            }
+            String[] split = address.split(":");
+            if (split.length < 2) {
+                throw new CommonException("bad address: " + address);
+            }
+            serverIp = split[0];
+            serverPort = Integer.parseInt(split[1]);
+        }
+        String clientIp = ClientConfig.CLIENT_IP;
+        Integer clientPort = ClientConfig.CLIENT_PORT;
 
         new Client(serverIp, serverPort, clientIp, clientPort, userName, passWord).connect();
     }
