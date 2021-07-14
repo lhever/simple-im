@@ -1,4 +1,4 @@
-package com.lhever.simpleim.common.Command;
+package com.lhever.simpleim.common.command;
 
 import io.netty.channel.Channel;
 

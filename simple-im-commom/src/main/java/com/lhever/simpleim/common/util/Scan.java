@@ -1,6 +1,6 @@
 package com.lhever.simpleim.common.util;
 
-import com.lhever.simpleim.common.Command.CommandManager;
+import com.lhever.simpleim.common.command.CommandManager;
 import io.netty.channel.Channel;
 import io.netty.util.internal.StringUtil;
 import org.slf4j.Logger;

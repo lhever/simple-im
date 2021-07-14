@@ -14,6 +14,11 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>com.lhever</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

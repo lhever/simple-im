@@ -1,4 +1,4 @@
-package com.lhever.simpleim.common.Command;
+package com.lhever.simpleim.common.command;
 
 import com.lhever.simpleim.common.msg.MessageReq;
 import com.lhever.simpleim.common.util.ChannelUtils;
