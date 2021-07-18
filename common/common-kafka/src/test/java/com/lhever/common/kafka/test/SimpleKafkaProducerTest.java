@@ -25,7 +25,7 @@ public class SimpleKafkaProducerTest {
     public static void main(String[] args) throws Throwable {
         String topic = "lihong-topic";
         ProducerCfg cfg = new ProducerCfg()
-                .bootstrapServers("10.33.65.9:9092")
+                .bootstrapServers("127.0.0.1:9092")
                 .acks("1")
                 .retries(3).retryBackoffMs(300)
                 .bufferMemory(null).batchSize(null).lingerMs(1000)

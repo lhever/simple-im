@@ -16,7 +16,7 @@ import java.util.Optional;
 public class SimpleKafkaManagerTest {
     public static void main(String[] args) {
 
-        SimpleKafkaManager simpleKafkaManager = new SimpleKafkaManager("10.33.65.9:9092");
+        SimpleKafkaManager simpleKafkaManager = new SimpleKafkaManager("127.0.0.1:9092");
         simpleKafkaManager.listAllTopic();
         String topic = "lihong-topic";
         simpleKafkaManager.getTopic(topic);

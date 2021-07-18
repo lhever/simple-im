@@ -33,7 +33,7 @@ public class KafkaConsumerTest {
 
         final String TOPIC = "lihong-topic";
         ConsumerCfg cfg = new ConsumerCfg()
-                .bootstrapServers("10.33.65.9:9092")
+                .bootstrapServers("127.0.0.1:9092")
                 .groupId("group-id-0")
                 .enableAutoCommit(false)
                 .autoOffsetReset("earliest")
@@ -43,10 +43,10 @@ public class KafkaConsumerTest {
                 .maxPollIntervalMs(5 * 10000)
                 .keyDeSerializer(StringDeserializer.class)
                 .valueDeSerializer(StringDeserializer.class)
-              /*  .topicPartitionOffset(new TopicPartitionOffset(TOPIC, new PartitionOffset[] {
+                .topicPartitionOffset(new TopicPartitionOffset(TOPIC, new PartitionOffset[] {
                         new PartitionOffset(0, 0L), new PartitionOffset(1, 0L), new PartitionOffset(2, 0L)})
-                )*/
-                .topic(TOPIC)
+                )
+//                .topic(TOPIC)
                 .pollDuration(Duration.ofMillis(300))
                 .concurrency(3)
                 .msgHandler( new MsgHandler<String, String>() {
