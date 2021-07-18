@@ -53,6 +53,8 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
             logger.info("[{}]登录成功！,id为{}", resp.getUserName(), resp.getUserId());
             LoginUtil.markAsLogin(ctx.channel());
             SessionUtil.bindSession(new Session(resp.getUserId(), loginReq.getUserName()), ctx.channel());
+
+
             ctx.writeAndFlush(resp);
             logger.info("server send login success");
 
