@@ -14,6 +14,7 @@
         <module>simple-im-gateway</module>
         <module>simple-im-client</module>
         <module>simple-im-server</module>
+        <module>simple-im-router</module>
     </modules>
 
     <properties>
