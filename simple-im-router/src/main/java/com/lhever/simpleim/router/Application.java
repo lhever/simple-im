@@ -1,6 +1,6 @@
 package com.lhever.simpleim.router;
 
-import com.lhever.simpleim.router.cfg.DataSourceConfig;
+import com.lhever.simpleim.router.basic.cfg.DataSourceConfig;
 import com.lhever.simpleim.router.pojo.User;
 import com.lhever.simpleim.router.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

@@ -1,4 +1,4 @@
-package com.lhever.simpleim.router.cfg;
+package com.lhever.simpleim.router.basic.cfg;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageInterceptor;
