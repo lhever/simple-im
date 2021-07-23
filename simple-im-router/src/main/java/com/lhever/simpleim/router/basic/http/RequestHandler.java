@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 @Data
-public class HttpMethodHandler {
+public class RequestHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRouter.class);
 
@@ -34,7 +34,7 @@ public class HttpMethodHandler {
 
     private boolean modifyResponse = false;
 
-    public HttpMethodHandler(@NonNull Object object, @NonNull Method method) {
+    public RequestHandler(@NonNull Object object, @NonNull Method method) {
         this.object = object;
         this.method = method;
         this.names = ParamNameResolver.getParamName(method);

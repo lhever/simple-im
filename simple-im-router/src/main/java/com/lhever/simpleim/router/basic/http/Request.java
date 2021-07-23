@@ -9,7 +9,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HttpHandlerPath {
+public class Request {
 
     private String uri;
 
@@ -19,7 +19,7 @@ public class HttpHandlerPath {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HttpHandlerPath that = (HttpHandlerPath) o;
+        Request that = (Request) o;
         return uri.equals(that.uri) &&
                 method.equals(that.method);
     }

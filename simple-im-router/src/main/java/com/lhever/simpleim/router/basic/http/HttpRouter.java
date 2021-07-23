@@ -21,7 +21,7 @@ public class HttpRouter/* extends ClassLoader*/ {
     private static final Logger logger = LoggerFactory.getLogger(HttpRouter.class);
 
     private static final int BUFFER_SIZE = 1024 * 8;
-    private Map<HttpHandlerPath, HttpMethodHandler> httpRouterMapper = Maps.newConcurrentMap();
+    private Map<Request, RequestHandler> httpRouterMapper = Maps.newConcurrentMap();
     private String classpath = this.getClass().getResource(CommonConsts.EMPTY).getPath();
     private Map<String, Object> controllerBeans = Maps.newConcurrentMap();
 
@@ -80,9 +80,9 @@ public class HttpRouter/* extends ClassLoader*/ {
                         if (!controllerBeans.containsKey(clazz.getName())) {
                             controllerBeans.put(clazz.getName(), instance);
                         }
-                        final HttpMethodHandler httpMethodHandler = new HttpMethodHandler(controllerBeans.get(clazz.getName()), invokeMethod);
+                        final RequestHandler requestHandler = new RequestHandler(controllerBeans.get(clazz.getName()), invokeMethod);
                         final String requestUri = clazzUri + CommonConsts.SLASH + FileUtils.trim(methodUri);
-                        httpRouterMapper.put(new HttpHandlerPath(requestUri, HttpMethod.valueOf(httpMethod)), httpMethodHandler);
+                        httpRouterMapper.put(new Request(requestUri, HttpMethod.valueOf(httpMethod)), requestHandler);
                     }
                 }
             }
@@ -93,7 +93,7 @@ public class HttpRouter/* extends ClassLoader*/ {
         }
     }
 
-    public HttpMethodHandler getRoute(final HttpHandlerPath httpHandlerPath) {
-        return httpRouterMapper.get(httpHandlerPath);
+    public RequestHandler getRoute(final Request request) {
+        return httpRouterMapper.get(request);
     }
 }

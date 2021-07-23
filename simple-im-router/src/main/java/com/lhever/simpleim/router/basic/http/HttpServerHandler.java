@@ -54,9 +54,9 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 uri = uri.substring(0, uri.indexOf(CommonConsts.QUESTION_MARK));
             }
             uri = FileUtils.trimTail(uri);
-            final HttpMethodHandler httpMethodHandler = httpRouter.getRoute(new HttpHandlerPath(uri, request.method()));
-            if (httpMethodHandler != null) {
-                ResponseUtils.response(ctx, request, httpMethodHandler.call(request));
+            final RequestHandler requestHandler = httpRouter.getRoute(new Request(uri, request.method()));
+            if (requestHandler != null) {
+                ResponseUtils.response(ctx, request, requestHandler.call(request));
             } else {
                 ResponseUtils.notFound(ctx, request);
             }
