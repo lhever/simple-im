@@ -29,7 +29,7 @@ public class HttpRouter {
         ctx.getBeansWithAnnotation(clazz)
                 .values().stream().forEach(bean -> {
                     Class<?> targetClass = AopUtils.getTargetClass(bean);
-                    logger.info("scan controller class, aop class:{} ---->  target class:{} ");
+                    logger.info("proxy class:{} ---->  target class:{} ", bean.getClass(), targetClass);
                     if (Objects.nonNull(targetClass.getAnnotation(clazz))) {
                         addRouter(targetClass, bean);
                     }
