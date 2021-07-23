@@ -1,5 +1,6 @@
 package com.lhever.simpleim.router.basic.http;
 
+import com.lhever.common.core.utils.NetUtils;
 import com.lhever.simpleim.router.basic.listener.SpringContextHolder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -55,13 +56,21 @@ public class HttpServer {
                     });
 
             final Channel serverChannel = bootstrap.bind(new InetSocketAddress(PORT)).sync().channel();
-            logger.info("http://127.0.0.1:{}/ Start-up success", PORT);
+            logger.info("http://{}:{}/ Start-up success", getIp(), PORT);
             serverChannel.closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
+        }
+    }
+
+    private String getIp() {
+        try {
+            return NetUtils.getLocalIP();
+        } catch (Exception e) {
+            return "127.0.0.1";
         }
     }
 }

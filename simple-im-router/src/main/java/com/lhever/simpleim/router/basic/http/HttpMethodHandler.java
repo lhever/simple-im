@@ -3,6 +3,7 @@ package com.lhever.simpleim.router.basic.http;
 import com.lhever.common.core.annotation.ModifyResponse;
 import com.lhever.common.core.response.CommonResponse;
 import com.lhever.common.core.utils.CollectionUtils;
+import com.lhever.common.core.utils.StringUtils;
 import com.lhever.simpleim.router.basic.http.annotation.RequestParam;
 import com.lhever.simpleim.router.basic.util.ParamNameResolver;
 import com.lhever.simpleim.router.basic.util.RequestUtils;
@@ -10,7 +11,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import lombok.Data;
 import lombok.NonNull;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,6 +94,8 @@ public class HttpMethodHandler {
             args.add(Boolean.valueOf(value));
         } else if (parameterType.equals(Short.class) || parameterType.equals(short.class)) {
             args.add(Short.valueOf(value));
+        } else if (parameterType.equals(Character.class) || parameterType.equals(char.class)) {
+            args.add(convert2Char(value));
         } else if (parameterType.isArray()) {
             Class<?> componentType = parameterType.getComponentType();
             if (componentType.equals(String.class)) {
@@ -140,7 +142,22 @@ public class HttpMethodHandler {
                     Array.set(array, i, Short.valueOf(values.get(i)));
                 }
                 args.add(array);
+            } else if (componentType.equals(Character.class) || componentType.equals(char.class)) {
+                Object array = Array.newInstance(componentType, values.size());
+                for (int i = 0; i < values.size(); i++) {
+                    Array.set(array, i, convert2Char(values.get(i)));
+                }
+                args.add(array);
             }
+        }
+    }
+
+    private static Character convert2Char(String value) {
+        if (StringUtils.isBlank(value)) {
+            return null;
+        } else {
+            char[] chars = value.toCharArray();
+            return Character.valueOf(chars[0]);
         }
     }
 
