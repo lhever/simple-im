@@ -44,7 +44,7 @@ public class HttpServer {
             final ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .handler(new LoggingHandler(LogLevel.WARN))
                     .option(ChannelOption.SO_REUSEADDR, true)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
 
