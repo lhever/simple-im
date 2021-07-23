@@ -16,33 +16,12 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Objects;
 
-public class HttpRouter/* extends ClassLoader*/ {
+public class HttpRouter {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRouter.class);
 
-    private static final int BUFFER_SIZE = 1024 * 8;
     private Map<Request, RequestHandler> httpRouterMapper = Maps.newConcurrentMap();
-    private String classpath = this.getClass().getResource(CommonConsts.EMPTY).getPath();
     private Map<String, Object> controllerBeans = Maps.newConcurrentMap();
-
-   /* @Override
-    protected Class<?> findClass(final String name) throws ClassNotFoundException {
-        final String path = classpath + name.replaceAll("\\.", CommonConsts.SLASH);
-        byte[] bytes;
-        try (InputStream ins = new FileInputStream(path)) {
-            try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-                final byte[] buffer = new byte[BUFFER_SIZE];
-                int temp;
-                while ((temp = ins.read(buffer)) != -1) {
-                    out.write(buffer, 0, temp);
-                }
-                bytes = out.toByteArray();
-            }
-        } catch (Exception e) {
-            throw new ClassNotFoundException(name);
-        }
-        return super.defineClass(name, bytes, 0, bytes.length);
-    }*/
 
 
     public void loadControllerClass(ApplicationContext ctx) {
