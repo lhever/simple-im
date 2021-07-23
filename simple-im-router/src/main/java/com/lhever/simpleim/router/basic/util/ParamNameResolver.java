@@ -36,7 +36,7 @@ public class ParamNameResolver {
      * </ul>
      */
 
-    public static SortedMap<Integer, String> ParamNameResolver(Method method) {
+    public static SortedMap<Integer, String> getParamName(Method method) {
         final Annotation[][] paramAnnotations = method.getParameterAnnotations();
         final SortedMap<Integer, String> map = new TreeMap<>();
         int paramCount = paramAnnotations.length;
@@ -74,7 +74,7 @@ public class ParamNameResolver {
     /**
      * Returns parameter names referenced by SQL providers.
      */
-    public String[] getNames(SortedMap<Integer, String> names) {
+    public static String[] getNames(SortedMap<Integer, String> names) {
         return names.values().toArray(new String[0]);
     }
 
@@ -86,7 +86,7 @@ public class ParamNameResolver {
      * ...).
      * </p>
      */
-    public Object getNamedParams(Object[] args, SortedMap<Integer, String> names) {
+    public static  Object getNamedParams(Object[] args, SortedMap<Integer, String> names) {
         final int paramCount = names.size();
         if (args == null || paramCount == 0) {
             return null;

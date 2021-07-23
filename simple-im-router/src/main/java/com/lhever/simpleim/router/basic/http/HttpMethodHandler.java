@@ -1,30 +1,26 @@
 package com.lhever.simpleim.router.basic.http;
 
+import com.lhever.common.core.annotation.ModifyResponse;
 import com.lhever.common.core.response.CommonResponse;
+import com.lhever.common.core.utils.CollectionUtils;
 import com.lhever.simpleim.router.basic.http.annotation.RequestParam;
+import com.lhever.simpleim.router.basic.util.ParamNameResolver;
 import com.lhever.simpleim.router.basic.util.RequestUtils;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
-@RequiredArgsConstructor
-public class HttpMethodHandler<T> {
+public class HttpMethodHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRouter.class);
 
@@ -33,6 +29,20 @@ public class HttpMethodHandler<T> {
 
     @NonNull
     private Method method;
+
+    private SortedMap<Integer, String> names;
+
+    private boolean modifyResponse = false;
+
+    public HttpMethodHandler(@NonNull Object object, @NonNull Method method) {
+        this.object = object;
+        this.method = method;
+        this.names = ParamNameResolver.getParamName(method);
+        ModifyResponse modifyResponse = method.getAnnotation(ModifyResponse.class);
+        if (modifyResponse != null) {
+            this.modifyResponse = true;
+        }
+    }
 
     // private boolean injectionFullHttpRequest;
 
@@ -134,13 +144,14 @@ public class HttpMethodHandler<T> {
         }
     }
 
-    public T call(FullHttpRequest request) {
+    public Object call(FullHttpRequest request) {
         try {
-            return (T) method.invoke(object, handleRequest(request));
-        } catch (Exception e) {
+          Object result =   method.invoke(object, handleRequest(request));
+          return modifyResponse ?  CommonResponse.clone(result) : result;
+        } catch (Throwable e) {
             String message = e.getMessage();
-            logger.error("Reasons for failure: {}", message);
-            return (T) CommonResponse.clone("500", message);
+            logger.error("Reasons for failure: {}", message, e);
+            return CommonResponse.clone("500", message);
         }
     }
 
@@ -159,13 +170,12 @@ public class HttpMethodHandler<T> {
     }
 
     private Object[] handleGetRequest(FullHttpRequest request) {
-        Parameter[] parameters = method.getParameters();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        List<Object> args = new ArrayList<>(parameters.length);
+        List<Object> args = new ArrayList<>(parameterTypes.length);
         Map<String, List<String>> parameterMap = RequestUtils.getParameterMap(request);
         verifyParameterAnnotations(parameterMap, method);
-        for (int i = 0; i < parameters.length; i++) {
-            List<String> values = parameterMap.get(parameters[i].getName());
+        for (int i = 0; i < parameterTypes.length; i++) {
+            List<String> values = parameterMap.get(names.get(i));
             handleParameterTypes(parameterTypes[i], values, args);
         }
         return args.toArray();

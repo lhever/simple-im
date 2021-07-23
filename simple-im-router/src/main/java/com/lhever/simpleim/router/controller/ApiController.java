@@ -1,6 +1,6 @@
 package com.lhever.simpleim.router.controller;
 
-import com.lhever.common.core.response.CommonResponse;
+import com.lhever.common.core.annotation.ModifyResponse;
 import com.lhever.simpleim.router.basic.http.annotation.HttpMethod;
 import com.lhever.simpleim.router.basic.http.annotation.PathMapping;
 import com.lhever.simpleim.router.basic.http.annotation.RequestParam;
@@ -13,17 +13,16 @@ import org.springframework.stereotype.Component;
 public class ApiController {
 
 
-    @PathMapping(uri = "/router", method = HttpMethod.GET)
-    public CommonResponse login(@RequestParam(name = "name") String name) {
-        return CommonResponse.clone(name);
-
+    @PathMapping(uri = "/login", method = HttpMethod.GET)
+    @ModifyResponse
+    public String login(@RequestParam(name = "name") String name) {
+        return name;
     }
 
-
-
-
-
-
+    @PathMapping(uri = "/hello", method = HttpMethod.GET)
+    public String login() {
+        return "hello";
+    }
 
 
 }

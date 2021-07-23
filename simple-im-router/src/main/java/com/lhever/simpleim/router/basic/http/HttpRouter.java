@@ -50,6 +50,7 @@ public class HttpRouter/* extends ClassLoader*/ {
         ctx.getBeansWithAnnotation(clazz)
                 .values().stream().forEach(bean -> {
                     Class<?> targetClass = AopUtils.getTargetClass(bean);
+                    logger.info("scan controller class, aop class:{} ---->  target class:{} ");
                     if (Objects.nonNull(targetClass.getAnnotation(clazz))) {
                         addRouter(targetClass, bean);
                     }
@@ -79,14 +80,14 @@ public class HttpRouter/* extends ClassLoader*/ {
                         if (!controllerBeans.containsKey(clazz.getName())) {
                             controllerBeans.put(clazz.getName(), instance);
                         }
-                        final HttpMethodHandler httpMethodHandler = new HttpMethodHandler<>(controllerBeans.get(clazz.getName()), invokeMethod);
+                        final HttpMethodHandler httpMethodHandler = new HttpMethodHandler(controllerBeans.get(clazz.getName()), invokeMethod);
                         final String requestUri = clazzUri + CommonConsts.SLASH + FileUtils.trim(methodUri);
                         httpRouterMapper.put(new HttpHandlerPath(requestUri, HttpMethod.valueOf(httpMethod)), httpMethodHandler);
                     }
                 }
             }
-
-            httpRouterMapper.forEach((key, value) -> logger.info("加载控制层 ==> [{}], 请求路径 ==> [{}], 请求方法 ==> [{}]", value.getObject(), key.getUri(), key.getMethod()));
+            String msg = "加载控制层 ==> [{}], 请求路径 ==> [{}], 请求方法 ==> [{}]";
+            httpRouterMapper.forEach((key, value) -> logger.info(msg, value.getObject(), key.getUri(), key.getMethod()));
         } catch (Exception e) {
             logger.error("load class error:{}", clazz, e);
         }
