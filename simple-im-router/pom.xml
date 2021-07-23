@@ -179,7 +179,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.lhever.simpleim.router.Application</mainClass>
+                            <mainClass>com.lhever.simpleim.router.RouterApplication</mainClass>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                             <useUniqueVersions>false</useUniqueVersions>

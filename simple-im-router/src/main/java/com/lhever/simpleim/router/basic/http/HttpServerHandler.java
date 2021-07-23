@@ -1,12 +1,17 @@
 package com.lhever.simpleim.router.basic.http;
 
 import com.lhever.common.core.consts.CommonConsts;
+import com.lhever.common.core.utils.FileUtils;
 import com.lhever.simpleim.router.basic.util.ResponseUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
+
+    private static final Logger logger = LoggerFactory.getLogger(HttpRouter.class);
 
     public static final String FAVICON = "/favicon.ico";
 
@@ -48,6 +53,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             if (uri.contains(CommonConsts.QUESTION_MARK)) {
                 uri = uri.substring(0, uri.indexOf(CommonConsts.QUESTION_MARK));
             }
+            uri = FileUtils.trimTail(uri);
             final HttpMethodHandler httpMethodHandler = httpRouter.getRoute(new HttpHandlerPath(uri, request.method()));
             if (httpMethodHandler != null) {
                 ResponseUtils.response(ctx, request, httpMethodHandler.call(request));
@@ -83,7 +89,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        logger.error("exception catch", cause);
         ctx.close();
     }
 }

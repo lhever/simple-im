@@ -16,6 +16,9 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+import io.netty.util.concurrent.DefaultThreadFactory;
+import io.netty.util.concurrent.EventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +35,9 @@ public class HttpServer {
     private SpringContextHolder springContextHolder;
 
     public void start() {
-        final NioEventLoopGroup bossGroup = new NioEventLoopGroup();
-        final NioEventLoopGroup workerGroup = new NioEventLoopGroup();
+        final NioEventLoopGroup bossGroup = new NioEventLoopGroup(2, new DefaultThreadFactory("boss-thread"));
+        final NioEventLoopGroup workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("worker-thread"));
+        EventExecutorGroup businessGroup = new DefaultEventExecutorGroup(6, new DefaultThreadFactory("biz-thread"));//业务
         try {
             HttpRouter httpRouter = new HttpRouter();
             httpRouter.loadControllerClass(springContextHolder.getApplicationContext());
@@ -51,7 +55,7 @@ public class HttpServer {
                             pipeline.addLast("httpObjectAggregator", new HttpObjectAggregator(65536));
                             pipeline.addLast("httpContentCompressor", new HttpContentCompressor());
                             pipeline.addLast("chunkedWriteHandler", new ChunkedWriteHandler());
-                            pipeline.addLast("nettyServerHandler", new HttpServerHandler(httpRouter));
+                            pipeline.addLast(businessGroup, new HttpServerHandler(httpRouter));
                         }
                     });
 
@@ -59,7 +63,7 @@ public class HttpServer {
             logger.info("http://{}:{}/ Start-up success", getIp(), PORT);
             serverChannel.closeFuture().sync();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
