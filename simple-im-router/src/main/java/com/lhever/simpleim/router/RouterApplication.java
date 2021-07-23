@@ -1,21 +1,14 @@
 package com.lhever.simpleim.router;
 
 import com.lhever.simpleim.router.basic.cfg.DataSourceConfig;
+import com.lhever.simpleim.router.basic.cfg.HttpServerCfg;
 import com.lhever.simpleim.router.pojo.User;
 import com.lhever.simpleim.router.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-/**
- * @author Wang pengfei
- * @date 2019/8/23 23:28
- * @ClassName: Application
- * @Description:
- */
-
-
 @ComponentScan(basePackages = {"com.lhever.simpleim.router"})
-public class Application {
+public class RouterApplication {
 
     /**
      * 注意四点
@@ -30,7 +23,7 @@ public class Application {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext ctx = null;
         try {
-            ctx = new AnnotationConfigApplicationContext(Application.class, DataSourceConfig.class);//初始化IOC容器
+            ctx = new AnnotationConfigApplicationContext(RouterApplication.class, DataSourceConfig.class, HttpServerCfg.class);//初始化IOC容器
             UserService userService = ctx.getBean(UserService.class);//通过IOC容器获得你要执行的业务代码的类
             User user = userService.findById();//通过IOC容器获取到的类执行你的业务代码
 
