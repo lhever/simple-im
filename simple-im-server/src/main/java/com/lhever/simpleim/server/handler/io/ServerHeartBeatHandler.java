@@ -39,7 +39,7 @@ public class ServerHeartBeatHandler extends SimpleChannelInboundHandler<PingPong
             String userId = session.getUserId();
             if (StringUtils.isNotBlank(userId)) {
                 logger.info("登陆用户:{}续期", userId);
-                RedisUtils.set(ServerConfig.LOGIN_KEY, userId, 60);
+                RedisUtils.set(ServerConfig.LOGIN_KEY + userId, userId, 60);
             }
         }
 

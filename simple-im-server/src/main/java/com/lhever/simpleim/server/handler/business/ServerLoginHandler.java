@@ -63,7 +63,7 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
             LoginUtil.markAsLogin(ctx.channel());
             SessionUtil.bindSession(new Session(resp.getUserId(), loginReq.getUserName()), ctx.channel());
             //idel timeout is 50
-            RedisUtils.set(ServerConfig.LOGIN_KEY, resp.getUserId(), 60);
+            RedisUtils.set(ServerConfig.LOGIN_KEY + resp.getUserId(), resp.getUserId(), 60);
 
 
             ctx.writeAndFlush(resp);
