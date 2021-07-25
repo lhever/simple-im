@@ -53,7 +53,7 @@ public class CollectionUtils {
         return collection.size();
     }
 
-    public static <T extends Object> T getValueSafely(Map<String, Object> map, String key, Class<? extends Object> T) {
+    public static <T extends Object> T getValueSafely(Map map, Object key, Class<? extends Object> T) {
 
         if (map == null || map.size() == 0) {
             return null;
@@ -69,7 +69,7 @@ public class CollectionUtils {
         return value;
     }
 
-    public static <T extends Object> T getValue(Map<String, Object> map, String key, Class<? extends Object> T) {
+    public static <T extends Object> T getValue(Map map, Object key, Class<? extends Object> T) {
 
         T value = null;
         try {
