@@ -88,8 +88,8 @@ public class ZkCuratorClient {
     public CuratorFramework createCuratorClient(String address, String namespace, RetryPolicy retryPolicy,
                                                 Integer sessionTimeOutMs, Integer connecTimeOutMs) {
 
-        sessionTimeOutMs = (sessionTimeOutMs == null || sessionTimeOutMs < 0) ? (5 * 1000) : sessionTimeOutMs;
-        connecTimeOutMs = (connecTimeOutMs == null || connecTimeOutMs < 0) ? (10 * 1000) : sessionTimeOutMs;
+        sessionTimeOutMs = (sessionTimeOutMs == null || sessionTimeOutMs < 0) ? (50 * 1000) : sessionTimeOutMs;
+        connecTimeOutMs = (connecTimeOutMs == null || connecTimeOutMs < 0) ? (15 * 1000) : sessionTimeOutMs;
         //老版本的方式，创建zookeeper连接客户端
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder();
 
