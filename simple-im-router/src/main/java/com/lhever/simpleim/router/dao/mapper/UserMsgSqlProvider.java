@@ -1,9 +1,9 @@
 package com.lhever.simpleim.router.dao.mapper;
 
-import com.lhever.simpleim.router.pojo.UserMsg;
-import com.lhever.simpleim.router.pojo.UserMsgExample;
-import com.lhever.simpleim.router.pojo.UserMsgExample.Criteria;
-import com.lhever.simpleim.router.pojo.UserMsgExample.Criterion;
+import com.lhever.simpleim.common.pojo.UserMsg;
+import com.lhever.simpleim.common.pojo.UserMsgExample;
+import com.lhever.simpleim.common.pojo.UserMsgExample.Criteria;
+import com.lhever.simpleim.common.pojo.UserMsgExample.Criterion;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.lhever.simpleim.router.dao.mapper;
 
-import com.lhever.simpleim.router.pojo.UserMsg;
-import com.lhever.simpleim.router.pojo.UserMsgExample;
+import com.lhever.simpleim.common.pojo.UserMsg;
+import com.lhever.simpleim.common.pojo.UserMsgExample;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 

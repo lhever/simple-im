@@ -1,10 +1,10 @@
 package com.lhever.simpleim.router.dao;
 
 
+import com.lhever.simpleim.common.pojo.User;
 import com.lhever.simpleim.router.basic.cfg.SessionFactoryHolder;
 import com.lhever.simpleim.router.dao.mapper.UserMapper;
 import com.lhever.simpleim.router.dao.mapper.UserMapperWrapper;
-import com.lhever.simpleim.router.pojo.User;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

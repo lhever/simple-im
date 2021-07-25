@@ -1,9 +1,9 @@
 package com.lhever.simpleim.router.dao.mapper;
 
-import com.lhever.simpleim.router.pojo.UserGroup;
-import com.lhever.simpleim.router.pojo.UserGroupExample;
-import com.lhever.simpleim.router.pojo.UserGroupExample.Criteria;
-import com.lhever.simpleim.router.pojo.UserGroupExample.Criterion;
+import com.lhever.simpleim.common.pojo.UserGroup;
+import com.lhever.simpleim.common.pojo.UserGroupExample;
+import com.lhever.simpleim.common.pojo.UserGroupExample.Criteria;
+import com.lhever.simpleim.common.pojo.UserGroupExample.Criterion;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;
