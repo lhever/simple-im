@@ -25,6 +25,8 @@ import com.lhever.simpleim.common.util.JsonUtils;
 import com.lhever.simpleim.common.util.LoginUtil;
 import com.lhever.simpleim.common.util.Session;
 import com.lhever.simpleim.common.util.SessionUtil;
+import com.lhever.simpleim.server.config.ServerConfig;
+import com.lhever.simpleim.server.util.RedisUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -60,6 +62,8 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
             logger.info("[{}]登录成功！,id为{}", resp.getUserName(), resp.getUserId());
             LoginUtil.markAsLogin(ctx.channel());
             SessionUtil.bindSession(new Session(resp.getUserId(), loginReq.getUserName()), ctx.channel());
+            //idel timeout is 50
+            RedisUtils.set(ServerConfig.LOGIN_KEY, resp.getUserId(), 60);
 
 
             ctx.writeAndFlush(resp);
