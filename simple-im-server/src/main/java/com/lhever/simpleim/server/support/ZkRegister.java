@@ -47,7 +47,7 @@ public class ZkRegister {
             createRootResult = client.createNode(CreateMode.PERSISTENT, rootPath, null);
         }
 
-        String childPath = StringUtils.appendAll(ip, ":", String.valueOf(port));
+        String childPath = StringUtils.appendAll(ip, ":", port);
 
         client.createNode(CreateMode.EPHEMERAL, StringUtils.appendAll(rootPath, "/", childPath), null);
         List<String> children = client.getChildren(rootPath);
