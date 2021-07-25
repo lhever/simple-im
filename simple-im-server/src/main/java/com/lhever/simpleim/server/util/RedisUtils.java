@@ -14,7 +14,7 @@ public class RedisUtils {
 
     public static  void init() {
         jedisClient = new CustomJedisClient(ServerConfig.REDIS_IP,
-                ServerConfig.REDIS_PORT, ServerConfig.REDIS_PWD, 5000, 5, 20, 2000, true);
+                ServerConfig.REDIS_PORT, ServerConfig.REDIS_PWD, 20000, 5, 20, 20000, true);
     }
 
     public static void set(String key, String value, long cacheSeconds) {
