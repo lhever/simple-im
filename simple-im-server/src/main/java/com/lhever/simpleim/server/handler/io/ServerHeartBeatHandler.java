@@ -30,19 +30,19 @@ public class ServerHeartBeatHandler extends SimpleChannelInboundHandler<PingPong
     protected void channelRead0(ChannelHandlerContext ctx, PingPong ping) throws Exception {
         logger.info("(服务端) <--- {}", ping);
         logger.info("(服务端) ---> {}", PingPong.PONG);
+        ctx.writeAndFlush(PingPong.PONG);
+
         Channel channel = ctx.channel();
         Attribute<Session> attr = channel.attr(Attributes.SESSION);
         Session session = null;
-        if (attr != null) {
-            session = attr.get();
-        }
-        if (StringUtils.isNotBlank(session.getUserId())) {
+        if (attr != null && (session = attr.get()) != null) {
             String userId = session.getUserId();
-            logger.info("登陆用户:{}续期", userId);
-            RedisUtils.set(ServerConfig.LOGIN_KEY, userId, 60);
+            if (StringUtils.isNotBlank(userId)) {
+                logger.info("登陆用户:{}续期", userId);
+                RedisUtils.set(ServerConfig.LOGIN_KEY, userId, 60);
+            }
         }
 
-        ctx.writeAndFlush(PingPong.PONG);
     }
 
 
