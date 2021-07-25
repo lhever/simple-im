@@ -22,7 +22,7 @@ public class ServerConfig {
     public static final Integer REDIS_PORT = reader.getIntProperty("redis.port", 6379);
     public static final String REDIS_PWD = reader.getProperty("redis.pwd", null);
 
-    public static final String LOGIN_KEY = "im.login.uid:";
+    public static final String LOGIN_KEY = "im.uid:";
 
 
 
