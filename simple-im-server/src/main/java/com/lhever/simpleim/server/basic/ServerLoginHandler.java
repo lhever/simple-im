@@ -15,6 +15,10 @@
  */
 package com.lhever.simpleim.server.basic;
 
+import com.alibaba.fastjson.TypeReference;
+import com.lhever.common.core.response.CommonResponse;
+import com.lhever.common.core.support.http.HttpClientSingleton;
+import com.lhever.common.core.utils.StringUtils;
 import com.lhever.simpleim.common.msg.loginReq;
 import com.lhever.simpleim.common.msg.loginResp;
 import com.lhever.simpleim.common.util.JsonUtils;
@@ -26,6 +30,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handles both client-side and server-side handler depending on which
@@ -109,15 +116,24 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
 
 
     public loginResp judgeLogin(loginReq loginReq) {
-        if ("lhever".equals(loginReq.getUserName()) && "123456".equals(loginReq.getPwd())) {
+        String s = HttpClientSingleton.get().doGet("http://127.0.0.1:8889/router/user/login", null, new HashMap() {{
+            put("name", loginReq.getUserName());
+            put("pwd", loginReq.getPwd());
+        }});
+
+       CommonResponse<Map<String, String>> resutlMap =
+               JsonUtils.json2Obj(s, new TypeReference<CommonResponse<Map<String, String>>>() {{
+        }});
+        Map<String, String> data = resutlMap.getData();
+        if (data == null || StringUtils.isAnyBlank(data.get("id"), data.get("name"))) {
             loginResp resp = new loginResp();
-            resp.setSuccess(true);
-            resp.setUserId("lhever");
-            resp.setUserName(loginReq.getUserName());
+            resp.setSuccess(false);
             return resp;
         } else {
             loginResp resp = new loginResp();
-            resp.setSuccess(false);
+            resp.setSuccess(true);
+            resp.setUserId(data.get("id"));
+            resp.setUserName(data.get("name"));
             return resp;
         }
     }

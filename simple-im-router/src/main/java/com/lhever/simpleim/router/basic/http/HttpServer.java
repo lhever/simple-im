@@ -35,9 +35,9 @@ public class HttpServer {
 
     public void start() {
         int port = RouterConfig.SERVER_PORT;
-        final NioEventLoopGroup bossGroup = new NioEventLoopGroup(2, new DefaultThreadFactory("boss-thread"));
-        final NioEventLoopGroup workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("worker-thread"));
-        EventExecutorGroup businessGroup = new DefaultEventExecutorGroup(6, new DefaultThreadFactory("biz-thread"));//业务
+        final NioEventLoopGroup bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss-thread"));
+        final NioEventLoopGroup workerGroup = new NioEventLoopGroup(2, new DefaultThreadFactory("worker-thread"));
+        EventExecutorGroup businessGroup = new DefaultEventExecutorGroup(2, new DefaultThreadFactory("biz-thread"));//业务
         try {
             HttpRouter httpRouter = new HttpRouter();
             httpRouter.loadControllerClass(springContextHolder.getApplicationContext());

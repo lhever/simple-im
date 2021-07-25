@@ -16,13 +16,14 @@
 package com.lhever.simpleim.client;
 
 import com.lhever.common.core.exception.CommonException;
-import com.lhever.common.core.support.http.HttpClientSingleton;
 import com.lhever.common.core.utils.StringUtils;
+import com.lhever.common.core.utils.ThreadUtils;
 import com.lhever.simpleim.client.basic.ClientHeartBeatHandler;
 import com.lhever.simpleim.client.basic.ClientIdleHandler;
 import com.lhever.simpleim.client.basic.ClientLoginHandler;
 import com.lhever.simpleim.client.business.ClientHandler;
 import com.lhever.simpleim.client.config.ClientConfig;
+import com.lhever.simpleim.client.config.RegCenter;
 import com.lhever.simpleim.common.codec.LengthBasedByteBufDecoder;
 import com.lhever.simpleim.common.codec.NettyCodecHandler;
 import com.lhever.simpleim.common.util.Scan;
@@ -68,7 +69,7 @@ public class Client {
         this.passWord = passWord;
     }
 
-    EventLoopGroup group = new NioEventLoopGroup();
+    EventLoopGroup group = new NioEventLoopGroup(4);
     public void connect() throws Exception {
         // 配置客户端NIO线程组
         try {
@@ -155,8 +156,14 @@ public class Client {
         String serverIp = ClientConfig.SERVER_IP;
         Integer serverPort = ClientConfig.SERVER_PORT;
         if (ClientConfig.ENABLE_DISCOVERY) {
-            String url = StringUtils.appendAll("http://", ClientConfig.DISCOVERY_IP, ":", ClientConfig.DISCOVERY_PORT, ClientConfig.DISCOVERY_CONTEXT, "/api/getServer");
-            String address = HttpClientSingleton.get().doGet(url, null, null);
+//            String url = StringUtils.appendAll("http://", ClientConfig.DISCOVERY_IP, ":", ClientConfig.DISCOVERY_PORT, ClientConfig.DISCOVERY_CONTEXT, "/api/getServer");
+//            String address = HttpClientSingleton.get().doGet(url, null, null);
+
+            RegCenter regCenter = new RegCenter(ClientConfig.ZK_ADDRESS,
+                    ClientConfig.ZK_NAMESPACE, ClientConfig.ZK_ROOTPATH);
+            regCenter.init();
+            ThreadUtils.sleep(2000);
+            String address = regCenter.getOnlineServer();
             if (StringUtils.isBlank(address)) {
                 throw new CommonException("cannot get server address");
             }

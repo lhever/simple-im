@@ -27,4 +27,11 @@ public class ClientConfig {
     public static final String DISCOVERY_CONTEXT = reader.getProperty("discovery.context", "/gateway");
 
 
+    public static final String ZK_IP = reader.getProperty("zookeeper.ip", "127.0.0.1");
+    public static final Integer ZK_PORT = reader.getIntProperty("zookeeper.port", 2181);
+    public static final String ZK_ADDRESS = reader.getProperty("zookeeper.address", "127.0.0.1:2181");
+    public static final String ZK_NAMESPACE = reader.getProperty("zookeeper.namespace", "im");
+    public static final String ZK_ROOTPATH = reader.getProperty("zookeeper.rootPath", "/root");
+
+
 }
