@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class RegCenter {
-    private static final Logger logger = LoggerFactory.getLogger(RegCenter.class);
+public class ServerZkRegister {
+    private static final Logger logger = LoggerFactory.getLogger(ServerZkRegister.class);
 
     private String zkAddress;
 
@@ -40,7 +40,7 @@ public class RegCenter {
     private RoundRobinStrategy<String> roundRobin = new RoundRobinStrategy<>();
 
 
-    public RegCenter(String zkAddress, String zkNamespace, String zkRootPath) {
+    public ServerZkRegister(String zkAddress, String zkNamespace, String zkRootPath) {
         this.zkAddress = zkAddress;
         this.zkNamespace = zkNamespace;
         this.zkRootPath = zkRootPath;

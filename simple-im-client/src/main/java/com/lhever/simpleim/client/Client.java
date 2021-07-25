@@ -23,7 +23,7 @@ import com.lhever.simpleim.client.handler.io.ClientIdleHandler;
 import com.lhever.simpleim.client.handler.business.ClientLoginHandler;
 import com.lhever.simpleim.client.handler.business.ClientHandler;
 import com.lhever.simpleim.client.config.ClientConfig;
-import com.lhever.simpleim.client.config.RegCenter;
+import com.lhever.simpleim.client.config.ServerZkRegister;
 import com.lhever.simpleim.common.codec.LengthBasedByteBufDecoder;
 import com.lhever.simpleim.common.codec.NettyCodecHandler;
 import com.lhever.simpleim.common.util.Scan;
@@ -159,11 +159,11 @@ public class Client {
 //            String url = StringUtils.appendAll("http://", ClientConfig.DISCOVERY_IP, ":", ClientConfig.DISCOVERY_PORT, ClientConfig.DISCOVERY_CONTEXT, "/api/getServer");
 //            String address = HttpClientSingleton.get().doGet(url, null, null);
 
-            RegCenter regCenter = new RegCenter(ClientConfig.ZK_ADDRESS,
+            ServerZkRegister serverZkRegister = new ServerZkRegister(ClientConfig.ZK_ADDRESS,
                     ClientConfig.ZK_NAMESPACE, ClientConfig.ZK_ROOTPATH);
-            regCenter.init();
+            serverZkRegister.init();
             ThreadUtils.sleep(2000);
-            String address = regCenter.getOnlineServer();
+            String address = serverZkRegister.getOnlineServer();
             if (StringUtils.isBlank(address)) {
                 throw new CommonException("cannot get server address");
             }
