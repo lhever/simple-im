@@ -1,20 +1,21 @@
 package com.lhever.simpleim.common.msg;
 
 import com.lhever.simpleim.common.consts.MsgType;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
 
 
+@Getter
+@Setter
 public class MessageResp extends Msg {
 
-    /**
-     * 响应内容
-     */
+    private String id;
+    private String sendId;
+    private String targetId;
     private String message;
-
-    /**
-     * 消息来源
-     */
-    private String fromUserId;
-    private String fromUserName;
+    private Date createTime;
 
 
     @Override
@@ -22,28 +23,5 @@ public class MessageResp extends Msg {
         return MsgType.MESSAGE_RESPONSE;
     }
 
-    public String getFromUserId() {
-        return fromUserId;
-    }
 
-    public void setFromUserId(String fromUserId) {
-        this.fromUserId = fromUserId;
-    }
-
-    public String getFromUserName() {
-        return fromUserName;
-    }
-
-    public void setFromUserName(String fromUserName) {
-        this.fromUserName = fromUserName;
-    }
-
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

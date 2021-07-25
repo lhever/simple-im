@@ -13,7 +13,7 @@ public class ClientMessageHandler extends SimpleChannelInboundHandler<MessageRes
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResp msg) throws Exception {
-        logger.info("收到{}的消息：{}", msg.getFromUserId(), msg.getMessage());
+        logger.info("收到{}的消息：{}", msg.getSendId(), msg.getMessage());
     }
 
 

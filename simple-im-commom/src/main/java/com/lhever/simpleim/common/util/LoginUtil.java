@@ -16,6 +16,14 @@ public class LoginUtil {
         channel.attr(Attributes.USER_ID).set(userId);
     }
 
+    public static String getUserId(Channel channel) {
+        Attribute<String> attr = channel.attr(Attributes.USER_ID);
+        if (attr != null) {
+            return attr.get();
+        }
+        return null;
+    }
+
     public static boolean hasLogin(Channel channel) {
         Attribute<Boolean> login = channel.attr(Attributes.LOGIN);
         //只要标志位不为空，即表示登录过

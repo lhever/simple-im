@@ -25,6 +25,9 @@ public class ServerConfig {
     public static final String LOGIN_KEY = "im.uid:";
 
 
+    public static final String KAFKA_ADDRESS = reader.getProperty("kafka.address", null);
+
+
 
 
 

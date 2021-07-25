@@ -12,7 +12,7 @@ public class RedisUtils {
     }
 
 
-    public static  void init() {
+    public static void init() {
         jedisClient = new CustomJedisClient(ServerConfig.REDIS_IP,
                 ServerConfig.REDIS_PORT, ServerConfig.REDIS_PWD, 20000, 5, 20, 20000, true);
     }

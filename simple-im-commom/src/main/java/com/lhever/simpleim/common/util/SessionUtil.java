@@ -3,6 +3,7 @@ package com.lhever.simpleim.common.util;
 import io.netty.channel.Channel;
 import io.netty.util.Attribute;
 
+import javax.print.DocFlavor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,6 +36,14 @@ public class SessionUtil {
 
     public static Session getSessionByChannel(Channel channel) {
         return channel.attr(Attributes.SESSION).get();
+    }
+
+    public static String getUserIdByChannel(Channel channel) {
+        Session session = channel.attr(Attributes.SESSION).get();
+        if (session != null) {
+            return session.getUserId();
+        }
+        return null;
     }
 
     public static boolean hasLogin(Channel channel) {

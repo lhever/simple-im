@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.lhever.simpleim.common.msg.MessageReq;
 import com.lhever.simpleim.common.msg.MessageResp;
 import com.lhever.simpleim.common.util.SessionUtil;
-import com.lhever.simpleim.common.util.Session;
+import com.lhever.simpleim.server.support.KafkaHelper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -12,6 +12,7 @@ import io.netty.util.internal.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.Map;
 
 
@@ -23,27 +24,15 @@ public class ServerMessageHandler extends SimpleChannelInboundHandler<MessageReq
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageReq msg) throws Exception {
 
-        logger.info("收到客户端消息：{}", msg.getMessage());
-        //拿到消息发送方的userId
-        Session session = SessionUtil.getSessionByChannel(ctx.channel());
-        logger.info("发送方为：{}", JSON.toJSONString(session));
-        String fromUserId = session.getUserId();
-        String fromUserName = session.getUserName();
-
-        //构造发送报文
-        MessageResp response = new MessageResp();
-        response.setFromUserId(fromUserId);
-        response.setFromUserName(fromUserName);
-        response.setMessage(msg.getMessage());
-
+        String sendId = SessionUtil.getUserIdByChannel(ctx.channel());
 
         //拿到接收方的信息
-        String toUserId = msg.getTargetUserId();
+        String targetId = msg.getTargetId();
         //toUserId不为空，则私聊；为空则发广播
-        if (!StringUtil.isNullOrEmpty(toUserId)) {
-            p2pChat(toUserId, response);
+        if (!StringUtil.isNullOrEmpty(targetId)) {
+            p2pChat(sendId, msg);
         } else {
-            broadcast(response);
+//            broadcast(msg);
         }
 
 
@@ -66,10 +55,23 @@ public class ServerMessageHandler extends SimpleChannelInboundHandler<MessageReq
     /**
      * 点对点私聊
      */
-    private void p2pChat(String toUserId, MessageResp response) {
-        Channel toUserChannel = SessionUtil.getChannelByUserId(toUserId);
-        logger.info("发送给客户端{}：{}", toUserId, JSON.toJSONString(response));
-        writeMessage(response, toUserChannel);
+    private void p2pChat(String sendId, MessageReq messageReq) {
+        String targetId = messageReq.getTargetId();
+        Channel targetChannel = SessionUtil.getChannelByUserId(targetId);
+
+        MessageResp resp = new MessageResp();
+        resp.setId(messageReq.getId());
+        resp.setSendId(sendId);
+        resp.setTargetId(targetId);
+        resp.setMessage(messageReq.getMessage());
+        resp.setCreateTime(new Date());
+
+        if (targetChannel != null) {
+            writeMessage(resp, targetChannel);
+            logger.info("发送消息给客户端{}，内容是:{}", targetId, JSON.toJSONString(resp));
+        } else {
+            KafkaHelper.sendMessage(resp);
+        }
     }
 
     private void writeMessage(MessageResp response, Channel toUserChannel) {
@@ -80,6 +82,10 @@ public class ServerMessageHandler extends SimpleChannelInboundHandler<MessageReq
             logger.info(" 该用户未登录，无法向他发送消息！");
         }
     }
+
+
+
+
 
 
 }
