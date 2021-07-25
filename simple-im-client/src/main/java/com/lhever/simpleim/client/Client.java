@@ -141,6 +141,7 @@ public class Client {
     private static void startScanConsole(Channel channel) {
         Scan scan = new Scan(channel);
         Thread thread = new Thread(scan);
+        thread.setDaemon(true);
         thread.setName("scan-thread");
         thread.start();
     }
