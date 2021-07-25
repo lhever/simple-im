@@ -1,7 +1,7 @@
 package com.lhever.simpleim.router.service.impl;
 
+import com.lhever.simpleim.common.pojo.User;
 import com.lhever.simpleim.router.dao.UserDao;
-import com.lhever.simpleim.router.pojo.User;
 import com.lhever.simpleim.router.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

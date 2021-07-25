@@ -2,8 +2,6 @@ package com.lhever.simpleim.router;
 
 import com.lhever.simpleim.router.basic.cfg.DataSourceConfig;
 import com.lhever.simpleim.router.basic.cfg.HttpServerCfg;
-import com.lhever.simpleim.router.pojo.User;
-import com.lhever.simpleim.router.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -23,11 +21,8 @@ public class RouterApplication {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext ctx = null;
         try {
-            ctx = new AnnotationConfigApplicationContext(RouterApplication.class, DataSourceConfig.class, HttpServerCfg.class);//初始化IOC容器
-            UserService userService = ctx.getBean(UserService.class);//通过IOC容器获得你要执行的业务代码的类
-            User user = userService.findById();//通过IOC容器获取到的类执行你的业务代码
-
-            System.out.println(user);
+            ctx = new AnnotationConfigApplicationContext(RouterApplication.class,
+                    DataSourceConfig.class, HttpServerCfg.class);//初始化IOC容器
         } finally {
             if (ctx != null){
                 ctx.close();

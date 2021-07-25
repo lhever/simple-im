@@ -1,11 +1,11 @@
 package com.lhever.simpleim.router.controller;
 
 import com.lhever.common.core.annotation.ModifyResponse;
+import com.lhever.simpleim.common.pojo.User;
 import com.lhever.simpleim.router.basic.http.annotation.HttpMethod;
 import com.lhever.simpleim.router.basic.http.annotation.PathMapping;
 import com.lhever.simpleim.router.basic.http.annotation.RequestParam;
 import com.lhever.simpleim.router.basic.http.annotation.RestController;
-import com.lhever.simpleim.router.pojo.User;
 import com.lhever.simpleim.router.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
