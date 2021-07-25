@@ -1,65 +1,49 @@
 package com.lhever.simpleim.router.dao;
 
+
+import com.lhever.simpleim.router.basic.cfg.SessionFactoryHolder;
 import com.lhever.simpleim.router.dao.mapper.UserMapper;
+import com.lhever.simpleim.router.dao.mapper.UserMapperWrapper;
 import com.lhever.simpleim.router.pojo.User;
-import com.lhever.simpleim.router.pojo.UserExample;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+@Component
+public class UserDao {
 
-public class UserDao implements UserMapper {
+    @Autowired
+    private SessionFactoryHolder sessionFactoryHolder;
 
-    @Override
-    public long countByExample(UserExample example) {
-        return 0;
+
+    public User findUser(String userName, String pwd) {
+        SqlSession sqlSession = null;
+        try {
+            SqlSessionFactory aDefault = sessionFactoryHolder.getDefault();
+            sqlSession = aDefault.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            UserMapperWrapper wrapper = new UserMapperWrapper(userMapper);
+            return  wrapper.findBy(userName, pwd);
+        } finally {
+            sqlSession.commit();
+            sqlSession.close();
+
+        }
     }
 
-    @Override
-    public int deleteByExample(UserExample example) {
-        return 0;
-    }
 
-    @Override
-    public int deleteByPrimaryKey(String id) {
-        return 0;
-    }
 
-    @Override
-    public int insert(User record) {
-        return 0;
-    }
 
-    @Override
-    public int insertSelective(User record) {
-        return 0;
-    }
 
-    @Override
-    public List<User> selectByExample(UserExample example) {
-        return null;
-    }
 
-    @Override
-    public User selectByPrimaryKey(String id) {
-        return null;
-    }
 
-    @Override
-    public int updateByExampleSelective(User record, UserExample example) {
-        return 0;
-    }
 
-    @Override
-    public int updateByExample(User record, UserExample example) {
-        return 0;
-    }
 
-    @Override
-    public int updateByPrimaryKeySelective(User record) {
-        return 0;
-    }
 
-    @Override
-    public int updateByPrimaryKey(User record) {
-        return 0;
-    }
+
+
+
+
+
 }

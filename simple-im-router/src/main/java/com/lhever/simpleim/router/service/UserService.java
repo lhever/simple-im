@@ -10,4 +10,7 @@ public interface UserService {
 
     User findById();
 
+
+    User find(String name, String pwd);
+
 }

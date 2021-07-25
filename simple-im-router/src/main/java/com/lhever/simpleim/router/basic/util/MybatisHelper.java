@@ -1,5 +1,6 @@
 package com.lhever.simpleim.router.basic.util;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageInterceptor;
 import com.lhever.simpleim.router.basic.cfg.DataSourceProp;
 import com.lhever.simpleim.router.service.UserService;
@@ -7,6 +8,7 @@ import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.executor.loader.ProxyFactory;
 import org.apache.ibatis.io.DefaultVFS;
 import org.apache.ibatis.logging.slf4j.Slf4jImpl;
+import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.mapping.ResultSetType;
 import org.apache.ibatis.reflection.DefaultReflectorFactory;
 import org.apache.ibatis.reflection.ReflectorFactory;
@@ -16,6 +18,7 @@ import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 import org.apache.ibatis.session.*;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.type.JdbcType;
 
 import java.util.Arrays;
@@ -68,7 +71,13 @@ public class MybatisHelper {
 
         settingsElement(cfg, settings);
 
-//        cfg.setEnvironment(null);
+        Environment.Builder builder = new Environment.Builder("default");
+        builder.dataSource(dataSource(dataSource));
+        JdbcTransactionFactory txf =  new JdbcTransactionFactory();
+        builder.transactionFactory(txf);
+
+
+        cfg.setEnvironment(builder.build());
 //        cfg.setDatabaseId("did");
 
         cfg.getTypeHandlerRegistry().register("com.lhever.simpleim.router");
@@ -168,6 +177,22 @@ public class MybatisHelper {
         } catch (Exception e) {
             throw new BuilderException("Error creating instance. Cause: " + e, e);
         }
+    }
+
+    public DruidDataSource dataSource(DataSourceProp dataSourceProp) {
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setUrl(dataSourceProp.getUrl());
+        dataSource.setUsername(dataSourceProp.getUsername());
+        dataSource.setPassword(dataSourceProp.getPassword());
+        dataSource.setDriverClassName(dataSourceProp.getDriver());
+        dataSource.setMinIdle(5);
+        dataSource.setValidationQuery("select 1");
+        dataSource.setTimeBetweenEvictionRunsMillis(60000);
+        dataSource.setMinEvictableIdleTimeMillis(300000);
+        dataSource.setMaxWait(60000);
+        dataSource.setInitialSize(5);
+        dataSource.setMaxActive(100);
+        return dataSource;
     }
 
 

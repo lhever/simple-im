@@ -1,14 +1,12 @@
 package com.lhever.simpleim.router.basic.cfg;
 
 import com.lhever.common.core.config.YamlPropertiesReader;
+import com.lhever.common.core.utils.CollectionUtils;
 import com.lhever.common.core.utils.JsonUtils;
 import com.lhever.common.core.utils.YamlUtils;
-import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.core.io.ClassPathResource;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * <p>类说明：</p>
@@ -38,11 +36,10 @@ public class RouterConfig {
     public static final String ZK_ROOTPATH = reader.getProperty("zookeeper.rootPath", "/root");
 
     static {
-        YamlPropertiesFactoryBean yaml = YamlUtils.getDefaultPropertiesFactory();
-        yaml.setResources(new ClassPathResource(CONFIG_FILE_NAME));
-        Properties object = yaml.getObject();
-        List<Map> list = (List<Map>)object.get("mybatis.datasource");
-        String s = JsonUtils.object2Json(list);
+        Map<String, Object> map = YamlUtils.yaml2Map(CONFIG_FILE_NAME);
+        Map mybatis = CollectionUtils.getValue(map, "mybatis", Map.class);
+        List datasource = CollectionUtils.getValue(mybatis, "datasource", List.class);
+        String s = JsonUtils.object2Json(datasource);
         dataSources = JsonUtils.json2Object(s, List.class, DataSourceProp.class);
     }
 
