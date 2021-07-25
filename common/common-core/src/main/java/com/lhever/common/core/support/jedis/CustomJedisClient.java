@@ -61,12 +61,12 @@ public class CustomJedisClient {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-        } catch (JedisException e) {
+            return jedis;
+        } catch (Throwable e) {
             logger.error("getResource error", e);
             returnBrokenJedis(jedis);
-            throw e;
         }
-        return jedis;
+        return null;
     }
 
     private void returnJedis(Jedis jedis, boolean isBroken) {
@@ -84,7 +84,11 @@ public class CustomJedisClient {
      */
     private void returnJedis(Jedis jedis) {
         if (null != jedis && null != jedisPool) {
-            jedisPool.returnResource(jedis);
+            try {
+                jedisPool.returnResource(jedis);
+            } catch (Throwable e) {
+                logger.error("return jedis error", e);
+            }
         }
     }
 
@@ -95,7 +99,11 @@ public class CustomJedisClient {
      */
     private void returnBrokenJedis(Jedis jedis) {
         if (null != jedis && null != jedisPool) {
-            jedisPool.returnBrokenResource(jedis);
+            try {
+                jedisPool.returnBrokenResource(jedis);
+            } catch (Exception e) {
+                logger.error("return bad jedis error", e);
+            }
         }
     }
 
