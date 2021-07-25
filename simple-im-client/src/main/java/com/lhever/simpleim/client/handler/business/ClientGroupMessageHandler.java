@@ -1,4 +1,4 @@
-package com.lhever.simpleim.client.business;
+package com.lhever.simpleim.client.handler.business;
 
 import com.lhever.simpleim.common.msg.GroupMessageResp;
 import io.netty.channel.ChannelHandlerContext;

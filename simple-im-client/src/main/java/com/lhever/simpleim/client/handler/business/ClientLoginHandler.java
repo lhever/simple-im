@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.lhever.simpleim.client.basic;
+package com.lhever.simpleim.client.handler.business;
 
 import com.lhever.simpleim.common.msg.loginReq;
 import com.lhever.simpleim.common.msg.loginResp;

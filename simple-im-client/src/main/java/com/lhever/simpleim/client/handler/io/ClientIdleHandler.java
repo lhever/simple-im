@@ -1,4 +1,4 @@
-package com.lhever.simpleim.client.basic;
+package com.lhever.simpleim.client.handler.io;
 
 import com.lhever.simpleim.common.msg.PingPong;
 import io.netty.channel.ChannelHandlerContext;

@@ -1,4 +1,4 @@
-package com.lhever.simpleim.client.business;
+package com.lhever.simpleim.client.handler.business;
 
 import com.alibaba.fastjson.JSON;
 import com.lhever.simpleim.common.msg.CreateGroupResp;
