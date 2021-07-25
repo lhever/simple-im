@@ -2,12 +2,12 @@ package com.lhever.simpleim.server;
 
 import com.lhever.simpleim.common.codec.LengthBasedByteBufDecoder;
 import com.lhever.simpleim.common.codec.NettyCodecHandler;
-import com.lhever.simpleim.server.basic.ServerHeartBeatHandler;
-import com.lhever.simpleim.server.basic.ServerIdleHandler;
-import com.lhever.simpleim.server.basic.ServerLoginHandler;
-import com.lhever.simpleim.server.business.ServerHandler;
+import com.lhever.simpleim.server.handler.io.ServerHeartBeatHandler;
+import com.lhever.simpleim.server.handler.io.ServerIdleHandler;
+import com.lhever.simpleim.server.handler.business.ServerLoginHandler;
+import com.lhever.simpleim.server.handler.business.ServerHandler;
 import com.lhever.simpleim.server.config.ServerConfig;
-import com.lhever.simpleim.server.reg.ZkRegister;
+import com.lhever.simpleim.server.support.ZkRegister;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

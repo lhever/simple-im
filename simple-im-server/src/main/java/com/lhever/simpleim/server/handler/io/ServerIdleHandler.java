@@ -1,4 +1,4 @@
-package com.lhever.simpleim.server.basic;
+package com.lhever.simpleim.server.handler.io;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;

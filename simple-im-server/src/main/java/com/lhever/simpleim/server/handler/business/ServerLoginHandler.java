@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.lhever.simpleim.server.basic;
+package com.lhever.simpleim.server.handler.business;
 
 import com.alibaba.fastjson.TypeReference;
 import com.lhever.common.core.response.CommonResponse;

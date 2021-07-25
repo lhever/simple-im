@@ -1,4 +1,4 @@
-package com.lhever.simpleim.server.business;
+package com.lhever.simpleim.server.handler.business;
 
 import com.lhever.simpleim.common.msg.GroupMessageReq;
 import com.lhever.simpleim.common.msg.GroupMessageResp;

@@ -1,4 +1,4 @@
-package com.lhever.simpleim.server.reg;
+package com.lhever.simpleim.server.support;
 
 
 import com.lhever.common.core.exception.CommonException;

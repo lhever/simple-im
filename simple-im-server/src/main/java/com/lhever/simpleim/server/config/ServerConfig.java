@@ -18,6 +18,10 @@ public class ServerConfig {
     public static final String ZK_NAMESPACE = reader.getProperty("zookeeper.namespace", "im");
     public static final String ZK_ROOTPATH = reader.getProperty("zookeeper.rootPath", "/root");
 
+    public static final String REDIS_IP = reader.getProperty("redis.ip", "127.0.0.1");
+    public static final Integer REDIS_PORT = reader.getIntProperty("redis.port", 6379);
+    public static final String REDIS_PWD = reader.getProperty("redis.pwd", null);
+
 
 
 
