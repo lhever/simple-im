@@ -1,44 +1,44 @@
-package com.lhever.simpleim.router.dao;
+package com.lhever.simpleim.router.dao.mapper;
 
-import com.lhever.simpleim.router.pojo.Group;
-import com.lhever.simpleim.router.pojo.GroupExample;
-import com.lhever.simpleim.router.pojo.GroupExample.Criteria;
-import com.lhever.simpleim.router.pojo.GroupExample.Criterion;
+import com.lhever.simpleim.router.pojo.User;
+import com.lhever.simpleim.router.pojo.UserExample;
+import com.lhever.simpleim.router.pojo.UserExample.Criteria;
+import com.lhever.simpleim.router.pojo.UserExample.Criterion;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;
 import java.util.Map;
 
-public class GroupSqlProvider {
+public class UserSqlProvider {
 
-    public String countByExample(GroupExample example) {
+    public String countByExample(UserExample example) {
         SQL sql = new SQL();
-        sql.SELECT("count(*)").FROM("im_group");
+        sql.SELECT("count(*)").FROM("im_user");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String deleteByExample(GroupExample example) {
+    public String deleteByExample(UserExample example) {
         SQL sql = new SQL();
-        sql.DELETE_FROM("im_group");
+        sql.DELETE_FROM("im_user");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String insertSelective(Group record) {
+    public String insertSelective(User record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("im_group");
+        sql.INSERT_INTO("im_user");
         
         if (record.getId() != null) {
             sql.VALUES("id", "#{id,jdbcType=VARCHAR}");
         }
         
-        if (record.getGroupName() != null) {
-            sql.VALUES("group_name", "#{groupName,jdbcType=VARCHAR}");
+        if (record.getName() != null) {
+            sql.VALUES("name", "#{name,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateId() != null) {
-            sql.VALUES("create_id", "#{createId,jdbcType=VARCHAR}");
+        if (record.getPwd() != null) {
+            sql.VALUES("pwd", "#{pwd,jdbcType=VARCHAR}");
         }
         
         if (record.getStatus() != null) {
@@ -56,19 +56,19 @@ public class GroupSqlProvider {
         return sql.toString();
     }
 
-    public String selectByExample(GroupExample example) {
+    public String selectByExample(UserExample example) {
         SQL sql = new SQL();
         if (example != null && example.isDistinct()) {
             sql.SELECT_DISTINCT("id");
         } else {
             sql.SELECT("id");
         }
-        sql.SELECT("group_name");
-        sql.SELECT("create_id");
+        sql.SELECT("name");
+        sql.SELECT("pwd");
         sql.SELECT("status");
         sql.SELECT("create_time");
         sql.SELECT("update_time");
-        sql.FROM("im_group");
+        sql.FROM("im_user");
         applyWhere(sql, example, false);
         
         if (example != null && example.getOrderByClause() != null) {
@@ -79,22 +79,22 @@ public class GroupSqlProvider {
     }
 
     public String updateByExampleSelective(Map<String, Object> parameter) {
-        Group record = (Group) parameter.get("record");
-        GroupExample example = (GroupExample) parameter.get("example");
+        User record = (User) parameter.get("record");
+        UserExample example = (UserExample) parameter.get("example");
         
         SQL sql = new SQL();
-        sql.UPDATE("im_group");
+        sql.UPDATE("im_user");
         
         if (record.getId() != null) {
             sql.SET("id = #{record.id,jdbcType=VARCHAR}");
         }
         
-        if (record.getGroupName() != null) {
-            sql.SET("group_name = #{record.groupName,jdbcType=VARCHAR}");
+        if (record.getName() != null) {
+            sql.SET("name = #{record.name,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateId() != null) {
-            sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
+        if (record.getPwd() != null) {
+            sql.SET("pwd = #{record.pwd,jdbcType=VARCHAR}");
         }
         
         if (record.getStatus() != null) {
@@ -115,30 +115,30 @@ public class GroupSqlProvider {
 
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
-        sql.UPDATE("im_group");
+        sql.UPDATE("im_user");
         
         sql.SET("id = #{record.id,jdbcType=VARCHAR}");
-        sql.SET("group_name = #{record.groupName,jdbcType=VARCHAR}");
-        sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
+        sql.SET("name = #{record.name,jdbcType=VARCHAR}");
+        sql.SET("pwd = #{record.pwd,jdbcType=VARCHAR}");
         sql.SET("status = #{record.status,jdbcType=INTEGER}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         
-        GroupExample example = (GroupExample) parameter.get("example");
+        UserExample example = (UserExample) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
-    public String updateByPrimaryKeySelective(Group record) {
+    public String updateByPrimaryKeySelective(User record) {
         SQL sql = new SQL();
-        sql.UPDATE("im_group");
+        sql.UPDATE("im_user");
         
-        if (record.getGroupName() != null) {
-            sql.SET("group_name = #{groupName,jdbcType=VARCHAR}");
+        if (record.getName() != null) {
+            sql.SET("name = #{name,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateId() != null) {
-            sql.SET("create_id = #{createId,jdbcType=VARCHAR}");
+        if (record.getPwd() != null) {
+            sql.SET("pwd = #{pwd,jdbcType=VARCHAR}");
         }
         
         if (record.getStatus() != null) {
@@ -158,7 +158,7 @@ public class GroupSqlProvider {
         return sql.toString();
     }
 
-    protected void applyWhere(SQL sql, GroupExample example, boolean includeExamplePhrase) {
+    protected void applyWhere(SQL sql, UserExample example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }

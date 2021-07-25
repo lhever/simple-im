@@ -1,48 +1,60 @@
-package com.lhever.simpleim.router.dao;
+package com.lhever.simpleim.router.dao.mapper;
 
-import com.lhever.simpleim.router.pojo.User;
-import com.lhever.simpleim.router.pojo.UserExample;
-import com.lhever.simpleim.router.pojo.UserExample.Criteria;
-import com.lhever.simpleim.router.pojo.UserExample.Criterion;
+import com.lhever.simpleim.router.pojo.UserMsg;
+import com.lhever.simpleim.router.pojo.UserMsgExample;
+import com.lhever.simpleim.router.pojo.UserMsgExample.Criteria;
+import com.lhever.simpleim.router.pojo.UserMsgExample.Criterion;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;
 import java.util.Map;
 
-public class UserSqlProvider {
+public class UserMsgSqlProvider {
 
-    public String countByExample(UserExample example) {
+    public String countByExample(UserMsgExample example) {
         SQL sql = new SQL();
-        sql.SELECT("count(*)").FROM("im_user");
+        sql.SELECT("count(*)").FROM("im_user_msg");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String deleteByExample(UserExample example) {
+    public String deleteByExample(UserMsgExample example) {
         SQL sql = new SQL();
-        sql.DELETE_FROM("im_user");
+        sql.DELETE_FROM("im_user_msg");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String insertSelective(User record) {
+    public String insertSelective(UserMsg record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("im_user");
+        sql.INSERT_INTO("im_user_msg");
         
         if (record.getId() != null) {
             sql.VALUES("id", "#{id,jdbcType=VARCHAR}");
         }
         
-        if (record.getName() != null) {
-            sql.VALUES("name", "#{name,jdbcType=VARCHAR}");
+        if (record.getCreateId() != null) {
+            sql.VALUES("create_id", "#{createId,jdbcType=VARCHAR}");
         }
         
-        if (record.getPwd() != null) {
-            sql.VALUES("pwd", "#{pwd,jdbcType=VARCHAR}");
+        if (record.getReceiveId() != null) {
+            sql.VALUES("receive_id", "#{receiveId,jdbcType=VARCHAR}");
         }
         
-        if (record.getStatus() != null) {
-            sql.VALUES("status", "#{status,jdbcType=INTEGER}");
+        if (record.getType() != null) {
+            sql.VALUES("type", "#{type,jdbcType=INTEGER}");
+        }
+        
+        if (record.getContent() != null) {
+            sql.VALUES("content", "#{content,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getSendStatus() != null) {
+            sql.VALUES("send_status", "#{sendStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getReadStatus() != null) {
+            sql.VALUES("read_status", "#{readStatus,jdbcType=INTEGER}");
         }
         
         if (record.getCreateTime() != null) {
@@ -56,19 +68,22 @@ public class UserSqlProvider {
         return sql.toString();
     }
 
-    public String selectByExample(UserExample example) {
+    public String selectByExample(UserMsgExample example) {
         SQL sql = new SQL();
         if (example != null && example.isDistinct()) {
             sql.SELECT_DISTINCT("id");
         } else {
             sql.SELECT("id");
         }
-        sql.SELECT("name");
-        sql.SELECT("pwd");
-        sql.SELECT("status");
+        sql.SELECT("create_id");
+        sql.SELECT("receive_id");
+        sql.SELECT("type");
+        sql.SELECT("content");
+        sql.SELECT("send_status");
+        sql.SELECT("read_status");
         sql.SELECT("create_time");
         sql.SELECT("update_time");
-        sql.FROM("im_user");
+        sql.FROM("im_user_msg");
         applyWhere(sql, example, false);
         
         if (example != null && example.getOrderByClause() != null) {
@@ -79,26 +94,38 @@ public class UserSqlProvider {
     }
 
     public String updateByExampleSelective(Map<String, Object> parameter) {
-        User record = (User) parameter.get("record");
-        UserExample example = (UserExample) parameter.get("example");
+        UserMsg record = (UserMsg) parameter.get("record");
+        UserMsgExample example = (UserMsgExample) parameter.get("example");
         
         SQL sql = new SQL();
-        sql.UPDATE("im_user");
+        sql.UPDATE("im_user_msg");
         
         if (record.getId() != null) {
             sql.SET("id = #{record.id,jdbcType=VARCHAR}");
         }
         
-        if (record.getName() != null) {
-            sql.SET("name = #{record.name,jdbcType=VARCHAR}");
+        if (record.getCreateId() != null) {
+            sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
         }
         
-        if (record.getPwd() != null) {
-            sql.SET("pwd = #{record.pwd,jdbcType=VARCHAR}");
+        if (record.getReceiveId() != null) {
+            sql.SET("receive_id = #{record.receiveId,jdbcType=VARCHAR}");
         }
         
-        if (record.getStatus() != null) {
-            sql.SET("status = #{record.status,jdbcType=INTEGER}");
+        if (record.getType() != null) {
+            sql.SET("type = #{record.type,jdbcType=INTEGER}");
+        }
+        
+        if (record.getContent() != null) {
+            sql.SET("content = #{record.content,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getSendStatus() != null) {
+            sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getReadStatus() != null) {
+            sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
         }
         
         if (record.getCreateTime() != null) {
@@ -115,34 +142,49 @@ public class UserSqlProvider {
 
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
-        sql.UPDATE("im_user");
+        sql.UPDATE("im_user_msg");
         
         sql.SET("id = #{record.id,jdbcType=VARCHAR}");
-        sql.SET("name = #{record.name,jdbcType=VARCHAR}");
-        sql.SET("pwd = #{record.pwd,jdbcType=VARCHAR}");
-        sql.SET("status = #{record.status,jdbcType=INTEGER}");
+        sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
+        sql.SET("receive_id = #{record.receiveId,jdbcType=VARCHAR}");
+        sql.SET("type = #{record.type,jdbcType=INTEGER}");
+        sql.SET("content = #{record.content,jdbcType=VARCHAR}");
+        sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
+        sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         
-        UserExample example = (UserExample) parameter.get("example");
+        UserMsgExample example = (UserMsgExample) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
-    public String updateByPrimaryKeySelective(User record) {
+    public String updateByPrimaryKeySelective(UserMsg record) {
         SQL sql = new SQL();
-        sql.UPDATE("im_user");
+        sql.UPDATE("im_user_msg");
         
-        if (record.getName() != null) {
-            sql.SET("name = #{name,jdbcType=VARCHAR}");
+        if (record.getCreateId() != null) {
+            sql.SET("create_id = #{createId,jdbcType=VARCHAR}");
         }
         
-        if (record.getPwd() != null) {
-            sql.SET("pwd = #{pwd,jdbcType=VARCHAR}");
+        if (record.getReceiveId() != null) {
+            sql.SET("receive_id = #{receiveId,jdbcType=VARCHAR}");
         }
         
-        if (record.getStatus() != null) {
-            sql.SET("status = #{status,jdbcType=INTEGER}");
+        if (record.getType() != null) {
+            sql.SET("type = #{type,jdbcType=INTEGER}");
+        }
+        
+        if (record.getContent() != null) {
+            sql.SET("content = #{content,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getSendStatus() != null) {
+            sql.SET("send_status = #{sendStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getReadStatus() != null) {
+            sql.SET("read_status = #{readStatus,jdbcType=INTEGER}");
         }
         
         if (record.getCreateTime() != null) {
@@ -158,7 +200,7 @@ public class UserSqlProvider {
         return sql.toString();
     }
 
-    protected void applyWhere(SQL sql, UserExample example, boolean includeExamplePhrase) {
+    protected void applyWhere(SQL sql, UserMsgExample example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }

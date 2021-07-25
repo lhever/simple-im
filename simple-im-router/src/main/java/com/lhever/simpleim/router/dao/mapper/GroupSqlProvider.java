@@ -1,64 +1,48 @@
-package com.lhever.simpleim.router.dao;
+package com.lhever.simpleim.router.dao.mapper;
 
-import com.lhever.simpleim.router.pojo.GroupMsg;
-import com.lhever.simpleim.router.pojo.GroupMsgExample;
-import com.lhever.simpleim.router.pojo.GroupMsgExample.Criteria;
-import com.lhever.simpleim.router.pojo.GroupMsgExample.Criterion;
+import com.lhever.simpleim.router.pojo.Group;
+import com.lhever.simpleim.router.pojo.GroupExample;
+import com.lhever.simpleim.router.pojo.GroupExample.Criteria;
+import com.lhever.simpleim.router.pojo.GroupExample.Criterion;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;
 import java.util.Map;
 
-public class GroupMsgSqlProvider {
+public class GroupSqlProvider {
 
-    public String countByExample(GroupMsgExample example) {
+    public String countByExample(GroupExample example) {
         SQL sql = new SQL();
-        sql.SELECT("count(*)").FROM("im_group_msg");
+        sql.SELECT("count(*)").FROM("im_group");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String deleteByExample(GroupMsgExample example) {
+    public String deleteByExample(GroupExample example) {
         SQL sql = new SQL();
-        sql.DELETE_FROM("im_group_msg");
+        sql.DELETE_FROM("im_group");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String insertSelective(GroupMsg record) {
+    public String insertSelective(Group record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("im_group_msg");
+        sql.INSERT_INTO("im_group");
         
         if (record.getId() != null) {
             sql.VALUES("id", "#{id,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getGroupName() != null) {
+            sql.VALUES("group_name", "#{groupName,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateId() != null) {
             sql.VALUES("create_id", "#{createId,jdbcType=VARCHAR}");
         }
         
-        if (record.getGroupId() != null) {
-            sql.VALUES("group_id", "#{groupId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getReceiveIds() != null) {
-            sql.VALUES("receive_ids", "#{receiveIds,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getType() != null) {
-            sql.VALUES("type", "#{type,jdbcType=INTEGER}");
-        }
-        
-        if (record.getContent() != null) {
-            sql.VALUES("content", "#{content,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getSendStatus() != null) {
-            sql.VALUES("send_status", "#{sendStatus,jdbcType=INTEGER}");
-        }
-        
-        if (record.getReadStatus() != null) {
-            sql.VALUES("read_status", "#{readStatus,jdbcType=INTEGER}");
+        if (record.getStatus() != null) {
+            sql.VALUES("status", "#{status,jdbcType=INTEGER}");
         }
         
         if (record.getCreateTime() != null) {
@@ -72,23 +56,19 @@ public class GroupMsgSqlProvider {
         return sql.toString();
     }
 
-    public String selectByExample(GroupMsgExample example) {
+    public String selectByExample(GroupExample example) {
         SQL sql = new SQL();
         if (example != null && example.isDistinct()) {
             sql.SELECT_DISTINCT("id");
         } else {
             sql.SELECT("id");
         }
+        sql.SELECT("group_name");
         sql.SELECT("create_id");
-        sql.SELECT("group_id");
-        sql.SELECT("receive_ids");
-        sql.SELECT("type");
-        sql.SELECT("content");
-        sql.SELECT("send_status");
-        sql.SELECT("read_status");
+        sql.SELECT("status");
         sql.SELECT("create_time");
         sql.SELECT("update_time");
-        sql.FROM("im_group_msg");
+        sql.FROM("im_group");
         applyWhere(sql, example, false);
         
         if (example != null && example.getOrderByClause() != null) {
@@ -99,42 +79,26 @@ public class GroupMsgSqlProvider {
     }
 
     public String updateByExampleSelective(Map<String, Object> parameter) {
-        GroupMsg record = (GroupMsg) parameter.get("record");
-        GroupMsgExample example = (GroupMsgExample) parameter.get("example");
+        Group record = (Group) parameter.get("record");
+        GroupExample example = (GroupExample) parameter.get("example");
         
         SQL sql = new SQL();
-        sql.UPDATE("im_group_msg");
+        sql.UPDATE("im_group");
         
         if (record.getId() != null) {
             sql.SET("id = #{record.id,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getGroupName() != null) {
+            sql.SET("group_name = #{record.groupName,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateId() != null) {
             sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
         }
         
-        if (record.getGroupId() != null) {
-            sql.SET("group_id = #{record.groupId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getReceiveIds() != null) {
-            sql.SET("receive_ids = #{record.receiveIds,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getType() != null) {
-            sql.SET("type = #{record.type,jdbcType=INTEGER}");
-        }
-        
-        if (record.getContent() != null) {
-            sql.SET("content = #{record.content,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
-        }
-        
-        if (record.getReadStatus() != null) {
-            sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
+        if (record.getStatus() != null) {
+            sql.SET("status = #{record.status,jdbcType=INTEGER}");
         }
         
         if (record.getCreateTime() != null) {
@@ -151,54 +115,34 @@ public class GroupMsgSqlProvider {
 
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
-        sql.UPDATE("im_group_msg");
+        sql.UPDATE("im_group");
         
         sql.SET("id = #{record.id,jdbcType=VARCHAR}");
+        sql.SET("group_name = #{record.groupName,jdbcType=VARCHAR}");
         sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
-        sql.SET("group_id = #{record.groupId,jdbcType=VARCHAR}");
-        sql.SET("receive_ids = #{record.receiveIds,jdbcType=VARCHAR}");
-        sql.SET("type = #{record.type,jdbcType=INTEGER}");
-        sql.SET("content = #{record.content,jdbcType=VARCHAR}");
-        sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
-        sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
+        sql.SET("status = #{record.status,jdbcType=INTEGER}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         
-        GroupMsgExample example = (GroupMsgExample) parameter.get("example");
+        GroupExample example = (GroupExample) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
-    public String updateByPrimaryKeySelective(GroupMsg record) {
+    public String updateByPrimaryKeySelective(Group record) {
         SQL sql = new SQL();
-        sql.UPDATE("im_group_msg");
+        sql.UPDATE("im_group");
+        
+        if (record.getGroupName() != null) {
+            sql.SET("group_name = #{groupName,jdbcType=VARCHAR}");
+        }
         
         if (record.getCreateId() != null) {
             sql.SET("create_id = #{createId,jdbcType=VARCHAR}");
         }
         
-        if (record.getGroupId() != null) {
-            sql.SET("group_id = #{groupId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getReceiveIds() != null) {
-            sql.SET("receive_ids = #{receiveIds,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getType() != null) {
-            sql.SET("type = #{type,jdbcType=INTEGER}");
-        }
-        
-        if (record.getContent() != null) {
-            sql.SET("content = #{content,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{sendStatus,jdbcType=INTEGER}");
-        }
-        
-        if (record.getReadStatus() != null) {
-            sql.SET("read_status = #{readStatus,jdbcType=INTEGER}");
+        if (record.getStatus() != null) {
+            sql.SET("status = #{status,jdbcType=INTEGER}");
         }
         
         if (record.getCreateTime() != null) {
@@ -214,7 +158,7 @@ public class GroupMsgSqlProvider {
         return sql.toString();
     }
 
-    protected void applyWhere(SQL sql, GroupMsgExample example, boolean includeExamplePhrase) {
+    protected void applyWhere(SQL sql, GroupExample example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }

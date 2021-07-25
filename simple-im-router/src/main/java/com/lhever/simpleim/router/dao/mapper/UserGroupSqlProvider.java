@@ -1,60 +1,44 @@
-package com.lhever.simpleim.router.dao;
+package com.lhever.simpleim.router.dao.mapper;
 
-import com.lhever.simpleim.router.pojo.UserMsg;
-import com.lhever.simpleim.router.pojo.UserMsgExample;
-import com.lhever.simpleim.router.pojo.UserMsgExample.Criteria;
-import com.lhever.simpleim.router.pojo.UserMsgExample.Criterion;
+import com.lhever.simpleim.router.pojo.UserGroup;
+import com.lhever.simpleim.router.pojo.UserGroupExample;
+import com.lhever.simpleim.router.pojo.UserGroupExample.Criteria;
+import com.lhever.simpleim.router.pojo.UserGroupExample.Criterion;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;
 import java.util.Map;
 
-public class UserMsgSqlProvider {
+public class UserGroupSqlProvider {
 
-    public String countByExample(UserMsgExample example) {
+    public String countByExample(UserGroupExample example) {
         SQL sql = new SQL();
-        sql.SELECT("count(*)").FROM("im_user_msg");
+        sql.SELECT("count(*)").FROM("im_user_group");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String deleteByExample(UserMsgExample example) {
+    public String deleteByExample(UserGroupExample example) {
         SQL sql = new SQL();
-        sql.DELETE_FROM("im_user_msg");
+        sql.DELETE_FROM("im_user_group");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String insertSelective(UserMsg record) {
+    public String insertSelective(UserGroup record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("im_user_msg");
+        sql.INSERT_INTO("im_user_group");
         
         if (record.getId() != null) {
             sql.VALUES("id", "#{id,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateId() != null) {
-            sql.VALUES("create_id", "#{createId,jdbcType=VARCHAR}");
+        if (record.getGroupId() != null) {
+            sql.VALUES("group_id", "#{groupId,jdbcType=VARCHAR}");
         }
         
-        if (record.getReceiveId() != null) {
-            sql.VALUES("receive_id", "#{receiveId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getType() != null) {
-            sql.VALUES("type", "#{type,jdbcType=INTEGER}");
-        }
-        
-        if (record.getContent() != null) {
-            sql.VALUES("content", "#{content,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getSendStatus() != null) {
-            sql.VALUES("send_status", "#{sendStatus,jdbcType=INTEGER}");
-        }
-        
-        if (record.getReadStatus() != null) {
-            sql.VALUES("read_status", "#{readStatus,jdbcType=INTEGER}");
+        if (record.getUserId() != null) {
+            sql.VALUES("user_id", "#{userId,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateTime() != null) {
@@ -68,22 +52,18 @@ public class UserMsgSqlProvider {
         return sql.toString();
     }
 
-    public String selectByExample(UserMsgExample example) {
+    public String selectByExample(UserGroupExample example) {
         SQL sql = new SQL();
         if (example != null && example.isDistinct()) {
             sql.SELECT_DISTINCT("id");
         } else {
             sql.SELECT("id");
         }
-        sql.SELECT("create_id");
-        sql.SELECT("receive_id");
-        sql.SELECT("type");
-        sql.SELECT("content");
-        sql.SELECT("send_status");
-        sql.SELECT("read_status");
+        sql.SELECT("group_id");
+        sql.SELECT("user_id");
         sql.SELECT("create_time");
         sql.SELECT("update_time");
-        sql.FROM("im_user_msg");
+        sql.FROM("im_user_group");
         applyWhere(sql, example, false);
         
         if (example != null && example.getOrderByClause() != null) {
@@ -94,38 +74,22 @@ public class UserMsgSqlProvider {
     }
 
     public String updateByExampleSelective(Map<String, Object> parameter) {
-        UserMsg record = (UserMsg) parameter.get("record");
-        UserMsgExample example = (UserMsgExample) parameter.get("example");
+        UserGroup record = (UserGroup) parameter.get("record");
+        UserGroupExample example = (UserGroupExample) parameter.get("example");
         
         SQL sql = new SQL();
-        sql.UPDATE("im_user_msg");
+        sql.UPDATE("im_user_group");
         
         if (record.getId() != null) {
             sql.SET("id = #{record.id,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateId() != null) {
-            sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
+        if (record.getGroupId() != null) {
+            sql.SET("group_id = #{record.groupId,jdbcType=VARCHAR}");
         }
         
-        if (record.getReceiveId() != null) {
-            sql.SET("receive_id = #{record.receiveId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getType() != null) {
-            sql.SET("type = #{record.type,jdbcType=INTEGER}");
-        }
-        
-        if (record.getContent() != null) {
-            sql.SET("content = #{record.content,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
-        }
-        
-        if (record.getReadStatus() != null) {
-            sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
+        if (record.getUserId() != null) {
+            sql.SET("user_id = #{record.userId,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateTime() != null) {
@@ -142,49 +106,29 @@ public class UserMsgSqlProvider {
 
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
-        sql.UPDATE("im_user_msg");
+        sql.UPDATE("im_user_group");
         
         sql.SET("id = #{record.id,jdbcType=VARCHAR}");
-        sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
-        sql.SET("receive_id = #{record.receiveId,jdbcType=VARCHAR}");
-        sql.SET("type = #{record.type,jdbcType=INTEGER}");
-        sql.SET("content = #{record.content,jdbcType=VARCHAR}");
-        sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
-        sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
+        sql.SET("group_id = #{record.groupId,jdbcType=VARCHAR}");
+        sql.SET("user_id = #{record.userId,jdbcType=VARCHAR}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         
-        UserMsgExample example = (UserMsgExample) parameter.get("example");
+        UserGroupExample example = (UserGroupExample) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
-    public String updateByPrimaryKeySelective(UserMsg record) {
+    public String updateByPrimaryKeySelective(UserGroup record) {
         SQL sql = new SQL();
-        sql.UPDATE("im_user_msg");
+        sql.UPDATE("im_user_group");
         
-        if (record.getCreateId() != null) {
-            sql.SET("create_id = #{createId,jdbcType=VARCHAR}");
+        if (record.getGroupId() != null) {
+            sql.SET("group_id = #{groupId,jdbcType=VARCHAR}");
         }
         
-        if (record.getReceiveId() != null) {
-            sql.SET("receive_id = #{receiveId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getType() != null) {
-            sql.SET("type = #{type,jdbcType=INTEGER}");
-        }
-        
-        if (record.getContent() != null) {
-            sql.SET("content = #{content,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{sendStatus,jdbcType=INTEGER}");
-        }
-        
-        if (record.getReadStatus() != null) {
-            sql.SET("read_status = #{readStatus,jdbcType=INTEGER}");
+        if (record.getUserId() != null) {
+            sql.SET("user_id = #{userId,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateTime() != null) {
@@ -200,7 +144,7 @@ public class UserMsgSqlProvider {
         return sql.toString();
     }
 
-    protected void applyWhere(SQL sql, UserMsgExample example, boolean includeExamplePhrase) {
+    protected void applyWhere(SQL sql, UserGroupExample example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }

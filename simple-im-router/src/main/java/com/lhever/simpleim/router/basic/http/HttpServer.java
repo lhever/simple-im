@@ -1,6 +1,7 @@
 package com.lhever.simpleim.router.basic.http;
 
 import com.lhever.common.core.utils.NetUtils;
+import com.lhever.simpleim.router.basic.cfg.RouterConfig;
 import com.lhever.simpleim.router.basic.listener.SpringContextHolder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -27,14 +28,13 @@ import java.net.InetSocketAddress;
 
 public class HttpServer {
 
-    private static final Integer PORT = 8889;
-
     private static final Logger logger = LoggerFactory.getLogger(HttpRouter.class);
 
     @Autowired
     private SpringContextHolder springContextHolder;
 
     public void start() {
+        int port = RouterConfig.SERVER_PORT;
         final NioEventLoopGroup bossGroup = new NioEventLoopGroup(2, new DefaultThreadFactory("boss-thread"));
         final NioEventLoopGroup workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("worker-thread"));
         EventExecutorGroup businessGroup = new DefaultEventExecutorGroup(6, new DefaultThreadFactory("biz-thread"));//业务
@@ -59,8 +59,8 @@ public class HttpServer {
                         }
                     });
 
-            final Channel serverChannel = bootstrap.bind(new InetSocketAddress(PORT)).sync().channel();
-            logger.info("http://{}:{}/ Start-up success", getIp(), PORT);
+            final Channel serverChannel = bootstrap.bind(new InetSocketAddress(port)).sync().channel();
+            logger.info("http://{}:{}/ Start-up success", getIp(), port);
             serverChannel.closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error("", e);

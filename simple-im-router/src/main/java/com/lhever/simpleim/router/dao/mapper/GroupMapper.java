@@ -1,4 +1,4 @@
-package com.lhever.simpleim.router.dao;
+package com.lhever.simpleim.router.dao.mapper;
 
 import com.lhever.simpleim.router.pojo.Group;
 import com.lhever.simpleim.router.pojo.GroupExample;

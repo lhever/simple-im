@@ -34,8 +34,8 @@ import java.util.Properties;
  * @modify by user: {修改人} 2020/9/24 16:30
  * @modify by reason:{方法名}:{原因}
  */
-@Configuration
-@MapperScan(basePackages = {"com.lhever.simpleim.router.dao"})
+//@Configuration
+//@MapperScan(basePackages = {"com.lhever.simpleim.router.dao"})
 public class DataSourceConfig {
     private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.lhever.simpleim.router.***.service..*.*(..))";
 
