@@ -87,6 +87,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws Exception {
+        ServerInitializer.init();
         new Server(ServerConfig.SERVER_IP, ServerConfig.SERVER_PORT).bind();
     }
 }

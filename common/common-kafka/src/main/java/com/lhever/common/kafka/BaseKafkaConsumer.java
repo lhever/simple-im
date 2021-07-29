@@ -1,8 +1,8 @@
 package com.lhever.common.kafka;
 
 import com.lhever.common.kafka.cfg.ConsumerCfg;
-import com.lhever.common.kafka.cfg.PartitionOffset;
 import com.lhever.common.kafka.cfg.TopicPartitionOffset;
+import com.lhever.common.kafka.util.CommonUtils;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.consumer.OffsetCommitCallback;
@@ -126,30 +126,26 @@ public abstract class BaseKafkaConsumer<K, V> extends Thread {
             kafkaConsumer.close();
         }
         this.kafkaConsumer = new KafkaConsumer(cfg.getProperties());
-        if (cfg.topic() != null) {
-            kafkaConsumer.subscribe(Collections.singletonList(cfg.topic()));
+        if (CommonUtils.isNotEmpty(cfg.topics())) {
+            kafkaConsumer.subscribe(cfg.topics());
         } else {
-            assignOrSeek(kafkaConsumer, cfg.topicPartitionOffset());
+            assignOrSeek(kafkaConsumer, cfg.topicPartitionOffsets());
         }
         if (cfg.msgHandler() == null) {
             throw new IllegalArgumentException("no handler");
         }
     }
 
-    protected void assignOrSeek(KafkaConsumer<K, V> kafkaConsumer, TopicPartitionOffset topicPartitionOffset) {
-        String topic = topicPartitionOffset.getTopic();
-        PartitionOffset[] partitionOffsets = topicPartitionOffset.getPartitionOffsets();
-        if (partitionOffsets == null || partitionOffsets.length == 0) {
-            kafkaConsumer.subscribe(Collections.singletonList(topic));
-            return;
-        }
+    protected void assignOrSeek(KafkaConsumer<K, V> kafkaConsumer, Collection<TopicPartitionOffset> topicPartitionOffsets) {
+
         Map<TopicPartition, Long> topicPartitionOffsetMap = new HashMap<>();
         List<TopicPartition> tps = new ArrayList<>();
-        for (PartitionOffset partitionOffset : partitionOffsets) {
-            TopicPartition topicPartition = new TopicPartition(topic, partitionOffset.getPartition());
+        for (TopicPartitionOffset tpo : topicPartitionOffsets) {
+            TopicPartition topicPartition = new TopicPartition(tpo.getTopic(), tpo.getPartition());
             tps.add(topicPartition);
-            if (partitionOffset.getOffset() != null) {
-                topicPartitionOffsetMap.put(topicPartition, partitionOffset.getOffset());
+
+            if (tpo.getOffset() != null) {
+                topicPartitionOffsetMap.put(topicPartition, tpo.getOffset());
             }
         }
         kafkaConsumer.assign(tps);

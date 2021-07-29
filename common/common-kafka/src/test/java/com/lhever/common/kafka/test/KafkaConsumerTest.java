@@ -43,10 +43,9 @@ public class KafkaConsumerTest {
                 .maxPollIntervalMs(5 * 10000)
                 .keyDeSerializer(StringDeserializer.class)
                 .valueDeSerializer(StringDeserializer.class)
-                .topicPartitionOffset(new TopicPartitionOffset(TOPIC, new PartitionOffset[] {
-                        new PartitionOffset(0, 0L), new PartitionOffset(1, 0L), new PartitionOffset(2, 0L)})
-                )
-//                .topic(TOPIC)
+                .topicPartitionOffset(Arrays.asList(new TopicPartitionOffset(TOPIC, 0, 0L), new TopicPartitionOffset(TOPIC, 1, 0L),
+                        new TopicPartitionOffset(TOPIC, 2, 0L)))
+//                .topics(Arrays.asList(TOPIC))
                 .pollDuration(Duration.ofMillis(300))
                 .concurrency(3)
                 .msgHandler( new MsgHandler<String, String>() {

@@ -18,10 +18,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TopicPartitionOffset {
     private String topic;
-    private PartitionOffset[]  partitionOffsets;
+    private Integer partition;
+    private Long offset;
 
-    public TopicPartitionOffset(String topic, PartitionOffset[] partitionOffsets) {
+    public TopicPartitionOffset(String topic, Integer partition, Long offset) {
         this.topic = topic;
-        this.partitionOffsets = partitionOffsets;
+        this.partition = partition;
+        this.offset = offset;
     }
 }

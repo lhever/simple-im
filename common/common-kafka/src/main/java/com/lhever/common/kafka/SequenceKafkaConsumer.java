@@ -13,10 +13,8 @@ package com.lhever.common.kafka;
 import com.lhever.common.kafka.ack.KafkaAck;
 import com.lhever.common.kafka.cfg.ConsumerCfg;
 import com.lhever.common.kafka.handler.MsgHandler;
-import com.lhever.common.kafka.partition.PartitionRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 
@@ -41,21 +39,8 @@ public class SequenceKafkaConsumer<K, V> extends BaseKafkaConsumer<K, V> {
 
     @Override
     protected void init() {
-        if (kafkaConsumer != null) {
-            kafkaConsumer.close();
-        }
-        this.kafkaConsumer = new KafkaConsumer(cfg.getProperties());
-        if (cfg.topic() != null) {
-            kafkaConsumer.subscribe(Collections.singletonList(cfg.topic()), new PartitionRebalanceListener(this));
-        } else {
-            assignOrSeek(kafkaConsumer, cfg.topicPartitionOffset());
-        }
-        if (cfg.msgHandler() == null) {
-            throw new IllegalArgumentException("no handler");
-        }
+        super.init();
     }
-
-
 
 
     @Override
@@ -118,16 +103,13 @@ public class SequenceKafkaConsumer<K, V> extends BaseKafkaConsumer<K, V> {
     private void startProcessor(TopicPartition topicPartition, PartitionProcessor processor) {
         partitionRunableMap.put(topicPartition, processor);
         Thread thread = new Thread(processor);
-        String name = "processor-partition-" + topicPartition.partition() + "-" + threadCount.getAndAdd(1) ;
+        String name = "processor-partition-" + topicPartition.partition() + "-" + threadCount.getAndAdd(1);
         thread.setName(name);
         thread.setDaemon(true);
         System.out.println("start process Thread: " + name);
         partitionThreadMap.put(topicPartition, thread);
         thread.start();
     }
-
-
-
 
 
     /**
@@ -139,9 +121,9 @@ public class SequenceKafkaConsumer<K, V> extends BaseKafkaConsumer<K, V> {
      * @modify by user: {修改人} 2021/7/16 11:24
      * @modify by reason:{方法名}:{原因}
      */
-    public static class PartitionProcessor<K,V> implements Runnable {
+    public static class PartitionProcessor<K, V> implements Runnable {
 
-        private  BlockingQueue<ConsumerRecord<K, V>> records = new LinkedBlockingQueue();
+        private BlockingQueue<ConsumerRecord<K, V>> records = new LinkedBlockingQueue();
         private SequenceKafkaConsumer sequenceKafkaConsumer;
         private MsgHandler<K, V> msgHandler;
         private volatile boolean isStop = false;
@@ -193,8 +175,6 @@ public class SequenceKafkaConsumer<K, V> extends BaseKafkaConsumer<K, V> {
             }
         }
     }
-
-
 
 
 }

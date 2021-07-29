@@ -32,6 +32,14 @@ mybatis:
       url: jdbc:postgresql://127.0.0.1:5432/postgres?useUnicode=true&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=UTC
       driver: org.postgresql.Driver
 
+kafka:
+  address: 127.0.0.1:9092
+  groupId: group0
+  offset: earliest
+  topics: 127.0.0.1
+
+
+
 
 
 

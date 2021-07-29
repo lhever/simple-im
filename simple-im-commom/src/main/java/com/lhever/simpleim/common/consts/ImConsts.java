@@ -9,5 +9,8 @@ public class ImConsts {
     public static final int CLIENT_PORT = 19999;
 
 
+    public static final String LOGIN_KEY = "im.uid:";
+
+
 
 }

@@ -19,6 +19,7 @@ public class RouterApplication {
      */
 
     public static void main(String[] args) {
+        RouterInitializer.init();
         AnnotationConfigApplicationContext ctx = null;
         try {
             ctx = new AnnotationConfigApplicationContext(RouterApplication.class,

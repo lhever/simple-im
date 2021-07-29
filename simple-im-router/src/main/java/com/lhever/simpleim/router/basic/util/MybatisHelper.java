@@ -3,7 +3,6 @@ package com.lhever.simpleim.router.basic.util;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageInterceptor;
 import com.lhever.simpleim.router.basic.cfg.DataSourceProp;
-import com.lhever.simpleim.router.service.UserService;
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.executor.loader.ProxyFactory;
 import org.apache.ibatis.io.DefaultVFS;
@@ -48,7 +47,6 @@ public class MybatisHelper {
 
 
         cfg.getTypeAliasRegistry().registerAliases("com.lhever.simpleim.router.pojo");
-        cfg.getTypeAliasRegistry().registerAliases("UserService", UserService.class);
         cfg.addInterceptor(pageInterceptor());
 
         ObjectFactory objectFactory = new DefaultObjectFactory();

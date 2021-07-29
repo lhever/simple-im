@@ -1,9 +1,13 @@
 package com.lhever.common.kafka.cfg;
 
 import com.lhever.common.kafka.handler.MsgHandler;
+import com.lhever.common.kafka.util.CommonUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -19,8 +23,8 @@ public class ConsumerCfg {
 
     private Properties properties;
 
-    private String topic;
-    private TopicPartitionOffset topicPartitionOffset;
+    private Collection<String> topics;
+    private Collection<TopicPartitionOffset> topicPartitionOffsets;
     private Duration pollDuration;
     private MsgHandler msgHandler;
     private Integer concurrency;
@@ -135,44 +139,57 @@ public class ConsumerCfg {
     }
 
 
-    public ConsumerCfg topic(String topic) {
-        if (topicPartitionOffset != null) {
+    public ConsumerCfg topics(Collection<String> topics) {
+        if (CommonUtils.isNotEmpty(topicPartitionOffsets)) {
             throw new IllegalArgumentException("topic and topicPartitionOffset are mutal exclusize, you can just assign one of them");
         }
-        this.topic = judgeTopic(topic);
+        this.topics = judgeTopics(topics);
         return this;
     }
 
-    public String topic() {
-        return topic;
+    public Collection<String> topics() {
+        return topics;
+    }
+
+    private Collection<String> judgeTopics(Collection<String> topics) {
+        if (CommonUtils.isEmpty(topics)) {
+            throw new IllegalArgumentException("topic collection cannot be empty");
+        }
+        List<String> modifyed = new ArrayList<>(topics.size());
+        for (String topic : topics) {
+            String trimedTopic = judgeTopic(topic);
+            modifyed.add(trimedTopic);
+        }
+        return modifyed;
     }
 
     private String judgeTopic(String topic) {
-        if (topic == null || topic.trim().length() == 0) {
-            throw new IllegalArgumentException("topic cannot be null");
+        if (CommonUtils.isBlank(topic)) {
+            throw new IllegalArgumentException("topic name  cannot be blank");
         }
         return topic.trim();
     }
 
-    public ConsumerCfg topicPartitionOffset(TopicPartitionOffset topicPartitionOffset) {
-        if (topic != null) {
+    public ConsumerCfg topicPartitionOffset(Collection<TopicPartitionOffset> topicPartitionOffsets) {
+        if (!CommonUtils.isEmpty(topics)) {
             throw new IllegalArgumentException("topic and topicPartitionOffset are mutal exclusize, you can just assign one of them");
         }
-        topicPartitionOffset.setTopic(judgeTopic(topicPartitionOffset.getTopic()));
-        PartitionOffset[] partitionOffsets = topicPartitionOffset.getPartitionOffsets();
-        if (partitionOffsets != null) {
-            for (PartitionOffset partitionOffset : partitionOffsets) {
-                if (partitionOffset.getPartition() == null) {
-                    throw new IllegalArgumentException("partition cann be null if assign");
-                }
+        if (CommonUtils.isEmpty(topicPartitionOffsets)) {
+            throw new IllegalArgumentException("topicPartitionOffset collection cannot be empty");
+        }
+        for (TopicPartitionOffset tpo : topicPartitionOffsets) {
+           tpo.setTopic(judgeTopic(tpo.getTopic()));
+            if (tpo.getPartition() == null) {
+                throw new IllegalArgumentException(tpo.getTopic() + " partion cannot be null" );
             }
         }
-        this.topicPartitionOffset = topicPartitionOffset;
+
+        this.topicPartitionOffsets = topicPartitionOffsets;
         return this;
     }
 
-    public TopicPartitionOffset topicPartitionOffset() {
-        return topicPartitionOffset;
+    public Collection<TopicPartitionOffset> topicPartitionOffsets() {
+        return topicPartitionOffsets;
     }
 
     public ConsumerCfg pollDuration(Duration pollDuration) {

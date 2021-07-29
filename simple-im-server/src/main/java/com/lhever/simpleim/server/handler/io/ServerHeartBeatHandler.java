@@ -1,11 +1,12 @@
 package com.lhever.simpleim.server.handler.io;
 
 import com.lhever.common.core.utils.StringUtils;
+import com.lhever.simpleim.common.consts.ImConsts;
 import com.lhever.simpleim.common.msg.PingPong;
 import com.lhever.simpleim.common.util.Attributes;
+import com.lhever.simpleim.common.util.RedisUtils;
 import com.lhever.simpleim.common.util.Session;
 import com.lhever.simpleim.server.config.ServerConfig;
-import com.lhever.simpleim.server.util.RedisUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -39,7 +40,8 @@ public class ServerHeartBeatHandler extends SimpleChannelInboundHandler<PingPong
             String userId = session.getUserId();
             if (StringUtils.isNotBlank(userId)) {
                 logger.info("登陆用户:{}续期", userId);
-                RedisUtils.set(ServerConfig.LOGIN_KEY + userId, userId, 60);
+                String address = StringUtils.appendAll(ServerConfig.SERVER_IP, ":", ServerConfig.SERVER_PORT);
+                RedisUtils.set(ImConsts.LOGIN_KEY + userId, address, 60);
             }
         }
 

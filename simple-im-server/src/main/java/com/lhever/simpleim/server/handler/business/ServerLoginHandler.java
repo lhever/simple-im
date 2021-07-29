@@ -19,14 +19,11 @@ import com.alibaba.fastjson.TypeReference;
 import com.lhever.common.core.response.CommonResponse;
 import com.lhever.common.core.support.http.HttpClientSingleton;
 import com.lhever.common.core.utils.StringUtils;
+import com.lhever.simpleim.common.consts.ImConsts;
 import com.lhever.simpleim.common.msg.loginReq;
 import com.lhever.simpleim.common.msg.loginResp;
-import com.lhever.simpleim.common.util.JsonUtils;
-import com.lhever.simpleim.common.util.LoginUtil;
-import com.lhever.simpleim.common.util.Session;
-import com.lhever.simpleim.common.util.SessionUtil;
+import com.lhever.simpleim.common.util.*;
 import com.lhever.simpleim.server.config.ServerConfig;
-import com.lhever.simpleim.server.util.RedisUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -63,7 +60,8 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
             LoginUtil.markAsLogin(ctx.channel());
             SessionUtil.bindSession(new Session(resp.getUserId(), loginReq.getUserName()), ctx.channel());
             //idel timeout is 50
-            RedisUtils.set(ServerConfig.LOGIN_KEY + resp.getUserId(), resp.getUserId(), 60);
+            String address = StringUtils.appendAll(ServerConfig.SERVER_IP, ":", ServerConfig.SERVER_PORT);
+            RedisUtils.set(ImConsts.LOGIN_KEY + resp.getUserId(), address, 60);
 
 
             ctx.writeAndFlush(resp);

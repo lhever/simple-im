@@ -12,6 +12,9 @@ import java.lang.reflect.Type;
 public class JsonUtils {
 
     public static String obj2Json(Object obj, boolean pretty) {
+        if (obj instanceof String) {
+            return obj == null ? null : obj.toString();
+        }
         if (pretty) {
             return JSON.toJSONString(obj, SerializerFeature.PrettyFormat);
         }
