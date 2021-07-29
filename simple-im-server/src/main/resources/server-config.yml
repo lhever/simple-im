@@ -19,6 +19,9 @@ redis:
 
 kafka:
   address: '127.0.0.1:9092'
+  groupId: group0
+  offset: earliest
+  topics: server-127.0.0.1-9999-1,server-127.0.0.1-9999-2
 
 
 

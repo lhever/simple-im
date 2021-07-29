@@ -8,6 +8,7 @@ import com.lhever.simpleim.common.util.KafkaUtils;
 import com.lhever.simpleim.router.service.RouterMsgHandler;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,12 +27,10 @@ import java.util.List;
 @Configuration
 public class KafkaConfig {
 
-    @Autowired
-    private RouterMsgHandler routerMsgHandler;
-
 
     @Bean
-    public SequenceKafkaConsumer<String, String> init() {
+    public SequenceKafkaConsumer<String, String> init(
+            @Qualifier("routerMsgHandler") RouterMsgHandler routerMsgHandler) {
         KafkaUtils.KafkaProp kafkaProp = RouterConfig.kafkaProp;
         if (kafkaProp == null) {
             throw new CommonException("no kafka config");
