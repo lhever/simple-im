@@ -1,23 +1,21 @@
-package com.lhever.simpleim.common.msg;
+package com.lhever.simpleim.common.dto.router;
 
 import com.lhever.simpleim.common.consts.MsgType;
+import com.lhever.simpleim.common.msg.Msg;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Getter
 @Setter
-public class CreateGroupReq extends Msg {
-    @Override
-    public Integer getType() {
-        return MsgType.CREATE_GROUP_REQUEST;
-    }
+@NoArgsConstructor
+public class RouterCreateGroupReq {
 
     private String createId;
 
     private String groupName;
 
     private List<String> userIds;
-
 }

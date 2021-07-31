@@ -17,11 +17,11 @@ public class KafkaUtils {
     private static Logger logger = LoggerFactory.getLogger(KafkaUtils.class);
 
     public static String ROUTER_TOPIC_PREFIX = "im-router-topic-";
-    private static int ROUTER_TOPIC_TOTAL = 200;
+    public static int ROUTER_TOPIC_TOTAL = 20;
 
     public static String SERVER_TOPIC_TPL = "server-{}-";
 
-    private static int SERVER_TOPIC_TOTAL = 2;
+    public static int SERVER_TOPIC_TOTAL = 2;
 
 
     private static SimpleKafkaProducer<String, String> simpleKafkaProducer;

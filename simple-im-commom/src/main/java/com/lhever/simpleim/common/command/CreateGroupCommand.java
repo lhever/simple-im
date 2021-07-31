@@ -20,21 +20,22 @@ public class CreateGroupCommand implements ConsoleCommand {
     public void exec(Channel channel, String string) {
 
         String[] strs = string.split("::");
-        if(strs.length < 2){
-            logger.info("创建群聊请使用 createGroup::userId1,userId2,userId3... 命令！");
+        if (strs.length < 3) {
+            logger.info("创建群聊请使用 createGroup::groupName::userId1,userId2,userId3... 命令！");
             return;
         }
-        CreateGroupReq packet = buildPacket(strs[1]);
-        ChannelUtils.writeAndFlush(channel,packet);
+        CreateGroupReq packet = buildPacket(strs[1], strs[2]);
+        ChannelUtils.writeAndFlush(channel, packet);
     }
 
-    private CreateGroupReq buildPacket(String usersString) {
+    private CreateGroupReq buildPacket(String groupName, String usersString) {
         CreateGroupReq packet = new CreateGroupReq();
         String[] users = usersString.split(",");
         List<String> userList = new ArrayList<String>();
-        for (String str : users){
+        for (String str : users) {
             userList.add(str);
         }
+        packet.setGroupName(groupName);
         packet.setUserIds(userList);
 
         return packet;

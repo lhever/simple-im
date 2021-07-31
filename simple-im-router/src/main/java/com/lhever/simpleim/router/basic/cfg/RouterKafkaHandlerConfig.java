@@ -25,12 +25,11 @@ import java.util.List;
  * @modify by reason:{方法名}:{原因}
  */
 @Configuration
-public class KafkaConfig {
+public class RouterKafkaHandlerConfig {
 
 
     @Bean
-    public SequenceKafkaConsumer<String, String> init(
-            @Qualifier("routerMsgHandler") RouterMsgHandler routerMsgHandler) {
+    public SequenceKafkaConsumer<String, String> init(@Qualifier("routerMsgHandler") RouterMsgHandler routerMsgHandler) {
         KafkaUtils.KafkaProp kafkaProp = RouterConfig.kafkaProp;
         if (kafkaProp == null) {
             throw new CommonException("no kafka config");
@@ -54,6 +53,7 @@ public class KafkaConfig {
                 .concurrency(3)
                 .msgHandler(routerMsgHandler);
         SequenceKafkaConsumer<String, String> kafkaConsumer = new SequenceKafkaConsumer<>(cfg);
+        kafkaConsumer.start();
 
         return kafkaConsumer;
 

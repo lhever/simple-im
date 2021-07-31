@@ -1,8 +1,13 @@
 package com.lhever.simpleim.router;
 
+import com.lhever.common.core.utils.ParseUtils;
+import com.lhever.common.core.utils.StringUtils;
+import com.lhever.common.kafka.SimpleKafkaManager;
 import com.lhever.simpleim.common.util.KafkaUtils;
 import com.lhever.simpleim.common.util.RedisUtils;
 import com.lhever.simpleim.router.basic.cfg.RouterConfig;
+
+import java.util.Optional;
 
 /**
  * <p>类说明：</p>
@@ -17,7 +22,8 @@ public class RouterInitializer {
 
     public static void init() {
          initRedis();
-         initKafka();
+         initTopic();
+         initKafkaProducer();
     }
 
     private static void initRedis() {
@@ -33,8 +39,25 @@ public class RouterInitializer {
         RedisUtils.init(redisProp);
     }
 
-    private static void initKafka() {
+    private static void initKafkaProducer() {
         KafkaUtils.init(RouterConfig.KAFKA_ADDRESS);
+    }
+
+
+    public static void initTopic() {
+        SimpleKafkaManager simpleKafkaManager = new SimpleKafkaManager(RouterConfig.KAFKA_ADDRESS);
+        for (int i = 0; i < KafkaUtils.ROUTER_TOPIC_TOTAL; i++) {
+            String topic = KafkaUtils.ROUTER_TOPIC_PREFIX + i;
+            doCreateTopic(simpleKafkaManager, topic);
+        }
+    }
+
+    public static void doCreateTopic(SimpleKafkaManager simpleKafkaManager, String topic) {
+        try {
+            simpleKafkaManager.createTopic(topic, Optional.of(3), Optional.empty());
+        } catch (Throwable e) {
+
+        }
     }
 
 

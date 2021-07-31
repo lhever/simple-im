@@ -11,6 +11,11 @@ import java.util.Date;
 @Setter
 public class MessageResp extends Msg {
 
+    @Override
+    public Integer getType() {
+        return MsgType.MESSAGE_RESPONSE;
+    }
+
     private String id;
     private String sendId;
     private String targetId;
@@ -18,10 +23,7 @@ public class MessageResp extends Msg {
     private Date createTime;
 
 
-    @Override
-    public Integer getType() {
-        return MsgType.MESSAGE_RESPONSE;
-    }
+
 
 
 }

@@ -11,5 +11,9 @@ package com.lhever.simpleim.common.consts;
  */
 public class KafkaDataType {
 
-    public static final String SINGLE_CHAT = "single_chat:";
+    public static final String P2P_MSG = "p2pMsg:";
+
+    public static final String GROUP_BATCH_MSG = "groupBatchMsg:";
+
+    public static final String GROUP_SINGLE_MSG = "groupSingleMsg:";
 }

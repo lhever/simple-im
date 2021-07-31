@@ -1,7 +1,8 @@
 package com.lhever.simpleim.router.controller;
 
 import com.lhever.common.core.annotation.ModifyResponse;
-import com.lhever.simpleim.common.msg.CreateGroupReq;
+import com.lhever.simpleim.common.dto.router.RouterCreateGroupReq;
+import com.lhever.simpleim.common.dto.router.RouterCreateGroupResp;
 import com.lhever.simpleim.router.basic.http.annotation.HttpMethod;
 import com.lhever.simpleim.router.basic.http.annotation.PathMapping;
 import com.lhever.simpleim.router.basic.http.annotation.RestController;
@@ -20,8 +21,8 @@ public class GroupController {
 
     @PathMapping(uri = "/create", method = HttpMethod.POST)
     @ModifyResponse
-    public void createGroup(CreateGroupReq req) {
-        groupService.createGroup(req);
+    public RouterCreateGroupResp createGroup(RouterCreateGroupReq req) {
+      return   groupService.createGroup(req);
     }
 
 

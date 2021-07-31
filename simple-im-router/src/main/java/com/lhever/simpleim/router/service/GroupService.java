@@ -1,6 +1,7 @@
 package com.lhever.simpleim.router.service;
 
-import com.lhever.simpleim.common.msg.CreateGroupReq;
+import com.lhever.simpleim.common.dto.router.RouterCreateGroupReq;
+import com.lhever.simpleim.common.dto.router.RouterCreateGroupResp;
 import com.lhever.simpleim.router.dao.GroupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class GroupService {
     @Autowired
     private GroupDao groupDao;
 
-    public void createGroup(CreateGroupReq req) {
-        groupDao.createGroup(req);
+    public RouterCreateGroupResp createGroup(RouterCreateGroupReq req) {
+        return groupDao.createGroup(req);
     }
 
 

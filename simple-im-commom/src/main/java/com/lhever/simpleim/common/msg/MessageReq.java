@@ -8,6 +8,11 @@ import lombok.Setter;
 @Setter
 public class MessageReq extends Msg {
 
+    @Override
+    public Integer getType() {
+        return MsgType.MESSAGE_REQUEST;
+    }
+
     private String id;
     /**
      * 消息接受者
@@ -20,8 +25,5 @@ public class MessageReq extends Msg {
     private String message;
 
 
-    @Override
-    public Integer getType() {
-        return MsgType.MESSAGE_REQUEST;
-    }
+
 }

@@ -2,14 +2,18 @@ package com.lhever.simpleim.common.pojo;
 
 import java.util.Date;
 
-public class Group {
+public class UserGroupMsg {
     private String id;
-
-    private String groupName;
 
     private String createId;
 
-    private String memberIds;
+    private String groupId;
+
+    private String receiveId;
+
+    private Integer type;
+
+    private String content;
 
     private Integer status;
 
@@ -25,14 +29,6 @@ public class Group {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName == null ? null : groupName.trim();
-    }
-
     public String getCreateId() {
         return createId;
     }
@@ -41,12 +37,36 @@ public class Group {
         this.createId = createId == null ? null : createId.trim();
     }
 
-    public String getMemberIds() {
-        return memberIds;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setMemberIds(String memberIds) {
-        this.memberIds = memberIds == null ? null : memberIds.trim();
+    public void setGroupId(String groupId) {
+        this.groupId = groupId == null ? null : groupId.trim();
+    }
+
+    public String getReceiveId() {
+        return receiveId;
+    }
+
+    public void setReceiveId(String receiveId) {
+        this.receiveId = receiveId == null ? null : receiveId.trim();
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 
     public Integer getStatus() {

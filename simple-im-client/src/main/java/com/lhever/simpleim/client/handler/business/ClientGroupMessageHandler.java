@@ -13,6 +13,6 @@ public class ClientGroupMessageHandler extends SimpleChannelInboundHandler<Group
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GroupMessageResp msg) throws Exception {
-        logger.info("收到群聊{}的消息：{}-->{}", msg.getGroupId(), msg.getFromUserName(), msg.getGroupMsg());
+        logger.info("收到群聊{}的消息：{}-->{}", msg.getGroupId(), msg.getSendId(), msg.getGroupMsg());
     }
 }

@@ -1,17 +1,20 @@
 package com.lhever.simpleim.server;
 
 import com.lhever.common.core.exception.CommonException;
+import com.lhever.common.core.utils.ParseUtils;
 import com.lhever.common.core.utils.StringUtils;
 import com.lhever.common.kafka.SequenceKafkaConsumer;
+import com.lhever.common.kafka.SimpleKafkaManager;
 import com.lhever.common.kafka.cfg.ConsumerCfg;
 import com.lhever.simpleim.common.util.KafkaUtils;
 import com.lhever.simpleim.common.util.RedisUtils;
 import com.lhever.simpleim.server.config.ServerConfig;
-import com.lhever.simpleim.server.support.kafkaMsgHandler;
+import com.lhever.simpleim.server.support.ServerkafkaHandler;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>类说明：</p>
@@ -28,6 +31,7 @@ public class ServerInitializer {
 
     public static void init() {
         initRedis();
+        initTopic();
         initKafkaProducer();
         initKafkaConsumer();
     }
@@ -69,9 +73,30 @@ public class ServerInitializer {
                 .topics(topics)
                 .pollDuration(Duration.ofMillis(1000))
                 .concurrency(3)
-                .msgHandler(new kafkaMsgHandler());
+                .msgHandler(new ServerkafkaHandler());
         kafkaConsumer = new SequenceKafkaConsumer<>(cfg);
         kafkaConsumer.start();
+    }
+
+
+    public static void initTopic() {
+        KafkaUtils.KafkaProp kafkaProp = ServerConfig.kafkaProp;
+        SimpleKafkaManager simpleKafkaManager = new SimpleKafkaManager(kafkaProp.getAddress());
+
+        for (int i = 0; i < KafkaUtils.SERVER_TOPIC_TOTAL; i++) {
+            String address = StringUtils.appendAll(ServerConfig.SERVER_IP, "-", ServerConfig.SERVER_PORT);
+            String topicPrefix = ParseUtils.parseArgs(KafkaUtils.SERVER_TOPIC_TPL, address);
+            String topic = topicPrefix + i;
+            doCreateTopic(simpleKafkaManager, topic);
+        }
+    }
+
+    public static void doCreateTopic(SimpleKafkaManager simpleKafkaManager, String topic) {
+        try {
+            simpleKafkaManager.createTopic(topic, Optional.of(3), Optional.empty());
+        } catch (Throwable e) {
+
+        }
     }
 
 

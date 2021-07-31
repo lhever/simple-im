@@ -7,7 +7,10 @@ import com.lhever.common.kafka.ack.KafkaAck;
 import com.lhever.common.kafka.handler.MsgHandler;
 import com.lhever.simpleim.common.consts.ImConsts;
 import com.lhever.simpleim.common.consts.KafkaDataType;
-import com.lhever.simpleim.common.msg.MessageResp;
+import com.lhever.simpleim.common.dto.kafka.KafkaBatchGroupMessage;
+import com.lhever.simpleim.common.dto.kafka.KafkaP2PMessage;
+import com.lhever.simpleim.common.dto.kafka.KafkaSingleGroupMessage;
+import com.lhever.simpleim.common.pojo.GroupMsg;
 import com.lhever.simpleim.common.util.KafkaUtils;
 import com.lhever.simpleim.common.util.RedisUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -29,9 +32,8 @@ import java.util.Objects;
 public class RouterMsgHandler implements MsgHandler<String, String> {
 
     @Autowired
-    private UserMessageService userMessageService;
+    private MessageService messageService;
 
-    @Override
 
     public void Handle(ConsumerRecord<String, String> record, KafkaAck ack) {
         String value = record.value();
@@ -39,25 +41,59 @@ public class RouterMsgHandler implements MsgHandler<String, String> {
             return;
         }
 
-        if (value.startsWith(KafkaDataType.SINGLE_CHAT)) {
-            handleMsg(value.substring(KafkaDataType.SINGLE_CHAT.length()));
+        if (value.startsWith(KafkaDataType.P2P_MSG)) {
+            handleP2P(value.substring(KafkaDataType.P2P_MSG.length()));
+            return;
+        }
+
+        if (value.startsWith(KafkaDataType.GROUP_BATCH_MSG)) {
+            handleGroupBatch(value.substring(KafkaDataType.GROUP_BATCH_MSG.length()));
+            return;
         }
     }
 
 
-    public void handleMsg(String msg) {
-        MessageResp messageResp = JsonUtils.json2Object(msg, MessageResp.class);
-        String targetId = messageResp.getTargetId();
-
-        String value = RedisUtils.get(ImConsts.LOGIN_KEY + targetId);
+    public void handleP2P(String msg) {
+        KafkaP2PMessage p2PMessage = JsonUtils.json2Object(msg, KafkaP2PMessage.class);
+        String receiveId = p2PMessage.getReceiveId();
+        String value = RedisUtils.get(ImConsts.LOGIN_KEY + receiveId);
 
         //说明用户不在线
         if (StringUtils.isBlank(value)) {
-            userMessageService.saveMessage(messageResp);
+            messageService.saveUserMsg(p2PMessage);
         } else {
             String replace = value.replace(":", "-");
-            String topic = ParseUtils.parseArgs(KafkaUtils.SERVER_TOPIC_TPL, replace);
-            KafkaUtils.sendToServer(Objects.hash(messageResp.getTargetId()), topic, KafkaDataType.SINGLE_CHAT, messageResp);
+            String topicPrefix = ParseUtils.parseArgs(KafkaUtils.SERVER_TOPIC_TPL, replace);
+            KafkaUtils.sendToServer(Objects.hash(receiveId), topicPrefix, KafkaDataType.P2P_MSG, p2PMessage);
+        }
+    }
+
+
+    public void handleGroupBatch(String msg) {
+        KafkaBatchGroupMessage groupBatchMsg = JsonUtils.json2Object(msg, KafkaBatchGroupMessage.class);
+        GroupMsg groupMsg = messageService.saveGroupMsg(groupBatchMsg);
+        if (groupMsg == null) {
+            return;
+        }
+        String[] split = groupMsg.getReceiveIds().split(",");
+        for (String memberId : split) {
+            KafkaSingleGroupMessage groupSingleMsg = new KafkaSingleGroupMessage();
+            groupSingleMsg.setSendId(groupBatchMsg.getSendId());
+            groupSingleMsg.setGroupId(groupMsg.getGroupId());
+            groupSingleMsg.setReceiveId(memberId);
+            groupSingleMsg.setGroupMsg(groupBatchMsg.getGroupMsg());
+
+            String value = RedisUtils.get(ImConsts.LOGIN_KEY + memberId);
+
+            //说明用户不在线
+            if (StringUtils.isBlank(value)) {
+                //将群组消息 group_msg 冗余到 user_group_msg 表
+                messageService.saveUserGroupMsg(groupSingleMsg);
+            } else {
+                String replace = value.replace(":", "-");
+                String topicPrefix = ParseUtils.parseArgs(KafkaUtils.SERVER_TOPIC_TPL, replace);
+                KafkaUtils.sendToServer(Objects.hash(memberId), topicPrefix, KafkaDataType.GROUP_SINGLE_MSG, groupSingleMsg);
+            }
         }
     }
 

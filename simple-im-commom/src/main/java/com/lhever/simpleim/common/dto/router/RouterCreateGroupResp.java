@@ -1,32 +1,22 @@
-package com.lhever.simpleim.common.msg;
+package com.lhever.simpleim.common.dto.router;
 
 import com.lhever.simpleim.common.consts.MsgType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Getter
 @Setter
-public class CreateGroupResp extends Msg {
-
-
-    @Override
-    public Integer getType() {
-        return MsgType.CREATE_GROUP_RESPONSE;
-    }
-
-    private Boolean success;
+@NoArgsConstructor
+public class RouterCreateGroupResp {
 
     private String groupId;
 
     private String createId;
 
     private List<String> userIds;
-
-
-
-
 
 
 }
