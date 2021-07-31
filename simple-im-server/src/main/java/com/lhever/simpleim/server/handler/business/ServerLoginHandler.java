@@ -82,7 +82,7 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         if (LoginUtil.hasLogin(ctx.channel())) {
-            logger.info("login success, no check login status later");
+            logger.info("login success, no check login status later......");
         } else {
             logger.info("login failed.....");
         }
