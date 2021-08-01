@@ -33,5 +33,6 @@ hs_err_pid*
 /simple-im-server/target/
 /core/target/
 /log/
+##
 
 
