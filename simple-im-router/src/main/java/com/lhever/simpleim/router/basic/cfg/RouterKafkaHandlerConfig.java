@@ -2,12 +2,11 @@ package com.lhever.simpleim.router.basic.cfg;
 
 import com.lhever.common.core.exception.CommonException;
 import com.lhever.common.core.utils.StringUtils;
-import com.lhever.common.kafka.SequenceKafkaConsumer;
+import com.lhever.common.kafka.ConcurrentKafkaConsumer;
 import com.lhever.common.kafka.cfg.ConsumerCfg;
 import com.lhever.simpleim.common.util.KafkaUtils;
 import com.lhever.simpleim.router.service.RouterMsgHandler;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +28,7 @@ public class RouterKafkaHandlerConfig {
 
 
     @Bean
-    public SequenceKafkaConsumer<String, String> init(@Qualifier("routerMsgHandler") RouterMsgHandler routerMsgHandler) {
+    public ConcurrentKafkaConsumer<String, String> init(@Qualifier("routerMsgHandler") RouterMsgHandler routerMsgHandler) {
         KafkaUtils.KafkaProp kafkaProp = RouterConfig.kafkaProp;
         if (kafkaProp == null) {
             throw new CommonException("no kafka config");
@@ -50,9 +49,9 @@ public class RouterKafkaHandlerConfig {
                 .valueDeSerializer(StringDeserializer.class)
                 .topics(topics)
                 .pollDuration(Duration.ofMillis(1000))
-                .concurrency(3)
+                .concurrency(2)
                 .msgHandler(routerMsgHandler);
-        SequenceKafkaConsumer<String, String> kafkaConsumer = new SequenceKafkaConsumer<>(cfg);
+        ConcurrentKafkaConsumer<String, String> kafkaConsumer = new ConcurrentKafkaConsumer<>(cfg);
         kafkaConsumer.start();
 
         return kafkaConsumer;

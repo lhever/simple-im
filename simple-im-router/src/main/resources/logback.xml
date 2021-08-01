@@ -48,6 +48,11 @@
         <appender-ref ref="rollingfile"/>
     </logger>
 
+    <logger name="org.apache.kafka" level="info" additivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="rollingfile"/>
+    </logger>
+
     <!-- 用来指定最基础的日志输出级别 -->
     <root level="debug">
         <appender-ref ref="console"/>

@@ -3,7 +3,7 @@ package com.lhever.simpleim.server;
 import com.lhever.common.core.exception.CommonException;
 import com.lhever.common.core.utils.ParseUtils;
 import com.lhever.common.core.utils.StringUtils;
-import com.lhever.common.kafka.SequenceKafkaConsumer;
+import com.lhever.common.kafka.ConcurrentKafkaConsumer;
 import com.lhever.common.kafka.SimpleKafkaManager;
 import com.lhever.common.kafka.cfg.ConsumerCfg;
 import com.lhever.simpleim.common.util.KafkaUtils;
@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 public class ServerInitializer {
 
-    private static SequenceKafkaConsumer<String, String> kafkaConsumer;
+    private static ConcurrentKafkaConsumer<String, String> kafkaConsumer;
 
     public static void init() {
         initRedis();
@@ -72,9 +72,9 @@ public class ServerInitializer {
                 .valueDeSerializer(StringDeserializer.class)
                 .topics(topics)
                 .pollDuration(Duration.ofMillis(1000))
-                .concurrency(3)
+                .concurrency(2)
                 .msgHandler(new ServerkafkaHandler());
-        kafkaConsumer = new SequenceKafkaConsumer<>(cfg);
+        kafkaConsumer = new ConcurrentKafkaConsumer<String, String>(cfg);
         kafkaConsumer.start();
     }
 
