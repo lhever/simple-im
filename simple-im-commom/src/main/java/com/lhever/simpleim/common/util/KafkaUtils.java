@@ -13,6 +13,9 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KafkaUtils {
     private static Logger logger = LoggerFactory.getLogger(KafkaUtils.class);
 
@@ -25,6 +28,21 @@ public class KafkaUtils {
 
 
     private static SimpleKafkaProducer<String, String> simpleKafkaProducer;
+
+    public static volatile List<String> ROUTER_TOPICS;
+
+    static {
+        List<String> topics = new ArrayList();
+        for (int i = 0; i < KafkaUtils.ROUTER_TOPIC_TOTAL; i++) {
+            String topic = KafkaUtils.ROUTER_TOPIC_PREFIX + i;
+            topics.add(topic);
+        }
+        ROUTER_TOPICS = topics;
+    }
+
+
+
+
 
     @Getter
     @Setter

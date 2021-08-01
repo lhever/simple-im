@@ -10,30 +10,30 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 命令管理器
  */
-public class CommandManager {
+public class CmdManager {
 
-    private static Logger logger = LoggerFactory.getLogger(CommandManager.class);
+    private static Logger logger = LoggerFactory.getLogger(CmdManager.class);
 
     /**
      * 单例模式
      */
-    private static CommandManager instance = new CommandManager();
+    private static CmdManager instance = new CmdManager();
 
-    private static Map<String,ConsoleCommand> commandMap = new ConcurrentHashMap<String, ConsoleCommand>();
+    private static Map<String, ConsoleCmd> commandMap = new ConcurrentHashMap<String, ConsoleCmd>();
 
     static {
-        commandMap.putIfAbsent("sendToUser",new P2PCommand());
-        commandMap.putIfAbsent("broadcast",new BroadcastCommand());
-        commandMap.putIfAbsent("createGroup",new CreateGroupCommand());
-        commandMap.putIfAbsent("sendToGroup",new GroupMessageCommand());
+        commandMap.putIfAbsent("sendToUser",new P2PCmd());
+        commandMap.putIfAbsent("broadcast",new BroadcastCmd());
+        commandMap.putIfAbsent("createGroup",new CreateGroupCmd());
+        commandMap.putIfAbsent("sendToGroup",new GroupMessageCmd());
 
     }
 
-    public static CommandManager getInstance(){
+    public static CmdManager getInstance(){
         return instance;
     }
 
-    private CommandManager(){  }
+    private CmdManager(){  }
 
 
     /**
@@ -49,7 +49,7 @@ public class CommandManager {
      */
     public static void exec(Channel channel,String msg){
         String[] strs = msg.split("::");
-        ConsoleCommand command = commandMap.get(strs[0]);
+        ConsoleCmd command = commandMap.get(strs[0]);
         if(command != null){
             command.exec(channel,msg);
         }else{

@@ -1,12 +1,13 @@
 package com.lhever.simpleim.router;
 
-import com.lhever.common.core.utils.ParseUtils;
-import com.lhever.common.core.utils.StringUtils;
 import com.lhever.common.kafka.SimpleKafkaManager;
 import com.lhever.simpleim.common.util.KafkaUtils;
 import com.lhever.simpleim.common.util.RedisUtils;
 import com.lhever.simpleim.router.basic.cfg.RouterConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,6 +20,7 @@ import java.util.Optional;
  * @modify by reason:{方法名}:{原因}
  */
 public class RouterInitializer {
+    private static final Logger logger = LoggerFactory.getLogger(RouterInitializer.class);
 
     public static void init() {
          initRedis();
@@ -46,16 +48,17 @@ public class RouterInitializer {
 
     public static void initTopic() {
         SimpleKafkaManager simpleKafkaManager = new SimpleKafkaManager(RouterConfig.KAFKA_ADDRESS);
-        for (int i = 0; i < KafkaUtils.ROUTER_TOPIC_TOTAL; i++) {
-            String topic = KafkaUtils.ROUTER_TOPIC_PREFIX + i;
+        List<String> routerTopics = KafkaUtils.ROUTER_TOPICS;
+        for (String topic : routerTopics) {
             doCreateTopic(simpleKafkaManager, topic);
         }
     }
 
     public static void doCreateTopic(SimpleKafkaManager simpleKafkaManager, String topic) {
         try {
-            simpleKafkaManager.createTopic(topic, Optional.of(3), Optional.empty());
+            simpleKafkaManager.createTopic(topic, Optional.of(2), Optional.empty());
         } catch (Throwable e) {
+            logger.error("create topic:{} error", topic, e);
 
         }
     }

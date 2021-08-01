@@ -13,6 +13,6 @@ import io.netty.channel.Channel;
  * 查询群聊中在线用户 getGroupUsers::groupId
  * 广播 broadcast::msg
  */
-public interface ConsoleCommand {
+public interface ConsoleCmd {
     void exec(Channel channel, String string);
 }

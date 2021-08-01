@@ -3,16 +3,21 @@ package com.lhever.simpleim.server;
 import com.lhever.common.core.exception.CommonException;
 import com.lhever.common.core.utils.ParseUtils;
 import com.lhever.common.core.utils.StringUtils;
-import com.lhever.common.kafka.ConcurrentKafkaConsumer;
+import com.lhever.common.kafka.SequenceKafkaConsumer;
 import com.lhever.common.kafka.SimpleKafkaManager;
 import com.lhever.common.kafka.cfg.ConsumerCfg;
+import com.lhever.simpleim.common.support.ZkProp;
+import com.lhever.simpleim.common.support.ZkRegister;
 import com.lhever.simpleim.common.util.KafkaUtils;
 import com.lhever.simpleim.common.util.RedisUtils;
 import com.lhever.simpleim.server.config.ServerConfig;
 import com.lhever.simpleim.server.support.ServerkafkaHandler;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,14 +31,17 @@ import java.util.Optional;
  * @modify by reason:{方法名}:{原因}
  */
 public class ServerInitializer {
+    private static final Logger logger = LoggerFactory.getLogger(ServerInitializer.class);
 
-    private static ConcurrentKafkaConsumer<String, String> kafkaConsumer;
+    private static SequenceKafkaConsumer<String, String> kafkaConsumer;
+    private static ZkRegister zkRegister;
 
     public static void init() {
         initRedis();
-        initTopic();
+        List<String> topics = initTopic();
+        logger.info("server create topics:{}", topics);
         initKafkaProducer();
-        initKafkaConsumer();
+        initKafkaConsumer(topics);
     }
 
     private static void initRedis() {
@@ -53,12 +61,11 @@ public class ServerInitializer {
         KafkaUtils.init(ServerConfig.KAFKA_ADDRESS);
     }
 
-    public static void initKafkaConsumer() {
+    public static void initKafkaConsumer(List<String> topics) {
         KafkaUtils.KafkaProp kafkaProp = ServerConfig.kafkaProp;
         if (kafkaProp == null) {
             throw new CommonException("no kafka config");
         }
-        List<String> topics = StringUtils.splitToList(kafkaProp.getTopics(), ",");
         ConsumerCfg cfg = new ConsumerCfg()
                 .bootstrapServers(kafkaProp.getAddress())
                 .groupId(kafkaProp.getGroupId())
@@ -72,31 +79,42 @@ public class ServerInitializer {
                 .valueDeSerializer(StringDeserializer.class)
                 .topics(topics)
                 .pollDuration(Duration.ofMillis(1000))
-                .concurrency(2)
+                .concurrency(3)
                 .msgHandler(new ServerkafkaHandler());
-        kafkaConsumer = new ConcurrentKafkaConsumer<String, String>(cfg);
+        kafkaConsumer = new SequenceKafkaConsumer<>(cfg);
         kafkaConsumer.start();
     }
 
 
-    public static void initTopic() {
+    public static List<String> initTopic() {
         KafkaUtils.KafkaProp kafkaProp = ServerConfig.kafkaProp;
         SimpleKafkaManager simpleKafkaManager = new SimpleKafkaManager(kafkaProp.getAddress());
 
+        List<String> topics = new ArrayList<>();
         for (int i = 0; i < KafkaUtils.SERVER_TOPIC_TOTAL; i++) {
             String address = StringUtils.appendAll(ServerConfig.SERVER_IP, "-", ServerConfig.SERVER_PORT);
             String topicPrefix = ParseUtils.parseArgs(KafkaUtils.SERVER_TOPIC_TPL, address);
             String topic = topicPrefix + i;
+            topics.add(topic);
             doCreateTopic(simpleKafkaManager, topic);
         }
+        return topics;
     }
 
     public static void doCreateTopic(SimpleKafkaManager simpleKafkaManager, String topic) {
         try {
             simpleKafkaManager.createTopic(topic, Optional.of(3), Optional.empty());
         } catch (Throwable e) {
+            logger.error("create topic:{} error", topic, e);
 
         }
+    }
+
+    public static void register(String serverIp, Integer serverPort) {
+        ZkProp zkProp = new ZkProp(ServerConfig.ZK_ADDRESS, ServerConfig.ZK_NAMESPACE, ServerConfig.ZK_ROOTPATH);
+        zkRegister = new ZkRegister(zkProp);
+        String childPath = StringUtils.appendAll(serverIp, ":", serverPort);
+        zkRegister.register(childPath);
     }
 
 

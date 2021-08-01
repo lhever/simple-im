@@ -12,6 +12,13 @@ CREATE TABLE im_user
     OIDS = FALSE
 );
 
+insert into im_user(id, name, pwd, status, create_time, update_time) values ('id1', 'lhever', '123456', 0, now(), now());
+insert into im_user(id, name, pwd, status, create_time, update_time) values ('id2', 'zhang', '123456', 0, now(), now());
+insert into im_user(id, name, pwd, status, create_time, update_time) values ('id3', 'zhao', '123456', 0, now(), now());
+insert into im_user(id, name, pwd, status, create_time, update_time) values ('id4', 'qian', '123456', 0, now(), now());
+insert into im_user(id, name, pwd, status, create_time, update_time) values ('id5', 'sun', '123456', 0, now(), now());
+insert into im_user(id, name, pwd, status, create_time, update_time) values ('id6', 'li', '123456', 0, now(), now());
+
 
 
 DROP TABLE IF EXISTS im_group;
@@ -97,6 +104,8 @@ CREATE TABLE im_user_group_msg
 ) WITH (
     OIDS = FALSE
 );
+
+
 
 
 

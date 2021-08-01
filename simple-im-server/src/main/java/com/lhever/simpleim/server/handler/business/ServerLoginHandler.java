@@ -56,7 +56,7 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
 
 
         if (resp.getSuccess()) {
-            logger.info("[{}]登录成功！,id为{}", resp.getUserName(), resp.getUserId());
+            logger.info("[{}]登录成功！,id为:{}", resp.getUserName(), resp.getUserId());
             LoginUtil.markAsLogin(ctx.channel());
             SessionUtil.bindSession(new Session(resp.getUserId(), loginReq.getUserName()), ctx.channel());
             //idel timeout is 50

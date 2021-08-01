@@ -24,7 +24,7 @@ import java.util.List;
  * @modify by reason:{方法名}:{原因}
  */
 @Configuration
-public class RouterKafkaHandlerConfig {
+public class RouterKafkaConsumerConfig {
 
 
     @Bean
@@ -47,9 +47,9 @@ public class RouterKafkaHandlerConfig {
                 .maxPollIntervalMs(5 * 10000)
                 .keyDeSerializer(StringDeserializer.class)
                 .valueDeSerializer(StringDeserializer.class)
-                .topics(topics)
+                .topics(KafkaUtils.ROUTER_TOPICS)
                 .pollDuration(Duration.ofMillis(1000))
-                .concurrency(2)
+                .concurrency(3)
                 .msgHandler(routerMsgHandler);
         ConcurrentKafkaConsumer<String, String> kafkaConsumer = new ConcurrentKafkaConsumer<>(cfg);
         kafkaConsumer.start();

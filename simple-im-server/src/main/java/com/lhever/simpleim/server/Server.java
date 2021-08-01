@@ -2,12 +2,11 @@ package com.lhever.simpleim.server;
 
 import com.lhever.simpleim.common.codec.LengthBasedByteBufDecoder;
 import com.lhever.simpleim.common.codec.NettyCodecHandler;
+import com.lhever.simpleim.server.config.ServerConfig;
+import com.lhever.simpleim.server.handler.business.ServerHandler;
+import com.lhever.simpleim.server.handler.business.ServerLoginHandler;
 import com.lhever.simpleim.server.handler.io.ServerHeartBeatHandler;
 import com.lhever.simpleim.server.handler.io.ServerIdleHandler;
-import com.lhever.simpleim.server.handler.business.ServerLoginHandler;
-import com.lhever.simpleim.server.handler.business.ServerHandler;
-import com.lhever.simpleim.server.config.ServerConfig;
-import com.lhever.simpleim.server.support.ZkRegister;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -30,7 +29,6 @@ public class Server {
 
     private Integer serverPort;
     private String serverIp;
-    private ZkRegister zkRegister;
 
     public Server(String serverIp, Integer serverPort) {
         this.serverPort = serverPort;
@@ -82,8 +80,9 @@ public class Server {
 
         logger.info("Netty server start success with ip:{} and port:{} ", serverIp, serverPort);
 
-        this.zkRegister = new ZkRegister();
-        zkRegister.register(this.serverIp, this.serverPort);
+        ServerInitializer.register(serverIp, serverPort);
+
+
     }
 
     public static void main(String[] args) throws Exception {

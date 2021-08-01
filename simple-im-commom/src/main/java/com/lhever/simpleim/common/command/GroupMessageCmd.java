@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 /**
  * 群聊 sendToGroup::groupId::msg
  */
-public class GroupMessageCommand implements ConsoleCommand {
+public class GroupMessageCmd implements ConsoleCmd {
 
-    private static Logger logger = LoggerFactory.getLogger(GroupMessageCommand.class);
+    private static Logger logger = LoggerFactory.getLogger(GroupMessageCmd.class);
 
     @Override
     public void exec(Channel channel, String string) {
@@ -20,11 +20,11 @@ public class GroupMessageCommand implements ConsoleCommand {
             logger.info("群聊请输入如下命令 sendToGroup::groupId::msg");
             return;
         }
-        GroupMessageReq packet = BuildRequestPacket(strs[1],strs[2]);
-        ChannelUtils.writeAndFlush(channel,packet);
+        GroupMessageReq groupMsg = buildGroupMessage(strs[1],strs[2]);
+        ChannelUtils.writeAndFlush(channel,groupMsg);
     }
 
-    private GroupMessageReq BuildRequestPacket(String groupId, String groupMsg) {
+    private GroupMessageReq buildGroupMessage(String groupId, String groupMsg) {
         GroupMessageReq packet = new GroupMessageReq();
         packet.setGroupId(groupId);
         packet.setGroupMsg(groupMsg);

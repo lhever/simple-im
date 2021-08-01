@@ -1,6 +1,6 @@
 package com.lhever.simpleim.common.util;
 
-import com.lhever.simpleim.common.command.CommandManager;
+import com.lhever.simpleim.common.command.CmdManager;
 import io.netty.channel.Channel;
 import io.netty.util.internal.StringUtil;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class Scan implements Runnable {
             if(LoginUtil.hasLogin(channel)){
                 String msg = sc.nextLine();
                 if(!StringUtil.isNullOrEmpty(msg)  &&  !StringUtil.isNullOrEmpty(msg.trim())){
-                    CommandManager.getInstance().exec(this.channel,msg);
+                    CmdManager.getInstance().exec(this.channel,msg);
                 }
             }
         }

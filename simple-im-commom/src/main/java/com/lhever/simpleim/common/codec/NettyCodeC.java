@@ -1,13 +1,12 @@
 package com.lhever.simpleim.common.codec;
 
 import com.lhever.simpleim.common.consts.MsgType;
-import com.lhever.simpleim.common.msg.Msg;
-import com.lhever.simpleim.common.msg.PingPong;
-import com.lhever.simpleim.common.msg.loginReq;
-import com.lhever.simpleim.common.msg.loginResp;
+import com.lhever.simpleim.common.msg.*;
 import com.lhever.simpleim.common.util.JsonUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +17,7 @@ import java.util.Map;
  * 编解码对象
  */
 public class NettyCodeC {
+    private static final Logger logger = LoggerFactory.getLogger(NettyCodeC.class);
     /**
      * 魔数
      */
@@ -43,9 +43,21 @@ public class NettyCodeC {
     static {
         packetTypeMap = new HashMap<Integer, Class<? extends Msg>>();
         packetTypeMap.put(MsgType.HEART_BEAT, PingPong.class);
+
         packetTypeMap.put(MsgType.LOGIN_REQ, loginReq.class);
         packetTypeMap.put(MsgType.LOGIN_RESP, loginResp.class);
+
+        packetTypeMap.put(MsgType.MESSAGE_REQUEST, MessageReq.class);
+        packetTypeMap.put(MsgType.MESSAGE_RESPONSE, MessageResp.class);
+
+        packetTypeMap.put(MsgType.CREATE_GROUP_REQUEST, CreateGroupReq.class);
+        packetTypeMap.put(MsgType.CREATE_GROUP_RESPONSE, CreateGroupResp.class);
+
+        packetTypeMap.put(MsgType.GROUP_MESSAGE_REQUEST, GroupMessageReq.class);
+        packetTypeMap.put(MsgType.GROUP_MESSAGE_RESPONSE, GroupMessageResp.class);
     }
+
+
 
     private NettyCodeC() {
 
@@ -111,6 +123,9 @@ public class NettyCodeC {
             } else {
                 return PingPong.PONG;
             }
+        }
+        if (packetType == null) {
+            logger.error("类型没有注册:{}, 无法解析");
         }
         //数据
         byte[] dataBytes = new byte[len];
