@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GroupMessageAck extends Msg{
+public class GroupSingleMessageAck extends Msg {
 
     @Override
     public Integer getType() {
-        return MsgType.GROUP_MESSAGE_ACK;
+        return MsgType.GROUP_SINGLE_MESSAGE_ACK;
     }
 
     private String groupId;

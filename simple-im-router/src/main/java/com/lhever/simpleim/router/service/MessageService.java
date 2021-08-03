@@ -56,7 +56,7 @@ public class MessageService {
     }
 
 
-    public void ackMessage(KafkaGroupMessageAck ack) {
+    public void ackMessage(KafkaGroupSingleMessageAck ack) {
         userGroupMsgDao.updateStatus(ack.getReceiveId(), ack.getUserGroupMsgId(), ImConsts.READED);
 
         groupMsgDao.incrReadCount(ack.getGroupId(), ack.getGroupMsgId());

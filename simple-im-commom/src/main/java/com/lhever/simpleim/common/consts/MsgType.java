@@ -47,7 +47,7 @@ public interface MsgType {
 
     final Integer MESSAGE_ACK = 9;
 
-    final Integer GROUP_MESSAGE_ACK = 10;
+    final Integer GROUP_SINGLE_MESSAGE_ACK = 10;
 
 
 

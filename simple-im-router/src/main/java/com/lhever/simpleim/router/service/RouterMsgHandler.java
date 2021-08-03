@@ -77,19 +77,20 @@ public class RouterMsgHandler implements MsgHandler<String, String> {
     public void handleP2P(String msg) {
         KafkaP2PMessage p2PMessage = JsonUtils.json2Object(msg, KafkaP2PMessage.class);
         if (p2PMessage.getSaveOnly()) {
-             logger.info("消息:{}, 发送人:{}, 接收人:{}已经发送，仅保存到数据库",
-                     p2PMessage.getId(), p2PMessage.getSendId(), p2PMessage.getReceiveId());
+            logger.info("消息:{}, 发送人:{}, 接收人:{}已经发送，仅保存到数据库",
+                    p2PMessage.getId(), p2PMessage.getSendId(), p2PMessage.getReceiveId());
             messageService.saveUserMsg(p2PMessage);
         } else {
+            messageService.saveUserMsg(p2PMessage);
             String receiveId = p2PMessage.getReceiveId();
             String value = RedisUtils.get(ImConsts.LOGIN_KEY + receiveId);
             //说明用户不在线
-            if (StringUtils.isBlank(value)) {
-                messageService.saveUserMsg(p2PMessage);
-            } else {
+            if (StringUtils.isNotBlank(value)) {
+
                 String replace = value.replace(":", "-");
                 String topicPrefix = ParseUtils.parseArgs(KafkaUtils.SERVER_TOPIC_TPL, replace);
                 KafkaUtils.sendToServer(Objects.hash(receiveId), topicPrefix, KafkaDataType.P2P_MSG, p2PMessage);
+
             }
         }
     }
@@ -104,7 +105,7 @@ public class RouterMsgHandler implements MsgHandler<String, String> {
     }
 
     public void ackGroupSingle(String msg) {
-        KafkaGroupMessageAck messageAck = JsonUtils.json2Object(msg, KafkaGroupMessageAck.class);
+        KafkaGroupSingleMessageAck messageAck = JsonUtils.json2Object(msg, KafkaGroupSingleMessageAck.class);
         if (messageAck == null) {
             return;
         }

@@ -2,7 +2,6 @@ package com.lhever.simpleim.common.codec;
 
 import com.lhever.simpleim.common.consts.MsgType;
 import com.lhever.simpleim.common.msg.*;
-import com.lhever.simpleim.common.pojo.Group;
 import com.lhever.simpleim.common.util.JsonUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -60,7 +59,7 @@ public class NettyCodeC {
 
         packetTypeMap.put(MsgType.MESSAGE_ACK, MessageAck.class);
 
-        packetTypeMap.put(MsgType.GROUP_MESSAGE_ACK, GroupMessageAck.class);
+        packetTypeMap.put(MsgType.GROUP_SINGLE_MESSAGE_ACK, GroupSingleMessageAck.class);
     }
 
 

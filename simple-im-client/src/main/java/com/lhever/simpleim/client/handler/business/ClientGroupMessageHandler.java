@@ -1,8 +1,7 @@
 package com.lhever.simpleim.client.handler.business;
 
-import com.lhever.common.core.utils.LogUtils;
 import com.lhever.common.core.utils.StringUtils;
-import com.lhever.simpleim.common.msg.GroupMessageAck;
+import com.lhever.simpleim.common.msg.GroupSingleMessageAck;
 import com.lhever.simpleim.common.msg.GroupMessageResp;
 import com.lhever.simpleim.common.util.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,7 +23,7 @@ public class ClientGroupMessageHandler extends SimpleChannelInboundHandler<Group
             logger.error("用户:{}不是组消息的真正接受者");
         }
 
-        GroupMessageAck ack = new GroupMessageAck();
+        GroupSingleMessageAck ack = new GroupSingleMessageAck();
         ack.setReceiveId(msg.getReceiveId());
         ack.setUserGroupMsgId(msg.getUserGroupMsgId());
 

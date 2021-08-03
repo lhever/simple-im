@@ -27,7 +27,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Msg> {
         handlerMap.putIfAbsent(MsgType.CREATE_GROUP_REQUEST, new ServerCreateGroupHandler());
         handlerMap.putIfAbsent(MsgType.GROUP_MESSAGE_REQUEST, new ServerGroupMessageHandler());
         handlerMap.putIfAbsent(MsgType.MESSAGE_ACK, new ServerMessageAckHandler());
-        handlerMap.putIfAbsent(MsgType.GROUP_MESSAGE_ACK, new ServerGroupMessageAckHandler());
+        handlerMap.putIfAbsent(MsgType.GROUP_SINGLE_MESSAGE_ACK, new ServerGroupSingleMessageAckHandler());
     }
 
     @Override
