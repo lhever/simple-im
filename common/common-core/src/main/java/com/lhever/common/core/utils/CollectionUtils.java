@@ -53,7 +53,7 @@ public class CollectionUtils {
         return collection.size();
     }
 
-    public static <T extends Object> T getValueSafely(Map map, Object key, Class<? extends Object> T) {
+    public static <T> T getValueSafely(Map map, Object key, Class<T> t) {
 
         if (map == null || map.size() == 0) {
             return null;
@@ -61,21 +61,21 @@ public class CollectionUtils {
 
         T value = null;
         try {
-            value = (T) map.get(key);
+            value = t.cast(map.get(key));
         } catch (Exception e) {
-            log.error("从map取值, key=[" + key + "], 转换为类型" + T + "错误", e);
+            log.error("从map取值, key=[" + key + "], 转换为类型" + t + "错误", e);
         }
 
         return value;
     }
 
-    public static <T extends Object> T getValue(Map map, Object key, Class<? extends Object> T) {
+    public static <T> T getValue(Map map, Object key, Class<T> t) {
 
         T value = null;
         try {
-            value = (T) map.get(key);
+             value = t.cast(map.get(key));
         } catch (Exception e) {
-            log.error("从map取值, key=[" + key + "], 转换为类型" + T + "错误", e);
+            log.error("从map取值, key=[" + key + "], 转换为类型" + t + "错误", e);
         }
 
         return value;
@@ -199,12 +199,12 @@ public class CollectionUtils {
         return filtered;
     }
 
-    public static <T> List<String> getNotNull(List<T> list, Function<T, String> func) {
+    public static <T, V> List<V> getNotNull(List<T> list, Function<T, V> func) {
         if (list == null) {
             return new ArrayList<>(0);
         }
 
-        List<String> filtered = list.stream()
+        List<V> filtered = list.stream()
                 .filter(i -> i != null)
                 .map(i -> func.apply(i))
                 .filter(i -> i != null)
