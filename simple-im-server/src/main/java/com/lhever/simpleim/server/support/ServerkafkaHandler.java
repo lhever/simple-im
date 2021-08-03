@@ -32,6 +32,15 @@ public class ServerkafkaHandler implements MsgHandler<String, String> {
 
     @Override
     public void Handle(ConsumerRecord<String, String> record, KafkaAck ack) {
+        try {
+            doHandle(record, ack);
+        } finally {
+            ack.acknowledge();
+        }
+
+    }
+
+    public void doHandle(ConsumerRecord<String, String> record, KafkaAck ack) {
         String value = record.value();
         if (StringUtils.isBlank(value)) {
             return;
@@ -56,7 +65,7 @@ public class ServerkafkaHandler implements MsgHandler<String, String> {
             MessageResp onlineResp = new MessageResp();
             onlineResp.setId(p2PMessage.getId());
             onlineResp.setSendId(p2PMessage.getSendId());
-            onlineResp.setTargetId(p2PMessage.getReceiveId());
+            onlineResp.setReceiveId(p2PMessage.getReceiveId());
             onlineResp.setMessage(p2PMessage.getMessage());
             onlineResp.setCreateTime(p2PMessage.getCreateTime());
             ServerSendUtils.write2Channel(onlineResp, targetChannel);
@@ -75,7 +84,10 @@ public class ServerkafkaHandler implements MsgHandler<String, String> {
         if (targetChannel != null) {
             GroupMessageResp onlineResp = new GroupMessageResp();
             onlineResp.setGroupId(singleMsg.getGroupId());
+            onlineResp.setGroupMsgId(singleMsg.getGroupMsgId());
             onlineResp.setSendId(singleMsg.getSendId());
+            onlineResp.setReceiveId(singleMsg.getReceiveId());
+            onlineResp.setUserGroupMsgId(singleMsg.getUserGroupMsgId());
             onlineResp.setGroupMsg(singleMsg.getGroupMsg());
             ServerSendUtils.write2Channel(onlineResp, targetChannel);
             logger.info("发送消息给客户端:{}，内容是:{}", receiveId, JSON.toJSONString(singleMsg));

@@ -1,6 +1,7 @@
 package com.lhever.simpleim.router.dao;
 
 
+import com.lhever.simpleim.common.pojo.UserGroup;
 import com.lhever.simpleim.common.pojo.UserGroupMsg;
 import com.lhever.simpleim.common.pojo.UserMsg;
 import com.lhever.simpleim.router.basic.cfg.SessionFactoryHolder;
@@ -31,6 +32,23 @@ public class UserGroupMsgDao {
             UserGroupMsgMapper userGroupMsgMapper = sqlSession.getMapper(UserGroupMsgMapper.class);
             UserGroupMsgMapperWrapper wrapper = new UserGroupMsgMapperWrapper(userGroupMsgMapper);
             wrapper.insert(userGroupMsg);
+        } finally {
+            sqlSession.commit();
+            sqlSession.close();
+        }
+    }
+
+
+
+
+    public void updateStatus(String receiveId, String msgId, Integer status) {
+        SqlSession sqlSession = null;
+        try {
+            SqlSessionFactory sessionFactory = sessionFactoryHolder.getSessionFactory(receiveId);
+            sqlSession = sessionFactory.openSession();
+            UserGroupMsgMapper userGroupMsgMapper = sqlSession.getMapper(UserGroupMsgMapper.class);
+            UserGroupMsgMapperWrapper wrapper = new UserGroupMsgMapperWrapper(userGroupMsgMapper);
+            wrapper.updateStatusById(msgId, status);
         } finally {
             sqlSession.commit();
             sqlSession.close();

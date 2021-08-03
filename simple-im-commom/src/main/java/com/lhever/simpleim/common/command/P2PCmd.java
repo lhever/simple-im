@@ -26,13 +26,11 @@ public class P2PCmd implements ConsoleCmd {
     }
 
 
-    private MessageReq buildMessa(String sendId, String targetId, String msg) {
+    private MessageReq buildMessa(String sendId, String receiveId, String msg) {
         MessageReq request = new MessageReq();
-        String id = StringUtils.getUuid();
-        request.setId(id);
-        request.setTargetId(targetId);
-        request.setMessage(msg);
-        logger.info("{}发送消息给:{}, 内容是{}", sendId, targetId, msg);
+        request.setReceiveId(receiveId);
+        request.setMsg(msg);
+        logger.info("{}发送消息给:{}, 内容是{}", sendId, receiveId, msg);
         return request;
     }
 }

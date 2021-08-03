@@ -34,6 +34,20 @@ public class UserMsgDao {
         }
     }
 
+    public void updateStatus(String receiveId, String msgId, Integer status) {
+        SqlSession sqlSession = null;
+        try {
+            SqlSessionFactory sessionFactory = sessionFactoryHolder.getSessionFactory(receiveId);
+            sqlSession = sessionFactory.openSession();
+            UserMsgMapper userMsgMapper = sqlSession.getMapper(UserMsgMapper.class);
+            UserMsgMapperWrapper wrapper = new UserMsgMapperWrapper(userMsgMapper);
+            wrapper.updateStatusById(msgId, status);
+        } finally {
+            sqlSession.commit();
+            sqlSession.close();
+        }
+    }
+
 
 
 

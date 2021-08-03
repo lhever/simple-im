@@ -25,7 +25,7 @@ public class BroadcastCmd implements ConsoleCmd {
 
     private MessageReq buildMessage(String msg) {
         MessageReq request = new MessageReq();
-        request.setMessage(msg);
+        request.setMsg(msg);
         return request;
     }
 }

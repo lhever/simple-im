@@ -45,6 +45,10 @@ public interface MsgType {
      */
     final Integer GROUP_MESSAGE_RESPONSE = 8;
 
+    final Integer MESSAGE_ACK = 9;
+
+    final Integer GROUP_MESSAGE_ACK = 10;
+
 
 
 

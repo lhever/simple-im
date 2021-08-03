@@ -58,7 +58,6 @@ CREATE TABLE im_user_msg
     "receive_id" VARCHAR(32),
     "type" int4,
     "content" VARCHAR(600),
-    "send_status" int4,
     "read_status" int4,
     "create_time" TIMESTAMP default now(),
     "update_time" TIMESTAMP default now(),
@@ -73,12 +72,12 @@ DROP TABLE IF EXISTS im_group_msg;
 CREATE TABLE im_group_msg
 (
     "id" VARCHAR(32),
-    "create_id" VARCHAR(64),
     "group_id" VARCHAR(64),
+    "create_id" VARCHAR(64),
     "receive_ids" VARCHAR(64),
     "type" int4,
     "content" VARCHAR(600),
-    "send_status" int4,
+    "read_count" int4 default 0,
     "read_status" int4,
     "create_time" TIMESTAMP default now(),
     "update_time" TIMESTAMP default now(),

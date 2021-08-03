@@ -1,6 +1,7 @@
 package com.lhever.simpleim.server.handler.business;
 
 import com.alibaba.fastjson.JSON;
+import com.lhever.common.core.utils.StringUtils;
 import com.lhever.simpleim.common.consts.KafkaDataType;
 import com.lhever.simpleim.common.dto.kafka.KafkaP2PMessage;
 import com.lhever.simpleim.common.msg.MessageReq;
@@ -33,30 +34,35 @@ public class ServerMessageHandler extends SimpleChannelInboundHandler<MessageReq
      * 点对点私聊
      */
     private void p2pChat(String sendId, MessageReq messageReq) {
-        String targetId = messageReq.getTargetId();
-        Channel targetChannel = SessionUtil.getChannelByUserId(targetId);
+        String receiveId = messageReq.getReceiveId();
+        Channel targetChannel = SessionUtil.getChannelByUserId(receiveId);
+
+        String msgId = StringUtils.getUuid();
+
+        KafkaP2PMessage kafkaP2PMessage = new KafkaP2PMessage();
+        kafkaP2PMessage.setId(msgId);
+        kafkaP2PMessage.setSendId(sendId);
+        kafkaP2PMessage.setReceiveId(receiveId);
+        kafkaP2PMessage.setMessage(messageReq.getMsg());
+        kafkaP2PMessage.setCreateTime(new Date());
 
         //如果用户在线
         if (targetChannel != null) {
             MessageResp resp = new MessageResp();
-            resp.setId(messageReq.getId());
+            resp.setId(msgId);
             resp.setSendId(sendId);
-            resp.setTargetId(targetId);
-            resp.setMessage(messageReq.getMessage());
+            resp.setReceiveId(receiveId);
+            resp.setMessage(messageReq.getMsg());
             resp.setCreateTime(new Date());
             ServerSendUtils.write2Channel(resp, targetChannel);
-            logger.info("发送消息给客户端{}，内容是:{}", targetId, JSON.toJSONString(resp));
+            logger.info("发送消息给用户:{}，内容是:{}", receiveId, JSON.toJSONString(resp));
 
-        } else {
-            //如果用户不在线
-            KafkaP2PMessage resp = new KafkaP2PMessage();
-            resp.setId(messageReq.getId());
-            resp.setSendId(sendId);
-            resp.setReceiveId(targetId);
-            resp.setMessage(messageReq.getMessage());
-            resp.setCreateTime(new Date());
-            KafkaUtils.sendToRouter(Objects.hash(targetId), KafkaDataType.P2P_MSG, resp);
+            //用户已经收到消息，仅仅保存到数据库
+            kafkaP2PMessage.setSaveOnly(true);
         }
+
+        //即使消息已经入库，仍然要保存到数据库
+        KafkaUtils.sendToRouter(Objects.hash(receiveId), KafkaDataType.P2P_MSG, kafkaP2PMessage);
     }
 
 

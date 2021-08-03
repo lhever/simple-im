@@ -13,7 +13,11 @@ public class KafkaDataType {
 
     public static final String P2P_MSG = "p2pMsg:";
 
+    public static final String P2P_MSG_ACK = "p2pMsgAck:";
+
     public static final String GROUP_BATCH_MSG = "groupBatchMsg:";
 
     public static final String GROUP_SINGLE_MSG = "groupSingleMsg:";
+
+    public static final String GROUP_SINGLE_MSG_ACK = "groupSingleMsgAck:";
 }

@@ -175,76 +175,6 @@ public class GroupMsgExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreateIdIsNull() {
-            addCriterion("create_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdIsNotNull() {
-            addCriterion("create_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdEqualTo(String value) {
-            addCriterion("create_id =", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdNotEqualTo(String value) {
-            addCriterion("create_id <>", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdGreaterThan(String value) {
-            addCriterion("create_id >", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdGreaterThanOrEqualTo(String value) {
-            addCriterion("create_id >=", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdLessThan(String value) {
-            addCriterion("create_id <", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdLessThanOrEqualTo(String value) {
-            addCriterion("create_id <=", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdLike(String value) {
-            addCriterion("create_id like", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdNotLike(String value) {
-            addCriterion("create_id not like", value, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdIn(List<String> values) {
-            addCriterion("create_id in", values, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdNotIn(List<String> values) {
-            addCriterion("create_id not in", values, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdBetween(String value1, String value2) {
-            addCriterion("create_id between", value1, value2, "createId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateIdNotBetween(String value1, String value2) {
-            addCriterion("create_id not between", value1, value2, "createId");
-            return (Criteria) this;
-        }
-
         public Criteria andGroupIdIsNull() {
             addCriterion("group_id is null");
             return (Criteria) this;
@@ -312,6 +242,76 @@ public class GroupMsgExample {
 
         public Criteria andGroupIdNotBetween(String value1, String value2) {
             addCriterion("group_id not between", value1, value2, "groupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdIsNull() {
+            addCriterion("create_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdIsNotNull() {
+            addCriterion("create_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdEqualTo(String value) {
+            addCriterion("create_id =", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdNotEqualTo(String value) {
+            addCriterion("create_id <>", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdGreaterThan(String value) {
+            addCriterion("create_id >", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdGreaterThanOrEqualTo(String value) {
+            addCriterion("create_id >=", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdLessThan(String value) {
+            addCriterion("create_id <", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdLessThanOrEqualTo(String value) {
+            addCriterion("create_id <=", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdLike(String value) {
+            addCriterion("create_id like", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdNotLike(String value) {
+            addCriterion("create_id not like", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdIn(List<String> values) {
+            addCriterion("create_id in", values, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdNotIn(List<String> values) {
+            addCriterion("create_id not in", values, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdBetween(String value1, String value2) {
+            addCriterion("create_id between", value1, value2, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdNotBetween(String value1, String value2) {
+            addCriterion("create_id not between", value1, value2, "createId");
             return (Criteria) this;
         }
 
@@ -515,63 +515,63 @@ public class GroupMsgExample {
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusIsNull() {
-            addCriterion("send_status is null");
+        public Criteria andReadCountIsNull() {
+            addCriterion("read_count is null");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusIsNotNull() {
-            addCriterion("send_status is not null");
+        public Criteria andReadCountIsNotNull() {
+            addCriterion("read_count is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusEqualTo(Integer value) {
-            addCriterion("send_status =", value, "sendStatus");
+        public Criteria andReadCountEqualTo(Integer value) {
+            addCriterion("read_count =", value, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusNotEqualTo(Integer value) {
-            addCriterion("send_status <>", value, "sendStatus");
+        public Criteria andReadCountNotEqualTo(Integer value) {
+            addCriterion("read_count <>", value, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusGreaterThan(Integer value) {
-            addCriterion("send_status >", value, "sendStatus");
+        public Criteria andReadCountGreaterThan(Integer value) {
+            addCriterion("read_count >", value, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("send_status >=", value, "sendStatus");
+        public Criteria andReadCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("read_count >=", value, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusLessThan(Integer value) {
-            addCriterion("send_status <", value, "sendStatus");
+        public Criteria andReadCountLessThan(Integer value) {
+            addCriterion("read_count <", value, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("send_status <=", value, "sendStatus");
+        public Criteria andReadCountLessThanOrEqualTo(Integer value) {
+            addCriterion("read_count <=", value, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusIn(List<Integer> values) {
-            addCriterion("send_status in", values, "sendStatus");
+        public Criteria andReadCountIn(List<Integer> values) {
+            addCriterion("read_count in", values, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusNotIn(List<Integer> values) {
-            addCriterion("send_status not in", values, "sendStatus");
+        public Criteria andReadCountNotIn(List<Integer> values) {
+            addCriterion("read_count not in", values, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusBetween(Integer value1, Integer value2) {
-            addCriterion("send_status between", value1, value2, "sendStatus");
+        public Criteria andReadCountBetween(Integer value1, Integer value2) {
+            addCriterion("read_count between", value1, value2, "readCount");
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("send_status not between", value1, value2, "sendStatus");
+        public Criteria andReadCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("read_count not between", value1, value2, "readCount");
             return (Criteria) this;
         }
 

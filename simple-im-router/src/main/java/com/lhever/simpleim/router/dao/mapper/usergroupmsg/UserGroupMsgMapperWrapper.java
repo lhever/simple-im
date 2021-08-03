@@ -3,6 +3,7 @@ package com.lhever.simpleim.router.dao.mapper.usergroupmsg;
 import com.lhever.simpleim.common.pojo.UserGroupMsg;
 import com.lhever.simpleim.common.pojo.UserGroupMsgExample;
 
+import java.util.Date;
 import java.util.List;
 
 public class UserGroupMsgMapperWrapper {
@@ -66,5 +67,14 @@ public class UserGroupMsgMapperWrapper {
 
     public int updateByPrimaryKey(UserGroupMsg record) {
         return userGroupMsgMapper.updateByPrimaryKey(record);
+    }
+
+
+    public int updateStatusById(String id, Integer status) {
+        UserGroupMsg update = new UserGroupMsg();
+        update.setId(id);
+        update.setStatus(status);
+        update.setUpdateTime(new Date());
+        return userGroupMsgMapper.updateByPrimaryKeySelective(update);
     }
 }

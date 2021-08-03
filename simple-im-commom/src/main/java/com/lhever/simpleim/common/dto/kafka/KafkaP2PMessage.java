@@ -24,4 +24,14 @@ public class KafkaP2PMessage {
     private String receiveId;
     private String message;
     private Date createTime;
+
+    private boolean saveOnly = false;
+
+    public boolean getSaveOnly() {
+        return saveOnly;
+    }
+
+    public void setSaveOnly(boolean saveOnly) {
+        this.saveOnly = saveOnly;
+    }
 }

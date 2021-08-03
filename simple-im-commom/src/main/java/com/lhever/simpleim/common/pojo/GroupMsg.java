@@ -5,9 +5,9 @@ import java.util.Date;
 public class GroupMsg {
     private String id;
 
-    private String createId;
-
     private String groupId;
+
+    private String createId;
 
     private String receiveIds;
 
@@ -15,7 +15,7 @@ public class GroupMsg {
 
     private String content;
 
-    private Integer sendStatus;
+    private Integer readCount;
 
     private Integer readStatus;
 
@@ -31,20 +31,20 @@ public class GroupMsg {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getCreateId() {
-        return createId;
-    }
-
-    public void setCreateId(String createId) {
-        this.createId = createId == null ? null : createId.trim();
-    }
-
     public String getGroupId() {
         return groupId;
     }
 
     public void setGroupId(String groupId) {
         this.groupId = groupId == null ? null : groupId.trim();
+    }
+
+    public String getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(String createId) {
+        this.createId = createId == null ? null : createId.trim();
     }
 
     public String getReceiveIds() {
@@ -71,12 +71,12 @@ public class GroupMsg {
         this.content = content == null ? null : content.trim();
     }
 
-    public Integer getSendStatus() {
-        return sendStatus;
+    public Integer getReadCount() {
+        return readCount;
     }
 
-    public void setSendStatus(Integer sendStatus) {
-        this.sendStatus = sendStatus;
+    public void setReadCount(Integer readCount) {
+        this.readCount = readCount;
     }
 
     public Integer getReadStatus() {

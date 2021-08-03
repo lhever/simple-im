@@ -445,66 +445,6 @@ public class UserMsgExample {
             return (Criteria) this;
         }
 
-        public Criteria andSendStatusIsNull() {
-            addCriterion("send_status is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusIsNotNull() {
-            addCriterion("send_status is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusEqualTo(Integer value) {
-            addCriterion("send_status =", value, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusNotEqualTo(Integer value) {
-            addCriterion("send_status <>", value, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusGreaterThan(Integer value) {
-            addCriterion("send_status >", value, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("send_status >=", value, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusLessThan(Integer value) {
-            addCriterion("send_status <", value, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("send_status <=", value, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusIn(List<Integer> values) {
-            addCriterion("send_status in", values, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusNotIn(List<Integer> values) {
-            addCriterion("send_status not in", values, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusBetween(Integer value1, Integer value2) {
-            addCriterion("send_status between", value1, value2, "sendStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andSendStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("send_status not between", value1, value2, "sendStatus");
-            return (Criteria) this;
-        }
-
         public Criteria andReadStatusIsNull() {
             addCriterion("read_status is null");
             return (Criteria) this;

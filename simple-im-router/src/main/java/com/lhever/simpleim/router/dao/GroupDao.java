@@ -38,8 +38,8 @@ public class GroupDao {
 
         Group group = createGroup(req.getGroupName(), req.getCreateId(), userIds);
         List<UserGroup> userGroups = createUserGroup(group, userIds);
-       saveGroup(group);
-       saveUserGroup(userGroups);
+        saveGroup(group);
+        saveUserGroup(userGroups);
 
         RouterCreateGroupResp result = new RouterCreateGroupResp();
         result.setGroupId(group.getId());
@@ -114,7 +114,6 @@ public class GroupDao {
     }
 
 
-
     public Group findGroup(String groupId) {
         SqlSession sqlSession = null;
         try {
@@ -122,7 +121,7 @@ public class GroupDao {
             sqlSession = aDefault.openSession();
             GroupMapper groupMapper = sqlSession.getMapper(GroupMapper.class);
             GroupMapperWrapper wrapper = new GroupMapperWrapper(groupMapper);
-            return  wrapper.selectByPrimaryKey(groupId);
+            return wrapper.selectByPrimaryKey(groupId);
         } finally {
             sqlSession.commit();
             sqlSession.close();

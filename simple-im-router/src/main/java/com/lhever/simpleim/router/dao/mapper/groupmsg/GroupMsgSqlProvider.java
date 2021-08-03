@@ -33,12 +33,12 @@ public class GroupMsgSqlProvider {
             sql.VALUES("id", "#{id,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateId() != null) {
-            sql.VALUES("create_id", "#{createId,jdbcType=VARCHAR}");
-        }
-        
         if (record.getGroupId() != null) {
             sql.VALUES("group_id", "#{groupId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getCreateId() != null) {
+            sql.VALUES("create_id", "#{createId,jdbcType=VARCHAR}");
         }
         
         if (record.getReceiveIds() != null) {
@@ -53,8 +53,8 @@ public class GroupMsgSqlProvider {
             sql.VALUES("content", "#{content,jdbcType=VARCHAR}");
         }
         
-        if (record.getSendStatus() != null) {
-            sql.VALUES("send_status", "#{sendStatus,jdbcType=INTEGER}");
+        if (record.getReadCount() != null) {
+            sql.VALUES("read_count", "#{readCount,jdbcType=INTEGER}");
         }
         
         if (record.getReadStatus() != null) {
@@ -79,12 +79,12 @@ public class GroupMsgSqlProvider {
         } else {
             sql.SELECT("id");
         }
-        sql.SELECT("create_id");
         sql.SELECT("group_id");
+        sql.SELECT("create_id");
         sql.SELECT("receive_ids");
         sql.SELECT("type");
         sql.SELECT("content");
-        sql.SELECT("send_status");
+        sql.SELECT("read_count");
         sql.SELECT("read_status");
         sql.SELECT("create_time");
         sql.SELECT("update_time");
@@ -109,12 +109,12 @@ public class GroupMsgSqlProvider {
             sql.SET("id = #{record.id,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateId() != null) {
-            sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
-        }
-        
         if (record.getGroupId() != null) {
             sql.SET("group_id = #{record.groupId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getCreateId() != null) {
+            sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
         }
         
         if (record.getReceiveIds() != null) {
@@ -129,8 +129,8 @@ public class GroupMsgSqlProvider {
             sql.SET("content = #{record.content,jdbcType=VARCHAR}");
         }
         
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
+        if (record.getReadCount() != null) {
+            sql.SET("read_count = #{record.readCount,jdbcType=INTEGER}");
         }
         
         if (record.getReadStatus() != null) {
@@ -154,12 +154,12 @@ public class GroupMsgSqlProvider {
         sql.UPDATE("im_group_msg");
         
         sql.SET("id = #{record.id,jdbcType=VARCHAR}");
-        sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
         sql.SET("group_id = #{record.groupId,jdbcType=VARCHAR}");
+        sql.SET("create_id = #{record.createId,jdbcType=VARCHAR}");
         sql.SET("receive_ids = #{record.receiveIds,jdbcType=VARCHAR}");
         sql.SET("type = #{record.type,jdbcType=INTEGER}");
         sql.SET("content = #{record.content,jdbcType=VARCHAR}");
-        sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
+        sql.SET("read_count = #{record.readCount,jdbcType=INTEGER}");
         sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
@@ -173,12 +173,12 @@ public class GroupMsgSqlProvider {
         SQL sql = new SQL();
         sql.UPDATE("im_group_msg");
         
-        if (record.getCreateId() != null) {
-            sql.SET("create_id = #{createId,jdbcType=VARCHAR}");
-        }
-        
         if (record.getGroupId() != null) {
             sql.SET("group_id = #{groupId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getCreateId() != null) {
+            sql.SET("create_id = #{createId,jdbcType=VARCHAR}");
         }
         
         if (record.getReceiveIds() != null) {
@@ -193,8 +193,8 @@ public class GroupMsgSqlProvider {
             sql.SET("content = #{content,jdbcType=VARCHAR}");
         }
         
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{sendStatus,jdbcType=INTEGER}");
+        if (record.getReadCount() != null) {
+            sql.SET("read_count = #{readCount,jdbcType=INTEGER}");
         }
         
         if (record.getReadStatus() != null) {

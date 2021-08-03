@@ -3,6 +3,7 @@ package com.lhever.simpleim.router.dao.mapper.usermsg;
 import com.lhever.simpleim.common.pojo.UserMsg;
 import com.lhever.simpleim.common.pojo.UserMsgExample;
 
+import java.util.Date;
 import java.util.List;
 
 public class UserMsgMapperWrapper implements UserMsgMapper {
@@ -66,6 +67,14 @@ public class UserMsgMapperWrapper implements UserMsgMapper {
     @Override
     public int updateByPrimaryKey(UserMsg record) {
         return userMsgMapper.updateByPrimaryKey(record);
+    }
+
+    public int updateStatusById(String id, Integer status) {
+        UserMsg update = new UserMsg();
+        update.setId(id);
+        update.setReadStatus(status);
+        update.setUpdateTime(new Date());
+        return userMsgMapper.updateByPrimaryKeySelective(update);
     }
 
 

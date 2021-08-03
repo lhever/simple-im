@@ -13,8 +13,6 @@ public class UserMsg {
 
     private String content;
 
-    private Integer sendStatus;
-
     private Integer readStatus;
 
     private Date createTime;
@@ -59,14 +57,6 @@ public class UserMsg {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
-    }
-
-    public Integer getSendStatus() {
-        return sendStatus;
-    }
-
-    public void setSendStatus(Integer sendStatus) {
-        this.sendStatus = sendStatus;
     }
 
     public Integer getReadStatus() {

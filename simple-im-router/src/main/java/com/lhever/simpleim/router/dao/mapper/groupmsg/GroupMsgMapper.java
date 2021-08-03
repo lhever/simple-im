@@ -21,14 +21,14 @@ public interface GroupMsgMapper {
     int deleteByPrimaryKey(String id);
 
     @Insert({
-        "insert into im_group_msg (id, create_id, ",
-        "group_id, receive_ids, ",
-        "type, content, send_status, ",
+        "insert into im_group_msg (id, group_id, ",
+        "create_id, receive_ids, ",
+        "type, content, read_count, ",
         "read_status, create_time, ",
         "update_time)",
-        "values (#{id,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, ",
-        "#{groupId,jdbcType=VARCHAR}, #{receiveIds,jdbcType=VARCHAR}, ",
-        "#{type,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{sendStatus,jdbcType=INTEGER}, ",
+        "values (#{id,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, ",
+        "#{createId,jdbcType=VARCHAR}, #{receiveIds,jdbcType=VARCHAR}, ",
+        "#{type,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{readCount,jdbcType=INTEGER}, ",
         "#{readStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, ",
         "#{updateTime,jdbcType=TIMESTAMP})"
     })
@@ -40,12 +40,12 @@ public interface GroupMsgMapper {
     @SelectProvider(type=GroupMsgSqlProvider.class, method="selectByExample")
     @Results({
         @Result(column="id", property="id", jdbcType=JdbcType.VARCHAR, id=true),
-        @Result(column="create_id", property="createId", jdbcType=JdbcType.VARCHAR),
         @Result(column="group_id", property="groupId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="create_id", property="createId", jdbcType=JdbcType.VARCHAR),
         @Result(column="receive_ids", property="receiveIds", jdbcType=JdbcType.VARCHAR),
         @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
         @Result(column="content", property="content", jdbcType=JdbcType.VARCHAR),
-        @Result(column="send_status", property="sendStatus", jdbcType=JdbcType.INTEGER),
+        @Result(column="read_count", property="readCount", jdbcType=JdbcType.INTEGER),
         @Result(column="read_status", property="readStatus", jdbcType=JdbcType.INTEGER),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
@@ -54,19 +54,19 @@ public interface GroupMsgMapper {
 
     @Select({
         "select",
-        "id, create_id, group_id, receive_ids, type, content, send_status, read_status, ",
+        "id, group_id, create_id, receive_ids, type, content, read_count, read_status, ",
         "create_time, update_time",
         "from im_group_msg",
         "where id = #{id,jdbcType=VARCHAR}"
     })
     @Results({
         @Result(column="id", property="id", jdbcType=JdbcType.VARCHAR, id=true),
-        @Result(column="create_id", property="createId", jdbcType=JdbcType.VARCHAR),
         @Result(column="group_id", property="groupId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="create_id", property="createId", jdbcType=JdbcType.VARCHAR),
         @Result(column="receive_ids", property="receiveIds", jdbcType=JdbcType.VARCHAR),
         @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
         @Result(column="content", property="content", jdbcType=JdbcType.VARCHAR),
-        @Result(column="send_status", property="sendStatus", jdbcType=JdbcType.INTEGER),
+        @Result(column="read_count", property="readCount", jdbcType=JdbcType.INTEGER),
         @Result(column="read_status", property="readStatus", jdbcType=JdbcType.INTEGER),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
@@ -84,16 +84,22 @@ public interface GroupMsgMapper {
 
     @Update({
         "update im_group_msg",
-        "set create_id = #{createId,jdbcType=VARCHAR},",
-          "group_id = #{groupId,jdbcType=VARCHAR},",
+        "set group_id = #{groupId,jdbcType=VARCHAR},",
+          "create_id = #{createId,jdbcType=VARCHAR},",
           "receive_ids = #{receiveIds,jdbcType=VARCHAR},",
           "type = #{type,jdbcType=INTEGER},",
           "content = #{content,jdbcType=VARCHAR},",
-          "send_status = #{sendStatus,jdbcType=INTEGER},",
+          "read_count = #{readCount,jdbcType=INTEGER},",
           "read_status = #{readStatus,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP}",
         "where id = #{id,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(GroupMsg record);
+
+
+    @Update("<script>" +
+            "update im_group_msg set read_count = read_count + 1, update_time = now() where id = #{id}" +
+            "</script>")
+    public int incrReadCount(@Param("id") String id);
 }

@@ -13,16 +13,15 @@ public class MessageReq extends Msg {
         return MsgType.MESSAGE_REQUEST;
     }
 
-    private String id;
     /**
      * 消息接受者
      */
-    private String targetId;
+    private String receiveId;
 
     /**
      * 消息内容
      */
-    private String message;
+    private String msg;
 
 
 

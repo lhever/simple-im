@@ -49,10 +49,6 @@ public class UserMsgSqlProvider {
             sql.VALUES("content", "#{content,jdbcType=VARCHAR}");
         }
         
-        if (record.getSendStatus() != null) {
-            sql.VALUES("send_status", "#{sendStatus,jdbcType=INTEGER}");
-        }
-        
         if (record.getReadStatus() != null) {
             sql.VALUES("read_status", "#{readStatus,jdbcType=INTEGER}");
         }
@@ -79,7 +75,6 @@ public class UserMsgSqlProvider {
         sql.SELECT("receive_id");
         sql.SELECT("type");
         sql.SELECT("content");
-        sql.SELECT("send_status");
         sql.SELECT("read_status");
         sql.SELECT("create_time");
         sql.SELECT("update_time");
@@ -120,10 +115,6 @@ public class UserMsgSqlProvider {
             sql.SET("content = #{record.content,jdbcType=VARCHAR}");
         }
         
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
-        }
-        
         if (record.getReadStatus() != null) {
             sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
         }
@@ -149,7 +140,6 @@ public class UserMsgSqlProvider {
         sql.SET("receive_id = #{record.receiveId,jdbcType=VARCHAR}");
         sql.SET("type = #{record.type,jdbcType=INTEGER}");
         sql.SET("content = #{record.content,jdbcType=VARCHAR}");
-        sql.SET("send_status = #{record.sendStatus,jdbcType=INTEGER}");
         sql.SET("read_status = #{record.readStatus,jdbcType=INTEGER}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
@@ -177,10 +167,6 @@ public class UserMsgSqlProvider {
         
         if (record.getContent() != null) {
             sql.SET("content = #{content,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getSendStatus() != null) {
-            sql.SET("send_status = #{sendStatus,jdbcType=INTEGER}");
         }
         
         if (record.getReadStatus() != null) {

@@ -67,4 +67,10 @@ public class GroupMsgMapperWrapper {
     public int updateByPrimaryKey(GroupMsg record) {
         return groupMsgMapper.updateByPrimaryKey(record);
     }
+
+
+    public int incrReadCount(String id) {
+
+        return groupMsgMapper.incrReadCount(id);
+    }
 }

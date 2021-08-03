@@ -18,7 +18,7 @@ public class MessageResp extends Msg {
 
     private String id;
     private String sendId;
-    private String targetId;
+    private String receiveId;
     private String message;
     private Date createTime;
 

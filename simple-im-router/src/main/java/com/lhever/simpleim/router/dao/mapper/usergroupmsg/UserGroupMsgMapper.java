@@ -90,4 +90,8 @@ public interface UserGroupMsgMapper {
         "where id = #{id,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(UserGroupMsg record);
+
+
+
+
 }

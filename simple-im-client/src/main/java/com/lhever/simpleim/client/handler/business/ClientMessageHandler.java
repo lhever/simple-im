@@ -1,6 +1,9 @@
 package com.lhever.simpleim.client.handler.business;
 
+import com.lhever.common.core.utils.StringUtils;
+import com.lhever.simpleim.common.msg.MessageAck;
 import com.lhever.simpleim.common.msg.MessageResp;
+import com.lhever.simpleim.common.util.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -13,7 +16,18 @@ public class ClientMessageHandler extends SimpleChannelInboundHandler<MessageRes
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResp msg) throws Exception {
-        logger.info("收到{}的消息：{}", msg.getSendId(), msg.getMessage());
+        String userId = LoginUtil.getUserId(ctx.channel());
+        if (StringUtils.equals(userId, msg.getReceiveId())) {
+            logger.error("{}不是正确的消息接收者", userId);
+        }
+        logger.info("用户:{}收到:{}发送过来的消息， 内容是:{} -> {}", userId, msg.getSendId(), msg.getId(),  msg.getMessage());
+
+        MessageAck ack = new MessageAck();
+        ack.setMsgId(msg.getId());
+        ack.setReceiveId(msg.getReceiveId());
+        ctx.writeAndFlush(ack);
+
+
     }
 
 
