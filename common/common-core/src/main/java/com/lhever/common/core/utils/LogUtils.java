@@ -1,7 +1,7 @@
 package com.lhever.common.core.utils;
 
 
-import com.lhever.common.core.support.log.Slf4jProxyLogger;
+import com.lhever.common.core.support.logger.Slf4jProxyLogger;
 import org.slf4j.Marker;
 
 import java.util.Date;

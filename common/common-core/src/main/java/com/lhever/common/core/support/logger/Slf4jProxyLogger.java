@@ -1,4 +1,4 @@
-package com.lhever.common.core.support.log;
+package com.lhever.common.core.support.logger;
 
 
 import com.lhever.common.core.utils.LogUtils;
@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 
-public class Slf4jProxyLogger implements Logger {
+public class Slf4jProxyLogger implements Logger   {
     private static final Logger internalLog = LoggerFactory.getLogger(Slf4jProxyLogger.class.getName());
 
     public static final Slf4jProxyLogger INSTANCE = new Slf4jProxyLogger();
