@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Map;
+
 public class RedisUtils {
 
     @Getter
@@ -46,6 +48,11 @@ public class RedisUtils {
         return value;
     }
 
+
+    public static Map<String, String> get(String... keys) {
+        Map<String, String> result = jedisClient.get(keys);
+        return result;
+    }
 
 
 

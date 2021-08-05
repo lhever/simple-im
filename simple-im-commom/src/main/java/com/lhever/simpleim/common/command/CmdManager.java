@@ -22,6 +22,7 @@ public class CmdManager {
     private static Map<String, ConsoleCmd> commandMap = new ConcurrentHashMap<String, ConsoleCmd>();
 
     static {
+        commandMap.putIfAbsent("login",new LoginCmd());
         commandMap.putIfAbsent("sendToUser",new P2PCmd());
         commandMap.putIfAbsent("broadcast",new BroadcastCmd());
         commandMap.putIfAbsent("createGroup",new CreateGroupCmd());

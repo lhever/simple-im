@@ -28,6 +28,11 @@ public class ServerHeartBeatHandler extends SimpleChannelInboundHandler<PingPong
     }
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
+    }
+
+    @Override
     protected void channelRead0(ChannelHandlerContext ctx, PingPong ping) throws Exception {
         logger.info("(服务端) <--- {}", ping);
         logger.info("(服务端) ---> {}", PingPong.PONG);

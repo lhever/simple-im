@@ -17,7 +17,7 @@ public class ClientMessageHandler extends SimpleChannelInboundHandler<MessageRes
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResp msg) throws Exception {
         String userId = LoginUtil.getUserId(ctx.channel());
-        if (StringUtils.equals(userId, msg.getReceiveId())) {
+        if (!StringUtils.equals(userId, msg.getReceiveId())) {
             logger.error("{}不是正确的消息接收者", userId);
         }
         logger.info("用户:{}收到:{}发送过来的消息， 内容是:{} -> {}", userId, msg.getSendId(), msg.getId(),  msg.getMessage());

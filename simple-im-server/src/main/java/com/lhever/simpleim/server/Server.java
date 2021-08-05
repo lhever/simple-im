@@ -5,6 +5,7 @@ import com.lhever.simpleim.common.codec.NettyCodecHandler;
 import com.lhever.simpleim.server.config.ServerConfig;
 import com.lhever.simpleim.server.handler.business.ServerHandler;
 import com.lhever.simpleim.server.handler.business.ServerLoginHandler;
+import com.lhever.simpleim.server.handler.io.ServerHandShakeHandler;
 import com.lhever.simpleim.server.handler.io.ServerHeartBeatHandler;
 import com.lhever.simpleim.server.handler.io.ServerIdleHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -49,6 +50,7 @@ public class Server {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) throws IOException {
+                        ch.pipeline().addLast(ServerHandShakeHandler.getInstance());
                         ch.pipeline().addLast(new ServerIdleHandler());
                         ch.pipeline().addLast(new LengthBasedByteBufDecoder());
                         ch.pipeline().addLast(new NettyCodecHandler());

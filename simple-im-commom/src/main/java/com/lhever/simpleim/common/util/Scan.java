@@ -1,8 +1,8 @@
 package com.lhever.simpleim.common.util;
 
+import com.lhever.common.core.utils.StringUtils;
 import com.lhever.simpleim.common.command.CmdManager;
 import io.netty.channel.Channel;
-import io.netty.util.internal.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +22,17 @@ public class Scan implements Runnable {
     public void run() {
         Scanner sc = new Scanner(System.in,"utf-8");
         while (!Thread.interrupted()) {
-            if(LoginUtil.hasLogin(channel)){
-                String msg = sc.nextLine();
-                if(!StringUtil.isNullOrEmpty(msg)  &&  !StringUtil.isNullOrEmpty(msg.trim())){
-                    CmdManager.getInstance().exec(this.channel,msg);
-                }
+            String msg = sc.nextLine();
+            if(StringUtils.isBlank(msg)){
+              continue;
+            }
+
+            msg = msg.trim();
+
+            if (msg.startsWith("login::")) {
+                CmdManager.getInstance().exec(this.channel, msg);
+            } else if(LoginUtil.hasLogin(channel)){
+                CmdManager.getInstance().exec(this.channel, msg);
             }
         }
 

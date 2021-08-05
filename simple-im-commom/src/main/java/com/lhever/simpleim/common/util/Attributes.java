@@ -10,4 +10,6 @@ public interface Attributes {
     AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
     AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
     AttributeKey<String> USER_ID = AttributeKey.newInstance("userId");
+
+    AttributeKey<Long> HAND_SHAKE_TIME = AttributeKey.newInstance("handShakeTime");
 }

@@ -19,6 +19,8 @@ public class ServerConfig {
 
     public static final Integer SERVER_PORT = reader.getIntProperty("server.port", ImConsts.SERVER_PORT);
 
+    public static final Integer LOGIN_TIMEOUT_SECONDS = reader.getIntProperty("server.loginTimeOutSeconds", 6);
+
     public static final KafkaUtils.KafkaProp kafkaProp;
 
 

@@ -1,6 +1,7 @@
 server:
   ip: 10.16.84.36
   port: 9999
+  loginTimeOutSeconds: 6
 
 
 zookeeper:

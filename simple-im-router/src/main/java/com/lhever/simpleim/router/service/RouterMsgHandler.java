@@ -1,5 +1,6 @@
 package com.lhever.simpleim.router.service;
 
+import com.lhever.common.core.utils.ArrayUtils;
 import com.lhever.common.core.utils.JsonUtils;
 import com.lhever.common.core.utils.ParseUtils;
 import com.lhever.common.core.utils.StringUtils;
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -120,6 +123,8 @@ public class RouterMsgHandler implements MsgHandler<String, String> {
             return;
         }
         String[] split = groupMsg.getReceiveIds().split(",");
+        Map<String, String> onlineMap = batchQuery(split);
+
         for (String memberId : split) {
             KafkaSingleGroupMessage groupSingleMsg = new KafkaSingleGroupMessage();
             groupSingleMsg.setGroupMsgId(groupMsg.getId());
@@ -135,7 +140,7 @@ public class RouterMsgHandler implements MsgHandler<String, String> {
             boolean self = StringUtils.equals(memberId, groupMsg.getCreateId());
             //如果用户在线, 另外，自己不用发给自己
             if (!self) {
-                String value = RedisUtils.get(ImConsts.LOGIN_KEY + memberId);
+                String value = onlineMap.get(ImConsts.LOGIN_KEY + memberId);
                 if (StringUtils.isNotBlank(value)) {
                     String replace = value.replace(":", "-");
                     String topicPrefix = ParseUtils.parseArgs(KafkaUtils.SERVER_TOPIC_TPL, replace);
@@ -143,6 +148,20 @@ public class RouterMsgHandler implements MsgHandler<String, String> {
                 }
             }
         }
+    }
+
+
+    public  Map<String, String> batchQuery(String[] memberIds) {
+        if (ArrayUtils.isEmpty(memberIds)) {
+            return new HashMap<>(0);
+        }
+        String[] keys = new String[memberIds.length];
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            keys[i] = ImConsts.LOGIN_KEY + key;
+        }
+        Map<java.lang.String, java.lang.String> onlineMap = RedisUtils.get(keys);
+        return onlineMap;
     }
 
 

@@ -17,9 +17,7 @@ import com.lhever.common.core.utils.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.util.*;
@@ -87,6 +85,7 @@ public class CustomJedisClient {
             try {
                 jedisPool.returnResource(jedis);
             } catch (Throwable e) {
+                jedisPool.returnBrokenResource(jedis);
                 logger.error("return jedis error", e);
             }
         }
@@ -155,6 +154,40 @@ public class CustomJedisClient {
             returnJedis(jedis);
         }
         return value;
+    }
+
+
+    public Map<String, String> get(String... keys) {
+        if (keys == null || keys.length == 0) {
+            return new HashMap<>(0);
+        }
+        Map<String, String> result = new HashMap<>(keys.length);
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            Pipeline pipelined = jedis.pipelined();
+            for (String key : keys) {
+                pipelined.get(key);
+            }
+            List<Object> objects = pipelined.syncAndReturnAll();
+            if (objects == null) {
+                return result;
+            }
+            for (int i = 0; i < keys.length; i++) {
+                Object o = objects.get(i);
+                String value = (o == null ? null : o.toString());
+                if ("nil".equalsIgnoreCase(value)) {
+                    value = null;
+                }
+                result.put(keys[i], value);
+            }
+        } catch (Throwable e) {
+            returnBrokenJedis(jedis);
+            logger.warn("pipline get error, keys: {}", Arrays.toString(keys), e);
+        } finally {
+            returnJedis(jedis);
+        }
+        return result;
     }
 
     /**
@@ -933,7 +966,10 @@ public class CustomJedisClient {
 
     public static void main(String[] args) {
 
-        CustomJedisClient client = new CustomJedisClient("127.0.0.1", 6379, "redis123", 5000, 5, 20, 2000, true);
+        CustomJedisClient client = new CustomJedisClient("10.33.65.9", 6379, "redis12345", 5000, 5, 20, 2000, true);
+        Map<String, String> resultMap = client.get("li", "aa", "login");
+        System.out.println(resultMap);
+
 
         client.set("lihong", "aaaaa", 6);
         String value = client.get("lihong");
