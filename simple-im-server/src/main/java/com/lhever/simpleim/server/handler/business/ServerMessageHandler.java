@@ -45,9 +45,15 @@ public class ServerMessageHandler extends SimpleChannelInboundHandler<MessageReq
         kafkaP2PMessage.setReceiveId(receiveId);
         kafkaP2PMessage.setMessage(messageReq.getMsg());
         kafkaP2PMessage.setCreateTime(new Date());
+        //用户已经收到消息，仅仅保存到数据库
+        kafkaP2PMessage.setSaveOnly(false);
 
-        //如果用户在线
-        if (targetChannel != null) {
+        /**
+         * 如果用户在线,直接发到channel。 会出现用户收到消息并提交应答，消息还没入库。
+         * 所以，即使用户在线，也不直接发给用户。而是先入库，再发送给用户
+         */
+
+      /*  if (targetChannel != null) {
             MessageResp resp = new MessageResp();
             resp.setId(msgId);
             resp.setSendId(sendId);
@@ -57,9 +63,9 @@ public class ServerMessageHandler extends SimpleChannelInboundHandler<MessageReq
             ServerSendUtils.write2Channel(resp, targetChannel);
             logger.info("发送消息给用户:{}，内容是:{}", receiveId, JSON.toJSONString(resp));
 
-            //用户已经收到消息，仅仅保存到数据库
+             //用户已经收到消息，仅仅保存到数据库
             kafkaP2PMessage.setSaveOnly(true);
-        }
+        }*/
 
         //即使消息已经入库，仍然要保存到数据库
         KafkaUtils.sendToRouter(Objects.hash(receiveId), KafkaDataType.P2P_MSG, kafkaP2PMessage);
